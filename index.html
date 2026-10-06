@@ -666,7 +666,6 @@ tr.openrow td.tag{color:var(--warn);font-weight:600;}
           <label class="check ampbox" title="실제 차트의 움직임을 이 배수만큼 키워요. 바꾸면 그 순간부터 앞으로 그려지는 캔들에 바로 적용돼요"><span>변동폭</span> <select id="selAmp" style="font-family:var(--font-ui);font-size:.78rem;background:var(--panel-bg-2);color:var(--fg);border:1px solid var(--border);border-radius:6px;padding:3px 4px;"><option value="1" selected>1배 (실제)</option><option value="1.5">1.5배</option><option value="2">2배</option><option value="3">3배</option><option value="4">4배</option></select></label>
           <span class="sep"></span>
           <button class="btn ghost" id="btnCloseAll">전체 청산</button>
-          <button class="btn ghost" id="btnRail" title="오른쪽 도움말·용어 사전 칸을 보이거나 숨겨요 (숨기면 차트가 넓어져요)">도움말</button>
           <button class="btn ghost" id="btnPng" title="보험금 계좌의 거래내역을 이미지로 공유해요 (모바일: 카톡·문자·텔레그램 등 / PC: 이미지로 저장)">거래내역 공유</button>
           <input type="text" id="pngName" hidden maxlength="20" placeholder="트레이더 이름" title="트레이더 이름: 히스토리 PNG 상단과 파일 이름에 표시돼요 (선택)" style="font-family:var(--font-ui);font-size:.78rem;width:106px;box-sizing:border-box;background:var(--panel-bg-2);color:var(--fg);border:1px solid var(--border);border-radius:6px;padding:6px 7px;">
           <span class="sep"></span>
@@ -1264,59 +1263,76 @@ function applyPreset(){
 function syncTraderTag(){ const t = document.getElementById("traderTag"), el = document.getElementById("pngName"); if(!t||!el) return; const v = el.value.trim(); t.hidden = !v; t.textContent = v ? v+" 트레이더" : ""; }
 document.addEventListener("DOMContentLoaded", ()=>{ const el = document.getElementById("pngName"); if(el){ el.addEventListener("input", syncTraderTag); syncTraderTag(); } });
 function pngLabel(){ const el = document.getElementById("pngName"); return el ? el.value.trim() : ""; }
-function historyPng(){
+function historyPng(){   // 4:3 (1200×900) 공유용 카드: 모바일에서 크게 보이도록 글씨를 키우고 최근 거래만 담는다
   const cs = getComputedStyle(document.documentElement), v = n => (cs.getPropertyValue(n) || "").trim();
   const C = {bg:v("--bg")||"#080c12", card:v("--panel-bg")||"#0d1420", head:v("--titlebar-bg")||"#0c1118", line:v("--border")||"#223", fg:v("--fg")||"#e6edf6", mute:v("--muted")||"#8a97a8",
              up:v("--profit")||"#4ad295", bad:v("--bad")||"#ff6b6b", buy:v("--buy")||"#2f6fed", gold:v("--gold")||"#e8b64a"};
   const FONT = '"Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif', MONO = 'ui-monospace,Menlo,Consolas,monospace';
-  const cols = [["시각",0,"left"],["방향",120,"left"],["랏",200,"right"],["진입가",300,"right"],["청산가",410,"right"],["손익",540,"right"],["수수료",650,"right"],["사유",780,"left"]];
-  const W = 1100, X0 = 30, RH = 30, MAXROWS = 150;
-  const groups = PANE_DEFS.filter(d=>d.idx===0).map(d=>({d:d, rows:state.trades.filter(t=>t.pane===d.idx).slice(0,MAXROWS)}));
-  let H = 110; groups.forEach(g=>{ H += 62 + 34 + Math.max(1,g.rows.length)*RH + 28; }); H += 20;
-  const dpr = 2, cv = document.createElement("canvas"); cv.width = W*dpr; cv.height = H*dpr;
-  const x = cv.getContext("2d"); x.scale(dpr,dpr);
+  const W = 1200, H = 900, PX = 48, dpr = 2;
+  const cv = document.createElement("canvas"); cv.width = W*dpr; cv.height = H*dpr;
+  const x = cv.getContext("2d"); x.scale(dpr,dpr); x.textBaseline = "middle";
+  const all = state.trades.filter(t=>t.pane===0), net = t => t.pnl;   // 수수료는 손익에 넣지 않고 따로 표기
+  const total = all.reduce((a,t)=>a+net(t),0), fees = all.reduce((a,t)=>a+(t.fee||0),0);
+  const sgn = n => (n>=0?"+":"")+fmtMoney(n);
   x.fillStyle = C.bg; x.fillRect(0,0,W,H);
-  x.textBaseline = "middle";
-  x.fillStyle = C.fg; x.font = "700 24px "+FONT; x.textAlign = "left"; x.fillText("XAUUSD 반대매매 시뮬레이션 · 보험금 거래 히스토리", X0, 40);
-  const who = pngLabel(); if(who){ x.textAlign = "right"; x.fillStyle = C.gold; const tw = x.measureText ? (x.font = "700 24px "+FONT, x.measureText("XAUUSD 반대매매 시뮬레이션 · 보험금 거래 히스토리").width) : 650, room = W-2*X0-tw-24;
-    let fs = 30; x.font = "800 "+fs+"px "+FONT; while(fs>16 && x.measureText(who+" 트레이더").width > room){ fs--; x.font = "800 "+fs+"px "+FONT; }
-    x.fillText(who+" 트레이더", W-X0, 40); x.textAlign = "left"; }
-  x.fillStyle = C.mute; x.font = "13px "+FONT;
-  const now = new Date(); x.fillText("저장 "+now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0")+"-"+String(now.getDate()).padStart(2,"0")+" "+String(now.getHours()).padStart(2,"0")+":"+String(now.getMinutes()).padStart(2,"0")+" · 시세 "+SESS.cur.name+" (KST) · 손익은 수수료 제외, 실현 = 손익 − 수수료", X0, 70);
-  let y = 100;
-  groups.forEach(g=>{
-    const p = state.panes[g.d.idx], all = state.trades.filter(t=>t.pane===g.d.idx);
-    const gross = all.reduce((a,t)=>a+t.pnl,0), fees = all.reduce((a,t)=>a+(t.fee||0),0), net = gross - fees;
-    const col = g.d.idx===0 ? C.gold : C.buy;
-    x.fillStyle = C.card; x.fillRect(X0-12, y, W-2*X0+24, 62 + 34 + Math.max(1,g.rows.length)*RH + 12);
-    x.fillStyle = col; x.fillRect(X0-12, y, 4, 62 + 34 + Math.max(1,g.rows.length)*RH + 12);
-    x.fillStyle = col; x.font = "700 18px "+FONT; x.textAlign = "left"; x.fillText(g.d.role, X0+4, y+24);
-    x.fillStyle = C.mute; x.font = "13px "+FONT;
-    x.fillText("거래 "+all.length+"회 · 평가금 "+fmtMoney(p.balance+floatOf(p))+" (초기 "+fmtMoney(p.start)+")", X0+4, y+48);
-    x.textAlign = "right"; x.font = "700 16px "+MONO; x.fillStyle = net>=0 ? C.up : C.bad;
-    x.fillText("실현 "+(net>=0?"+":"")+fmtMoney(net), W-X0, y+24);
-    x.font = "12px "+FONT; x.fillStyle = C.mute; x.fillText("손익 "+(gross>=0?"+":"")+fmtMoney(gross)+"  ·  수수료 -"+fmtMoney(fees), W-X0, y+48);
-    y += 62;
-    x.fillStyle = C.head; x.fillRect(X0-12, y, W-2*X0+24, 34);
-    x.fillStyle = C.mute; x.font = "600 12px "+FONT;
-    cols.forEach(c=>{ x.textAlign = c[2]; x.fillText(c[0], X0 + c[1] + (c[2]==="right"?70:0), y+17); });
-    y += 34;
-    if(!g.rows.length){ x.textAlign = "left"; x.fillStyle = C.mute; x.font = "13px "+FONT; x.fillText("아직 거래가 없습니다.", X0, y+RH/2); y += RH; }
-    g.rows.forEach((t,i)=>{
-      if(i%2){ x.fillStyle = "rgba(127,140,160,.07)"; x.fillRect(X0-12, y, W-2*X0+24, RH); }
-      const cy = y + RH/2, put = (txt,c,color,font) => { x.textAlign = c[2]; x.fillStyle = color; x.font = font || ("13px "+MONO); x.fillText(txt, X0 + c[1] + (c[2]==="right"?70:0), cy); };
-      put(kstFull(t.sec), cols[0], C.fg);
-      put(t.dir, cols[1], t.dir==="BUY" ? C.buy : C.bad, "700 13px "+MONO);
-      put(t.lot.toFixed(2), cols[2], C.fg);
-      put(fmtPrice(t.entry), cols[3], C.fg);
-      put(fmtPrice(t.exit), cols[4], C.fg);
-      put((t.pnl>=0?"+":"")+fmtMoney(t.pnl), cols[5], t.pnl>=0 ? C.up : C.bad, "700 13px "+MONO);
-      put("-"+fmtMoney(t.fee||0), cols[6], C.mute);
-      put((t.reason||"") + (t.lag>0 ? "  "+t.lag.toFixed(2)+"초" : ""), cols[7], C.fg, "13px "+FONT);
-      y += RH;
-    });
-    y += 28;
+  // 헤더: 제목 + 트레이더 이름(크게)
+  const who = pngLabel();
+  x.textAlign = "left"; x.fillStyle = C.mute; x.font = "600 26px "+FONT; x.fillText("XAUUSD 반대매매 시뮬레이션", PX, 44);
+  x.fillStyle = C.gold; let fs = 60; const title = who ? who+" 트레이더" : "보험금 거래 히스토리";
+  x.font = "800 "+fs+"px "+FONT; while(fs>30 && x.measureText(title).width > W-2*PX){ fs -= 2; x.font = "800 "+fs+"px "+FONT; }
+  x.fillText(title, PX, 108);
+  const now = new Date();
+  x.textAlign = "right"; x.fillStyle = C.mute; x.font = "22px "+FONT;
+  x.fillText(now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0")+"-"+String(now.getDate()).padStart(2,"0"), W-PX, 44);
+  // 요약 3칸
+  const bx = [PX, PX+656], bw = [640, 448], by = 156, bh = 180;
+  const stats = [["실현 손익", sgn(total), total>=0 ? C.up : C.bad, 54], ["거래 횟수", all.length+"회", C.fg, 54]];
+  stats.forEach((st,i)=>{
+    x.fillStyle = C.card; x.fillRect(bx[i], by, bw[i], bh); x.fillStyle = C.gold; x.fillRect(bx[i], by, 5, bh);
+    x.textAlign = "left"; x.fillStyle = C.mute; x.font = "600 24px "+FONT; x.fillText(st[0], bx[i]+28, by+36);
+    x.fillStyle = st[2]; let f2 = st[3]; x.font = "800 "+f2+"px "+MONO; while(f2>28 && x.measureText(st[1]).width > bw[i]-50){ f2 -= 2; x.font = "800 "+f2+"px "+MONO; }
+    x.fillText(st[1], bx[i]+28, by+90);
   });
+  // 실현 손익 칸 아래줄: 수익 합산 / 손실 합산 (수수료 제외)
+  const profitSum = all.reduce((a2,t)=>a2+(net(t)>0 ? net(t) : 0),0), lossSum = all.reduce((a2,t)=>a2+(net(t)<0 ? net(t) : 0),0);
+  [["수익 합산", profitSum, C.up, 0], ["손실 합산", lossSum, C.bad, 310]].forEach(it=>{
+    const px = bx[0]+28+it[3], py = by+144;
+    x.textAlign = "left"; x.fillStyle = C.mute; x.font = "600 22px "+FONT; x.fillText(it[0], px, py);
+    const lw = x.measureText(it[0]).width;
+    x.fillStyle = it[1] === 0 ? C.mute : it[2]; x.font = "800 26px "+MONO; x.fillText(it[1] === 0 ? "$0.00" : sgn(it[1]), px+lw+12, py);
+  });
+  // 거래 횟수 칸 아래줄: 수수료 합계(손익과 따로)
+  x.textAlign = "left"; x.fillStyle = C.mute; x.font = "600 22px "+FONT; x.fillText("수수료", bx[1]+28, by+144);
+  { const fw = x.measureText("수수료").width; x.fillStyle = fees > 0 ? C.bad : C.mute; x.font = "800 26px "+MONO; x.fillText(fees > 0 ? "-"+fmtMoney(fees) : "$0.00", bx[1]+28+fw+12, by+144); }
+  // 표
+  const ty = 358, RH = 52, maxRows = Math.floor((H - ty - 44 - 62) / RH);
+  x.fillStyle = C.head; x.fillRect(PX-12, ty, W-2*PX+24, 44);
+  x.fillStyle = C.mute; x.font = "600 22px "+FONT;
+  x.textAlign = "left"; x.fillText("시각", PX+4, ty+22); x.fillText("방향", PX+190, ty+22);
+  x.textAlign = "right"; x.fillText("진입 → 청산", PX+740, ty+22); x.fillText("손익", W-PX-4, ty+22);
+  x.textAlign = "left"; x.fillText("수수료", PX+790, ty+22);
+  const rows = all.slice(0, maxRows);
+  if(!rows.length){ x.textAlign = "center"; x.fillStyle = C.mute; x.font = "600 30px "+FONT; x.fillText("아직 거래가 없습니다.", W/2, ty+44+(maxRows*RH)/2); }
+  rows.forEach((t,i)=>{
+    const yy = ty + 44 + i*RH, cy = yy + RH/2;
+    if(i%2){ x.fillStyle = "rgba(127,140,160,.08)"; x.fillRect(PX-12, yy, W-2*PX+24, RH); }
+    x.textAlign = "left"; x.fillStyle = C.fg; x.font = "24px "+MONO; x.fillText(kstFull(t.sec), PX+4, cy);
+    x.fillStyle = t.dir==="BUY" ? C.buy : C.bad; x.font = "800 24px "+MONO; x.fillText(t.dir, PX+190, cy);
+    x.textAlign = "right"; x.fillStyle = C.fg; x.font = "24px "+MONO; x.fillText(fmtPrice(t.entry)+" → "+fmtPrice(t.exit), PX+740, cy);
+    // 방향 옆에 TP/SL 표시 (보험금의 연동 청산은 '연동 TP/SL')
+    x.textAlign = "left"; const linked = t.reason === "연동청산", rr = linked ? (t.cause || "") : (t.reason || "");
+    const tag = rr === "익절" ? [linked ? "연동 TP" : "TP", linked ? C.fg : C.up] : rr === "손절" ? [linked ? "연동 SL" : "SL", linked ? C.fg : C.bad] : null;
+    if(tag){ x.fillStyle = tag[1]; x.font = "800 22px "+FONT; x.fillText(tag[0], PX+290, cy); }
+    // 수수료는 사유 자리에 따로 표기
+    x.fillStyle = C.mute; x.font = "24px "+MONO; x.fillText("-"+fmtMoney(t.fee||0), PX+790, cy);
+    x.textAlign = "right";
+    x.fillStyle = net(t)>=0 ? C.up : C.bad; x.font = "800 26px "+MONO; x.fillText(sgn(net(t)), W-PX-4, cy);
+  });
+  // 하단
+  x.textAlign = "left"; x.fillStyle = C.mute; x.font = "20px "+FONT;
+  const more = all.length - rows.length;
+  x.fillText(more > 0 ? "최근 "+rows.length+"건만 표시 · 이전 "+more+"건 생략" : "손익은 수수료 제외 · 수수료는 별도 표기", PX, H-34);
+  x.textAlign = "right"; x.fillText("Created by Hoon.D", W-PX, H-34);
   return cv;
 }
 async function saveHistoryPng(){
@@ -1347,10 +1363,10 @@ async function saveHistoryPng(){
   showPngSheet(cv.toDataURL("image/png"), name);
 }
 function shareText(){
-  const who = pngLabel(), mine = state.trades.filter(t=>t.pane===0).slice(0,10);
-  const total = state.trades.filter(t=>t.pane===0).reduce((a,t)=>a+t.pnl-(t.fee||0),0);
-  const lines = mine.map(t=>t.dir+" "+t.lot.toFixed(2)+"lot "+fmtPrice(t.entry)+" → "+fmtPrice(t.exit)+" ("+(t.pnl-(t.fee||0)>=0?"+":"")+fmtMoney(t.pnl-(t.fee||0))+")");
-  return (who ? who+" 트레이더 · " : "")+"XAUUSD 반대매매 시뮬레이션 거래내역\n"+lines.join("\n")+(lines.length ? "\n" : "")+"실현 "+(total>=0?"+":"")+fmtMoney(total);
+  const who = pngLabel(), all = state.trades.filter(t=>t.pane===0), mine = all.slice(0,10);
+  const total = all.reduce((a,t)=>a+t.pnl,0), fees = all.reduce((a,t)=>a+(t.fee||0),0);
+  const lines = mine.map(t=>t.dir+" "+t.lot.toFixed(2)+"lot "+fmtPrice(t.entry)+" → "+fmtPrice(t.exit)+" ("+(t.pnl>=0?"+":"")+fmtMoney(t.pnl)+")");
+  return (who ? who+" 트레이더 · " : "")+"XAUUSD 반대매매 시뮬레이션 거래내역\n"+lines.join("\n")+(lines.length ? "\n" : "")+"실현 "+(total>=0?"+":"")+fmtMoney(total)+" · 수수료 -"+fmtMoney(fees);
 }
 function showPngSheet(url, name, file){
   let ov = document.getElementById("pngSheet");
@@ -1559,7 +1575,7 @@ function closeLeg(paneIdx, leg, reason, now, lagFixed){
   // 동시 진입·동시 컷: 챌린지가 청산되면(수동·익절·손절·강제청산) 그 챌린지가 만든 보험금 포지션도 함께 청산 요청
   if(paneIdx !== 0 && document.getElementById("chkLink").checked){
     const lg = leg.closing ? leg.closing.lagSec : null;   // 동시 컷: 챌린지와 같은 지연으로 함께 체결
-    state.panes[0].legs.filter(l=>l.src===paneIdx).forEach(l=>closeLeg(0, l, "연동청산", now, lg));
+    state.panes[0].legs.filter(l=>l.src===paneIdx).forEach(l=>{ l.cause = reason; closeLeg(0, l, "연동청산", now, lg); });
   }
 }
 function processPending(){
@@ -1583,7 +1599,7 @@ function calcPnl(pos, exitPrice){
 function logTrade(paneIdx, pos, exit, pnl, reason, extra){
   state.trades.unshift({
     tick: state.tick, sec: state.sec, openSec: pos.openSec, src: pos.src, pane: paneIdx, dir: pos.dir, lot: pos.lot,
-    openTick: pos.openTick, entry: pos.entry, exit: exit, pnl: pnl, reason: reason, lag: extra ? extra.lag : null, slip: extra ? extra.slip : 0, fee: extra ? (extra.fee||0) : 0
+    openTick: pos.openTick, cause: pos.cause, entry: pos.entry, exit: exit, pnl: pnl, reason: reason, lag: extra ? extra.lag : null, slip: extra ? extra.slip : 0, fee: extra ? (extra.fee||0) : 0
   });
   renderLog();
 }
@@ -2266,12 +2282,7 @@ function buildGlossary(){
 function wireEvents(){
   document.getElementById("btnPlay").addEventListener("click", ()=> state.running ? pause() : play());
   document.getElementById("btnNew").addEventListener("click", newGame);
-  { const mc = document.querySelector(".main-col"), rb = document.getElementById("btnRail");
-    const apply = off => { mc.classList.toggle("railoff", off); rb.classList.toggle("active", !off); setTimeout(()=>window.dispatchEvent(new Event("resize")), 60); };
-    let off = true; try{ const sv = localStorage.getItem("xauRailOff"); if(sv != null) off = sv === "1"; }catch(e){}
-    apply(off);
-    rb.addEventListener("click", ()=>{ off = !mc.classList.contains("railoff"); apply(off); try{ localStorage.setItem("xauRailOff", off ? "1" : "0"); }catch(e){} });
-  }
+  { const mc = document.querySelector(".main-col"); if(mc){ mc.classList.add("railoff"); setTimeout(()=>window.dispatchEvent(new Event("resize")), 60); } }   // 도움말 칸은 항상 숨김
   { const fb = document.getElementById("btnFs"), de = document.documentElement;
     const isFs = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
     const sync = () => { fb.classList.toggle("active", isFs()); setTimeout(()=>window.dispatchEvent(new Event("resize")), 120); };
@@ -2543,6 +2554,7 @@ const LANGS = ["ko","en","ja","zh"];
 const EX = {
  // ── 제목·상단 ──
  "금 선물":["Gold Futures","金先物","黄金期货"],
+ "XAUUSD 반대매매 시뮬레이션":["XAUUSD Counter-Trade Simulator","XAUUSD 反対売買シミュレーション","XAUUSD 对冲交易模拟"],
  "반대매매 시뮬레이션":["Counter-Trade Simulator","反対売買シミュレーション","对冲交易模拟"],
  "1랏=100온스 · 0.01랏은 $1 변동에 $1 · 1배속=실시간":["1 lot = 100 oz · 0.01 lot = $1 per $1 move · 1x speed = real time","1ロット=100オンス · 0.01ロットは$1の値動きで$1 · 1倍速=リアルタイム","1手=100盎司 · 0.01手每波动$1盈亏$1 · 1倍速=实时"],
  "설정을 바꾸면 새로 시작돼요":["Changing settings restarts the game","設定を変更すると最初からやり直しになります","更改设置后将重新开始"],
@@ -2593,6 +2605,16 @@ const EX = {
  "거래 내역을 복사했어요. 카톡·텔레그램에 붙여넣으세요.":["Copied. Paste it into KakaoTalk or Telegram.","コピーしました。カカオトーク·Telegramに貼り付けてください。","已复制。请粘贴到 KakaoTalk 或 Telegram。"],
  "복사하지 못했어요. 이미지를 길게 눌러 저장해 주세요.":["Couldn't copy. Please long-press the image to save it.","コピーできませんでした。画像を長押しして保存してください。","复制失败。请长按图片保存。"],
  "이 환경에서는 공유창을 열 수 없어요. 이미지를 길게 눌러 저장하거나, 내역 텍스트를 복사해 붙여넣으세요.":["Sharing isn't available here. Long-press the image to save it, or copy the text and paste it.","この環境では共有画面を開けません。画像を長押しして保存するか、テキストをコピーして貼り付けてください。","此环境无法打开分享面板。请长按图片保存，或复制文字后粘贴。"],
+ "실현 손익":["Realized P/L","実現損益","已实现盈亏"],
+ "거래 횟수":["Trades","取引回数","交易次数"],
+ "승률":["Win rate","勝率","胜率"],
+ "진입 → 청산":["Entry → Exit","エントリー → 決済","开仓 → 平仓"],
+ "손익은 수수료 제외 · 수수료는 별도 표기":["P/L excludes fees · fees shown separately","損益は手数料を除く · 手数料は別表示","盈亏不含手续费 · 手续费单独显示"],
+ "손익은 수수료 반영":["P/L is net of fees","損益は手数料込み","盈亏已含手续费"],
+ "연동 TP":["Linked TP","連動TP","联动 TP"],
+ "연동 SL":["Linked SL","連動SL","联动 SL"],
+ "수익 합산":["Total profit","利益合計","盈利合计"],
+ "손실 합산":["Total loss","損失合計","亏损合计"],
  "저장":["Save","保存","保存"],
  "취소":["Cancel","キャンセル","取消"],
  "전체 청산":["Close all","全決済","全部平仓"],
@@ -2742,6 +2764,8 @@ const TPL = [
  [/^대기 · 잔액 (.+)$/, ["Idle · Balance $1","待機 · 残高 $1","待机 · 余额 $1"]],
  [/^평가금 (.+)$/, ["Equity $1","評価額 $1","净值 $1"]],
  [/^실현 (.+)$/, ["Realized $1","実現 $1","已实现 $1"]],
+ [/^(\d+)회$/, ["$1","$1回","$1 次"]],
+ [/^최근 (\d+)건만 표시 · 이전 (\d+)건 생략$/, ["Latest $1 shown · $2 earlier omitted","直近$1件のみ表示 · 以前$2件は省略","仅显示最近 $1 笔 · 省略此前 $2 笔"]],
  [/^거래 (\d+)회$/, ["$1 trades","取引 $1回","交易 $1 次"]],
  [/^거래 (\d+)회 · 평가금 (.+) \(초기 (.+)\)$/, ["$1 trades · Equity $2 (initial $3)","取引 $1回 · 評価額 $2(初期 $3)","交易 $1 次 · 净值 $2(初始 $3)"]],
  [/^손익 (.+?)\s+·\s+수수료 -(.+)$/, ["P/L $1  ·  Fees -$2","損益 $1  ·  手数料 -$2","盈亏 $1  ·  手续费 -$2"]],
@@ -2863,7 +2887,6 @@ const GUIDE = [
  [()=>document.getElementById("chkSnd").closest("label"),"효과음","버튼 클릭, 진입, 익절·손절·강제청산 때 효과음이 나요"],
  [".ampbox","변동폭","실제 차트의 움직임을 이 배수만큼 키워요. 바꾸면 그 순간부터 앞으로 그려지는 캔들에 바로 적용돼요"],
  ["#btnCloseAll","전체 청산","열려 있는 모든 계좌의 포지션을 한꺼번에 청산해요."],
- ["#btnRail","도움말","오른쪽 도움말·용어 사전 칸을 보이거나 숨겨요 (숨기면 차트가 넓어져요)"],
  ["#btnPng","거래내역 공유","보험금 계좌의 거래내역을 이미지로 만들어요. 누르면 트레이더 이름을 물어보고, 모바일에서는 카카오톡·문자·텔레그램 등으로 바로 공유할 수 있어요. PC에서는 이미지 파일로 저장돼요."],
  [".themegrp","테마","화면 색 테마를 바꿔요 (다크 · 카키 · 핑크 · 윈도우11)."],
  ["#selLang","언어","화면 언어를 바꿔요 (한국어 · English · 日本語 · 中文)."],
