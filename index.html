@@ -520,6 +520,16 @@ tr.openrow td.tag{color:var(--warn);font-weight:600;}
   .price-box.top button{min-width:78px;padding:7px 10px;}
 }
 
+/* 태블릿 폭(761~1280px): 옵션 상자가 여러 줄로 길어져 위쪽 상자들이 위아래로 늘어나던 문제 →
+   첫 줄에 차트시간+재생 컨트롤, 둘째 줄에 옵션 상자를 가로 전체로 배치 */
+@media (min-width:761px) and (max-width:1280px){
+  .stat-strip{flex-wrap:wrap;align-items:stretch;}
+  .stat.sq{flex:0 0 auto;min-width:220px;}
+  .stat.speedbox{flex:1 1 0;min-width:0;}
+  .stat.optbox{flex:1 1 100%;}
+  .settings{flex-wrap:wrap;margin-left:0;width:100%;}
+  .settings .cfg{flex:1 1 auto;}
+}
 .jumpbar{display:none;}
 /* ---------- 모바일 (폭 760px 이하): 세로 한 줄 구조, 데스크톱 레이아웃은 그대로 ---------- */
 @media (max-width:760px){
