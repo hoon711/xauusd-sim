@@ -1,17 +1,5 @@
-<meta charset="utf-8">
 <title>XAUUSD 금 선물 반대매매 시뮬레이션</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="챌린지 vs 보험금, 금 선물 반대매매를 실전처럼 연습하는 XAUUSD 시뮬레이터">
-<meta property="og:type" content="website">
-<meta property="og:title" content="XAUUSD 금 선물 반대매매 시뮬레이션">
-<meta property="og:description" content="챌린지 vs 보험금, 금 선물 반대매매를 실전처럼 연습하는 XAUUSD 시뮬레이터">
-<meta property="og:image" content="https://hoon711.github.io/xauusd-sim/thumb.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:url" content="https://hoon711.github.io/xauusd-sim/">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://hoon711.github.io/xauusd-sim/thumb.png">
-
 <style>
 /* Layout concept: dark MT5 terminal shell — header stat strip, two
    independently-tradeable panes styled as floating FastInOut-style EA
@@ -520,16 +508,6 @@ tr.openrow td.tag{color:var(--warn);font-weight:600;}
   .price-box.top button{min-width:78px;padding:7px 10px;}
 }
 
-/* 태블릿 폭(761~1280px): 옵션 상자가 여러 줄로 길어져 위쪽 상자들이 위아래로 늘어나던 문제 →
-   첫 줄에 차트시간+재생 컨트롤, 둘째 줄에 옵션 상자를 가로 전체로 배치 */
-@media (min-width:761px) and (max-width:1280px){
-  .stat-strip{flex-wrap:wrap;align-items:stretch;}
-  .stat.sq{flex:0 0 auto;min-width:220px;}
-  .stat.speedbox{flex:1 1 0;min-width:0;}
-  .stat.optbox{flex:1 1 100%;}
-  .settings{flex-wrap:wrap;margin-left:0;width:100%;}
-  .settings .cfg{flex:1 1 auto;}
-}
 .jumpbar{display:none;}
 /* ---------- 모바일 (폭 760px 이하): 세로 한 줄 구조, 데스크톱 레이아웃은 그대로 ---------- */
 @media (max-width:760px){
@@ -687,7 +665,7 @@ tr.openrow td.tag{color:var(--warn);font-weight:600;}
           <span class="sep"></span>
           <button class="btn ghost" id="btnCloseAll">전체 청산</button>
           <button class="btn ghost" id="btnRail" title="오른쪽 도움말·용어 사전 칸을 보이거나 숨겨요 (숨기면 차트가 넓어져요)">도움말</button>
-          <button class="btn ghost" id="btnPng" title="보험금 계좌의 거래 히스토리를 PNG 이미지로 저장해요">히스토리 PNG 저장</button>
+          <button class="btn ghost" id="btnPng" title="보험금 계좌의 거래내역을 이미지로 공유해요 (모바일: 카톡·문자·텔레그램 등 / PC: 이미지로 저장)">거래내역 공유</button>
           <input type="text" id="pngName" hidden maxlength="20" placeholder="트레이더 이름" title="트레이더 이름: 히스토리 PNG 상단과 파일 이름에 표시돼요 (선택)" style="font-family:var(--font-ui);font-size:.78rem;width:106px;box-sizing:border-box;background:var(--panel-bg-2);color:var(--fg);border:1px solid var(--border);border-radius:6px;padding:6px 7px;">
           <span class="sep"></span>
           <div class="themegrp" role="group" aria-label="테마"><button class="themebtn active" data-theme-set="dark" title="다크" aria-label="다크"></button><button class="themebtn" data-theme-set="khaki" title="카키" aria-label="카키"></button><button class="themebtn" data-theme-set="pink" title="핑크" aria-label="핑크"></button><button class="themebtn" data-theme-set="win11" title="윈도우11" aria-label="윈도우11"></button></div>
@@ -1344,6 +1322,19 @@ async function saveHistoryPng(){
   const cv = historyPng();
   const blob = await new Promise(res=>cv.toBlob(res, "image/png"));
   const d = new Date(), who = pngLabel().replace(/[\\/:*?"<>|\s]+/g,"_"), name = "보험금_거래히스토리_"+(who?who+"_":"")+d.getFullYear()+String(d.getMonth()+1).padStart(2,"0")+String(d.getDate()).padStart(2,"0")+"_"+String(d.getHours()).padStart(2,"0")+String(d.getMinutes()).padStart(2,"0")+".png";
+  // 모바일(터치 화면): 공유 시트를 띄워 카카오톡·문자·텔레그램 등으로 바로 보내기
+  const touch = window.matchMedia && (window.matchMedia("(pointer:coarse)").matches || window.innerWidth <= 760);
+  if(touch && blob && typeof File === "function" && navigator.share && navigator.canShare){
+    try{
+      const file = new File([blob], name, {type: "image/png"});
+      if(navigator.canShare({files: [file]})){
+        const who2 = pngLabel();
+        await navigator.share({files: [file], title: "XAUUSD 반대매매 시뮬레이션 거래내역", text: (who2 ? who2+" 트레이더 · " : "") + "XAUUSD 반대매매 시뮬레이션 거래내역"});
+        notify("거래내역을 공유했어요.");
+        return;
+      }
+    }catch(e){ if(e && e.name === "AbortError") return; }   // 공유창을 닫은 경우는 조용히 종료, 그 외 오류는 아래 저장 방식으로
+  }
   try{
     const dl = (window.claude && window.claude.use) ? await window.claude.use("downloads") : null;
     if(dl){ await dl.save({filename:name, data:blob}); notify("히스토리를 PNG로 저장했어요."); return; }
@@ -1369,7 +1360,7 @@ function askTraderName(){
     let ov = document.getElementById("nameAsk");
     if(!ov){
       ov = document.createElement("div"); ov.id = "nameAsk";
-      ov.innerHTML = '<div class="nbox" role="dialog" aria-modal="true"><b class="nt">트레이더 이름을 입력하세요</b><span class="ns">이미지 상단과 파일 이름에 표시돼요 (비워도 돼요)</span><input type="text" id="nameAskInp" maxlength="20" placeholder="트레이더 이름" autocomplete="off"><div class="nrow"><button class="btn ghost" id="nameAskNo">취소</button><button class="btn" id="nameAskOk">저장</button></div></div>';
+      ov.innerHTML = '<div class="nbox" role="dialog" aria-modal="true"><b class="nt">트레이더 이름을 입력하세요</b><span class="ns">이미지 상단과 파일 이름에 표시돼요 (비워도 돼요)</span><input type="text" id="nameAskInp" maxlength="20" placeholder="트레이더 이름" autocomplete="off"><div class="nrow"><button class="btn ghost" id="nameAskNo">취소</button><button class="btn" id="nameAskOk">공유</button></div></div>';
       document.body.appendChild(ov);
     }
     const inp = document.getElementById("nameAskInp"), ok = document.getElementById("nameAskOk"), no = document.getElementById("nameAskNo");
@@ -2566,6 +2557,11 @@ const EX = {
  "시간":["Time","時間","时间"],
  "트레이더 이름을 입력하세요":["Enter your trader name","トレーダー名を入力してください","请输入交易员名称"],
  "이미지 상단과 파일 이름에 표시돼요 (비워도 돼요)":["Shown at the top of the image and in the file name (optional)","画像の上部とファイル名に表示されます(空欄でも可)","显示在图片顶部和文件名中(可留空)"],
+ "거래내역 공유":["Share trade history","取引履歴を共有","分享交易记录"],
+ "보험금 계좌의 거래내역을 이미지로 공유해요 (모바일: 카톡·문자·텔레그램 등 / PC: 이미지로 저장)":["Share the insurance account's trade history as an image (mobile: KakaoTalk, SMS, Telegram, etc. / PC: saves as an image)","保険金口座の取引履歴を画像で共有します(モバイル:カカオトーク·SMS·Telegramなど / PC:画像として保存)","将保险金账户的交易记录作为图片分享(手机：KakaoTalk、短信、Telegram 等 / 电脑：保存为图片)"],
+ "보험금 계좌의 거래내역을 이미지로 만들어요. 누르면 트레이더 이름을 물어보고, 모바일에서는 카카오톡·문자·텔레그램 등으로 바로 공유할 수 있어요. PC에서는 이미지 파일로 저장돼요.":["Turns the insurance account's trade history into an image. It asks for your trader name first; on mobile you can share it straight to KakaoTalk, SMS, Telegram and more. On PC it is saved as an image file.","保険金口座の取引履歴を画像にします。押すとトレーダー名を尋ね、モバイルではカカオトーク·SMS·Telegramなどにそのまま共有できます。PCでは画像ファイルとして保存されます。","将保险金账户的交易记录生成图片。点击后会询问交易员名称，手机上可直接分享到 KakaoTalk、短信、Telegram 等；电脑上则保存为图片文件。"],
+ "거래내역을 공유했어요.":["Trade history shared.","取引履歴を共有しました。","已分享交易记录。"],
+ "공유":["Share","共有","分享"],
  "저장":["Save","保存","保存"],
  "취소":["Cancel","キャンセル","取消"],
  "전체 청산":["Close all","全決済","全部平仓"],
@@ -2837,7 +2833,7 @@ const GUIDE = [
  [".ampbox","변동폭","실제 차트의 움직임을 이 배수만큼 키워요. 바꾸면 그 순간부터 앞으로 그려지는 캔들에 바로 적용돼요"],
  ["#btnCloseAll","전체 청산","열려 있는 모든 계좌의 포지션을 한꺼번에 청산해요."],
  ["#btnRail","도움말","오른쪽 도움말·용어 사전 칸을 보이거나 숨겨요 (숨기면 차트가 넓어져요)"],
- ["#btnPng","히스토리 PNG 저장","보험금 계좌의 거래 히스토리를 PNG 이미지로 저장해요. 누르면 트레이더 이름을 물어보고, 입력한 이름이 이미지 상단과 파일 이름에 표시돼요."],
+ ["#btnPng","거래내역 공유","보험금 계좌의 거래내역을 이미지로 만들어요. 누르면 트레이더 이름을 물어보고, 모바일에서는 카카오톡·문자·텔레그램 등으로 바로 공유할 수 있어요. PC에서는 이미지 파일로 저장돼요."],
  [".themegrp","테마","화면 색 테마를 바꿔요 (다크 · 카키 · 핑크 · 윈도우11)."],
  ["#selLang","언어","화면 언어를 바꿔요 (한국어 · English · 日本語 · 中文)."],
  ["#btnFs","전체화면","전체화면 켜기/끄기 (Esc로 해제)"],
