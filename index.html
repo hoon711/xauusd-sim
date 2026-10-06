@@ -482,6 +482,8 @@ tr.openrow td.tag{color:var(--warn);font-weight:600;}
 #pngSheet.show{display:flex;}
 #pngSheet .pngbox{background:var(--panel-bg);border:1px solid var(--border-strong);border-radius:12px;max-width:min(1200px,96vw);max-height:92vh;overflow:auto;padding:12px;}
 #pngSheet .pnghead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px;font-size:.84rem;} #pngSheet .pnghead span{color:var(--muted);flex:1;}
+@media (max-width:760px){#pngSheet .pnghead span{flex:1 1 100%;order:3;}}
+#pngSheet .pngact{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
 #pngSheet img{display:block;max-width:100%;height:auto;border-radius:6px;-webkit-touch-callout:default;-webkit-user-select:auto;user-select:auto;}
 #toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);max-width:min(720px,92vw);background:var(--panel-bg);color:var(--warn);border:1px solid var(--border-strong);border-radius:10px;padding:10px 16px;font-size:.84rem;line-height:1.45;box-shadow:0 8px 28px rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:50;}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
@@ -1324,16 +1326,18 @@ async function saveHistoryPng(){
   const d = new Date(), who = pngLabel().replace(/[\\/:*?"<>|\s]+/g,"_"), name = "보험금_거래히스토리_"+(who?who+"_":"")+d.getFullYear()+String(d.getMonth()+1).padStart(2,"0")+String(d.getDate()).padStart(2,"0")+"_"+String(d.getHours()).padStart(2,"0")+String(d.getMinutes()).padStart(2,"0")+".png";
   // 모바일(터치 화면): 공유 시트를 띄워 카카오톡·문자·텔레그램 등으로 바로 보내기
   const touch = window.matchMedia && (window.matchMedia("(pointer:coarse)").matches || window.innerWidth <= 760);
-  if(touch && blob && typeof File === "function" && navigator.share && navigator.canShare){
-    try{
-      const file = new File([blob], name, {type: "image/png"});
-      if(navigator.canShare({files: [file]})){
-        const who2 = pngLabel();
-        await navigator.share({files: [file], title: "XAUUSD 반대매매 시뮬레이션 거래내역", text: (who2 ? who2+" 트레이더 · " : "") + "XAUUSD 반대매매 시뮬레이션 거래내역"});
+  if(touch){
+    const file = (blob && typeof File === "function") ? new File([blob], name, {type: "image/png"}) : null;
+    if(file && navigator.share && navigator.canShare && navigator.canShare({files: [file]})){
+      try{
+        await navigator.share({files: [file], title: "XAUUSD 반대매매 시뮬레이션 거래내역", text: shareText()});
         notify("거래내역을 공유했어요.");
         return;
-      }
-    }catch(e){ if(e && e.name === "AbortError") return; }   // 공유창을 닫은 경우는 조용히 종료, 그 외 오류는 아래 저장 방식으로
+      }catch(e){ if(e && e.name === "AbortError") return; }   // 공유창을 닫은 경우는 조용히 종료
+    }
+    // 바로 공유가 막힌 경우(브라우저·앱 제한, 터치 시점 만료 등): 미리보기 + '공유하기' 버튼(새로 누르면 공유가 열림)
+    showPngSheet(cv.toDataURL("image/png"), name, file);
+    return;
   }
   try{
     const dl = (window.claude && window.claude.use) ? await window.claude.use("downloads") : null;
@@ -1342,18 +1346,40 @@ async function saveHistoryPng(){
   // 파일 저장 권한이 없는 경우(조직 구성원이 아닌 사람 등): 이미지를 화면에 띄워 길게 누르거나 우클릭으로 저장
   showPngSheet(cv.toDataURL("image/png"), name);
 }
-function showPngSheet(url, name){
+function shareText(){
+  const who = pngLabel(), mine = state.trades.filter(t=>t.pane===0).slice(0,10);
+  const total = state.trades.filter(t=>t.pane===0).reduce((a,t)=>a+t.pnl-(t.fee||0),0);
+  const lines = mine.map(t=>t.dir+" "+t.lot.toFixed(2)+"lot "+fmtPrice(t.entry)+" → "+fmtPrice(t.exit)+" ("+(t.pnl-(t.fee||0)>=0?"+":"")+fmtMoney(t.pnl-(t.fee||0))+")");
+  return (who ? who+" 트레이더 · " : "")+"XAUUSD 반대매매 시뮬레이션 거래내역\n"+lines.join("\n")+(lines.length ? "\n" : "")+"실현 "+(total>=0?"+":"")+fmtMoney(total);
+}
+function showPngSheet(url, name, file){
   let ov = document.getElementById("pngSheet");
   if(!ov){
     ov = document.createElement("div"); ov.id = "pngSheet";
-    ov.innerHTML = '<div class="pngbox"><div class="pnghead"><b>보험금 거래 히스토리</b><span>이미지를 길게 누르거나(모바일) 우클릭(PC)해서 저장하세요</span><button class="btn ghost" id="pngClose">닫기</button></div><img id="pngImg" alt="보험금 거래 히스토리"></div>';
+    ov.innerHTML = '<div class="pngbox"><div class="pnghead"><b>보험금 거래 히스토리</b><span>이미지를 길게 누르거나(모바일) 우클릭(PC)해서 저장하세요</span><button class="btn ghost" id="pngClose">닫기</button></div><div class="pngact"><button class="btn" id="pngShare">공유하기</button><button class="btn ghost" id="pngCopy">내역 텍스트 복사</button></div><img id="pngImg" alt="보험금 거래 히스토리"></div>';
     document.body.appendChild(ov);
     ov.addEventListener("click", e=>{ if(e.target === ov || e.target.id === "pngClose") ov.classList.remove("show"); });
+    document.getElementById("pngCopy").addEventListener("click", async ()=>{
+      const t = shareText();
+      try{ await navigator.clipboard.writeText(t); notify("거래 내역을 복사했어요. 카톡·텔레그램에 붙여넣으세요."); }
+      catch(e){ const ta = document.createElement("textarea"); ta.value = t; document.body.appendChild(ta); ta.select(); try{ document.execCommand("copy"); notify("거래 내역을 복사했어요. 카톡·텔레그램에 붙여넣으세요."); }catch(_){ notify("복사하지 못했어요. 이미지를 길게 눌러 저장해 주세요."); } ta.remove(); }
+    });
+    document.getElementById("pngShare").addEventListener("click", async ()=>{
+      const f = ov._file;
+      if(f && navigator.share){
+        try{ await navigator.share({files: [f], title: "XAUUSD 반대매매 시뮬레이션 거래내역", text: shareText()}); notify("거래내역을 공유했어요."); return; }
+        catch(e){ if(e && e.name === "AbortError") return; }
+        try{ await navigator.share({title: "XAUUSD 반대매매 시뮬레이션 거래내역", text: shareText()}); notify("거래내역을 공유했어요."); return; }   // 이미지 공유가 안 되면 글로라도 공유
+        catch(e){ if(e && e.name === "AbortError") return; }
+      }
+      notify("이 환경에서는 공유창을 열 수 없어요. 이미지를 길게 눌러 저장하거나, 내역 텍스트를 복사해 붙여넣으세요.");
+    });
   }
+  ov._file = file || null;
+  ov.querySelector("#pngShare").style.display = (file && navigator.share) || navigator.share ? "" : "none";
   const img = document.getElementById("pngImg"); img.src = url; img.dataset.name = name;
   ov.classList.add("show");
 }
-
 /* 히스토리 저장 전에 트레이더 이름 입력받기 */
 function askTraderName(){
   return new Promise(res=>{
@@ -2562,6 +2588,11 @@ const EX = {
  "보험금 계좌의 거래내역을 이미지로 만들어요. 누르면 트레이더 이름을 물어보고, 모바일에서는 카카오톡·문자·텔레그램 등으로 바로 공유할 수 있어요. PC에서는 이미지 파일로 저장돼요.":["Turns the insurance account's trade history into an image. It asks for your trader name first; on mobile you can share it straight to KakaoTalk, SMS, Telegram and more. On PC it is saved as an image file.","保険金口座の取引履歴を画像にします。押すとトレーダー名を尋ね、モバイルではカカオトーク·SMS·Telegramなどにそのまま共有できます。PCでは画像ファイルとして保存されます。","将保险金账户的交易记录生成图片。点击后会询问交易员名称，手机上可直接分享到 KakaoTalk、短信、Telegram 等；电脑上则保存为图片文件。"],
  "거래내역을 공유했어요.":["Trade history shared.","取引履歴を共有しました。","已分享交易记录。"],
  "공유":["Share","共有","分享"],
+ "공유하기":["Share","共有する","分享"],
+ "내역 텍스트 복사":["Copy as text","内容をテキストでコピー","复制文字记录"],
+ "거래 내역을 복사했어요. 카톡·텔레그램에 붙여넣으세요.":["Copied. Paste it into KakaoTalk or Telegram.","コピーしました。カカオトーク·Telegramに貼り付けてください。","已复制。请粘贴到 KakaoTalk 或 Telegram。"],
+ "복사하지 못했어요. 이미지를 길게 눌러 저장해 주세요.":["Couldn't copy. Please long-press the image to save it.","コピーできませんでした。画像を長押しして保存してください。","复制失败。请长按图片保存。"],
+ "이 환경에서는 공유창을 열 수 없어요. 이미지를 길게 눌러 저장하거나, 내역 텍스트를 복사해 붙여넣으세요.":["Sharing isn't available here. Long-press the image to save it, or copy the text and paste it.","この環境では共有画面を開けません。画像を長押しして保存するか、テキストをコピーして貼り付けてください。","此环境无法打开分享面板。请长按图片保存，或复制文字后粘贴。"],
  "저장":["Save","保存","保存"],
  "취소":["Cancel","キャンセル","取消"],
  "전체 청산":["Close all","全決済","全部平仓"],
