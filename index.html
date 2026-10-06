@@ -185,6 +185,10 @@
 #guideOv .gb .gt i{font-style:normal;flex:none;width:24px;height:24px;border-radius:50%;background:#4da3ff;color:#06101e;display:inline-flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:800;}
 #guideOv .gb p{margin:0;font-size:.9rem;line-height:1.5;color:#c6d2e4;word-break:keep-all;}
 #guideOv .gb s{position:absolute;width:10px;height:10px;background:#101a2b;border-left:1.5px solid #4da3ff;border-top:1.5px solid #4da3ff;transform:translate(-50%,0) rotate(45deg);}
+#guideQr{position:fixed;right:16px;bottom:14px;z-index:911;display:flex;flex-direction:column;align-items:center;gap:6px;background:#fff;color:#0b1220;border:2px solid #4da3ff;border-radius:12px;padding:10px 10px 8px;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.5);font-family:var(--font-ui);font-size:.74rem;font-weight:800;line-height:1.3;text-align:center;}
+#guideQr svg{width:132px;height:132px;display:block;shape-rendering:crispEdges;}
+#guideQr small{font-weight:600;color:#44546b;font-size:.68rem;}
+@media (max-width:760px){ #guideQr{right:auto;left:50%;transform:translateX(-50%);bottom:12px;flex-direction:row;gap:8px;padding:7px 12px;border-radius:999px;} #guideQr svg,#guideQr small{display:none;} }
 #guideBar{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:910;display:flex;align-items:center;gap:10px;background:rgba(16,26,43,.94);color:#e7edf7;border:1px solid #4da3ff;border-radius:999px;padding:6px 8px 6px 16px;font-size:.8rem;font-weight:600;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.5);}
 @media (max-width:760px){ #guideBar{bottom:auto;top:8px;font-size:.72rem;white-space:nowrap;padding:5px 6px 5px 12px;} }
 #guideOv .ghl b{position:absolute;left:-10px;top:-10px;width:20px;height:20px;border-radius:50%;background:#4da3ff;color:#06101e;font-size:.64rem;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px #0b1220;}
@@ -376,6 +380,10 @@ canvas.pane-chart{touch-action:pan-y;cursor:crosshair;position:absolute;inset:0;
 .pane-footer .pos .legsum{white-space:nowrap;color:var(--muted);border-top:1px solid var(--border);margin-top:2px;padding-top:2px;}
 .pane-footer .pos.buy{color:var(--buy);}
 .pane-footer .pos.sell{color:var(--sell);}
+.pane-footer .pos.danger{color:#fff;animation:dgBlink .7s steps(1) infinite;border-radius:5px;padding:1px 6px;}
+.log-col.dangerpane tr[data-leg]{animation:dgBlinkRow .7s steps(1) infinite;}
+@keyframes dgBlink{0%,100%{background:#e0283c;}50%{background:transparent;color:var(--bad);}}
+@keyframes dgBlinkRow{0%,100%{background:rgba(224,40,60,.38);}50%{background:transparent;}}
 .pane-footer .pnl.good{color:var(--good);} .pane-footer .pnl.up{color:var(--profit);}
 .pane-footer .pnl.bad{color:var(--bad);}
 .pane-footer .pos,.pane-footer .closebtn{display:none;}
@@ -1934,6 +1942,11 @@ function renderPanes(){
       const eq = p.balance + floatOf(p);   // 강제청산 체결이 늦으면 0 아래(마이너스)도 표시
       posEl.className = "pos eq " + (eq>p.start+0.005?"up":eq<p.start-0.005?"bad":"");
       posEl.textContent = "평가금 " + fmtMoney(eq);
+      // 청산 임박 경고(MT5 마진콜처럼 빨갛게 깜빡임): 청산선까지 남은 여유가 20% 이하
+      const sl0 = idx===0 ? usedMargin(p)*0.5 : 0;
+      const warn = p.legs.length>0 && !p.stopped && p.balance > sl0 && (eq - sl0) <= (p.balance - sl0)*0.20;
+      posEl.classList.toggle("danger", warn);
+      const col = document.querySelector('.log-col[data-pane="'+idx+'"]'); if(col) col.classList.toggle("dangerpane", warn);
     }
   });
 }
@@ -2694,6 +2707,8 @@ const EX = {
  "모의계좌":["Demo account","デモ口座","模拟账户"],
  "작게":["Small","小","小"],"보통":["Medium","中","中"],"크게":["Large","大","大"],
  "드래그/휠: 가격 확대·축소":["Drag / wheel: zoom the price axis","ドラッグ/ホイール:価格軸の拡大·縮小","拖动/滚轮：缩放价格轴"],
+ "웹 버전 QR":["Web version QR","Webバージョン QR","网页版二维码"],
+ "스마트폰 카메라로 스캔하세요":["Scan with your phone camera","スマホのカメラでスキャン","用手机相机扫描"],
  "손실 청산된 계좌입니다. 리셋 후 사용하세요":["This account was liquidated. Reset it to continue.","ロスカットされた口座です。リセットしてからご利用ください。","该账户已被强制平仓，请重置后使用。"],
  "포인트":["Points","ポイント","点数"],
  "진입가에서 떨어진 포인트(1p=$0.01)":["Distance from entry in points (1 pt = $0.01)","エントリー価格からの距離(ポイント、1p=$0.01)","距开仓价的点数(1点=$0.01)"],
@@ -2920,7 +2935,8 @@ const GUIDE = [
  ['.pane[data-pane="1"] .price-box.top',"SELL / BUY 주문","누르면 바로 주문돼요. 이때 보험금에는 반대 포지션이 자동으로 들어가요."]
 ];
 let _gOv = null;
-function closeGuide(){ if(_gOv){ _gOv.remove(); _gOv = null; } const h = document.getElementById("guideBar"); if(h) h.remove(); document.removeEventListener("keydown", _gKey, true); }
+const QR_URL = "https://hoon711.github.io/xauusd-sim/", QR_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29" class="segno"><path class="qrline" stroke="#000" d="M0 0.5h7m1 0h1m1 0h4m3 0h3m2 0h7m-29 1h1m5 0h1m1 0h3m2 0h1m2 0h1m1 0h1m1 0h1m1 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m2 0h3m1 0h2m7 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m1 0h3m4 0h1m4 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m3 0h1m1 0h1m1 0h3m2 0h1m2 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m2 0h1m3 0h1m5 0h2m1 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-21 1h2m4 0h1m2 0h2m-19 1h1m1 0h2m1 0h3m1 0h3m1 0h1m1 0h6m1 0h1m2 0h1m1 0h2m-29 1h1m1 0h2m5 0h1m3 0h1m2 0h5m1 0h1m1 0h1m3 0h1m-28 1h1m1 0h4m1 0h2m2 0h2m2 0h1m1 0h1m1 0h2m1 0h2m1 0h2m-28 1h1m1 0h2m1 0h1m1 0h1m2 0h3m2 0h2m1 0h2m1 0h1m1 0h2m3 0h1m-28 1h3m2 0h3m1 0h3m1 0h6m1 0h1m3 0h2m-25 1h1m8 0h2m1 0h3m2 0h1m1 0h2m3 0h3m-29 1h3m2 0h2m1 0h6m3 0h3m2 0h3m1 0h3m-29 1h1m1 0h3m4 0h2m3 0h3m3 0h1m2 0h1m3 0h1m-26 1h2m2 0h1m1 0h1m1 0h1m3 0h2m2 0h1m4 0h3m1 0h1m-27 1h1m1 0h2m2 0h4m1 0h1m1 0h5m1 0h2m1 0h1m1 0h3m-28 1h1m1 0h1m3 0h2m1 0h1m1 0h5m2 0h1m1 0h2m1 0h1m2 0h1m-25 1h1m2 0h1m1 0h1m1 0h1m2 0h3m1 0h2m2 0h2m2 0h1m1 0h1m-26 1h1m3 0h3m5 0h2m1 0h3m1 0h7m-19 1h1m1 0h1m1 0h1m3 0h1m1 0h1m1 0h1m3 0h5m-29 1h7m1 0h1m1 0h3m1 0h1m1 0h2m1 0h2m1 0h1m1 0h2m1 0h1m-28 1h1m5 0h1m1 0h2m3 0h4m1 0h1m1 0h1m3 0h2m1 0h2m-29 1h1m1 0h3m1 0h1m8 0h3m2 0h5m1 0h1m-27 1h1m1 0h3m1 0h1m1 0h3m1 0h1m2 0h5m3 0h3m2 0h1m-29 1h1m1 0h3m1 0h1m1 0h2m1 0h3m4 0h1m4 0h1m2 0h1m1 0h1m-29 1h1m5 0h1m3 0h1m1 0h1m2 0h2m3 0h1m1 0h1m1 0h2m1 0h1m-28 1h7m1 0h7m1 0h1m1 0h3m1 0h3m2 0h1"/></svg>';
+function closeGuide(){ const qa = document.getElementById("guideQr"); if(qa) qa.remove(); if(_gOv){ _gOv.remove(); _gOv = null; } const h = document.getElementById("guideBar"); if(h) h.remove(); document.removeEventListener("keydown", _gKey, true); }
 function _gKey(e){ if(e.key === "Escape"){ e.stopPropagation(); closeGuide(); } }
 function openGuide(){
   if(_gOv){ closeGuide(); return; }
@@ -2941,6 +2957,9 @@ function openGuide(){
     const bar = document.createElement("div"); bar.id = "guideBar";
     bar.innerHTML = '<span></span><button type="button">✕</button>'; bar.firstChild.textContent = tr(msg);
     body.appendChild(bar);
+    const qa = document.createElement("a"); qa.id = "guideQr"; qa.href = QR_URL; qa.target = "_blank"; qa.rel = "noopener";
+    qa.innerHTML = QR_SVG + '<span></span><small></small>'; qa.children[1].textContent = tr("웹 버전 QR"); qa.children[2].textContent = tr("스마트폰 카메라로 스캔하세요");
+    qa.addEventListener("click", e=>e.stopPropagation()); body.appendChild(qa);
     ov.addEventListener("click", onOv); bar.addEventListener("click", closeGuide);
     document.addEventListener("keydown", _gKey, true);
   };
