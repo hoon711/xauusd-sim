@@ -197,10 +197,22 @@
 #guideOv .gb .gt i{font-style:normal;flex:none;width:24px;height:24px;border-radius:50%;background:#4da3ff;color:#06101e;display:inline-flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:800;}
 #guideOv .gb p{margin:0;font-size:.9rem;line-height:1.5;color:#c6d2e4;word-break:keep-all;}
 #guideOv .gb s{position:absolute;width:10px;height:10px;background:#101a2b;border-left:1.5px solid #4da3ff;border-top:1.5px solid #4da3ff;transform:translate(-50%,0) rotate(45deg);}
-#guideQr{position:fixed;right:16px;bottom:14px;z-index:911;display:flex;flex-direction:column;align-items:center;gap:6px;background:#fff;color:#0b1220;border:2px solid #4da3ff;border-radius:12px;padding:10px 10px 8px;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.5);font-family:var(--font-ui);font-size:.74rem;font-weight:800;line-height:1.3;text-align:center;}
-#guideQr svg{width:132px;height:132px;display:block;shape-rendering:crispEdges;}
-#guideQr small{font-weight:600;color:#44546b;font-size:.68rem;}
+#guideQr{transition:opacity .15s;position:fixed;right:16px;bottom:14px;z-index:911;display:flex;flex-direction:column;align-items:center;gap:6px;background:#fff;color:#0b1220;border:2px solid #4da3ff;border-radius:12px;padding:10px 10px 8px;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.5);font-family:var(--font-ui);font-size:.74rem;font-weight:800;line-height:1.3;text-align:center;font-size:.95rem;}
+#guideQr svg{width:200px;height:200px;display:block;shape-rendering:crispEdges;}
+#guideQr small{font-weight:600;color:#44546b;font-size:.82rem;}
 @media (max-width:760px){ #guideQr{right:auto;left:50%;transform:translateX(-50%);bottom:12px;flex-direction:row;gap:8px;padding:7px 12px;border-radius:999px;} #guideQr svg,#guideQr small{display:none;} }
+#guideNote{transition:opacity .15s;position:fixed;left:16px;bottom:14px;z-index:1;width:min(330px,calc(100% - 200px));background:#101a2b;color:#e7edf7;border:1.5px solid rgba(255,184,77,.55);border-radius:10px;padding:10px 13px 11px;box-shadow:0 8px 24px rgba(0,0,0,.5);font-family:var(--font-ui);font-size:.8rem;line-height:1.5;word-break:keep-all;pointer-events:none;}
+#guideNote b{display:block;color:#ffb84d;font-size:.82rem;margin-bottom:3px;}
+#guideNote p{margin:0;} #guideNote p+p{margin-top:3px;}
+@media (max-width:760px){ #guideNote{left:8px;right:8px;width:auto;bottom:56px;font-size:.7rem;padding:7px 10px 8px;} #guideNote b{font-size:.72rem;margin-bottom:2px;} }
+.guideWrap{position:relative;display:inline-block;}
+.btn.guidePulse{border-color:#ffb84d !important;color:#ffd58a;animation:gPulse 1.3s ease-in-out infinite;}
+@keyframes gPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,184,77,.65);}50%{box-shadow:0 0 0 7px rgba(255,184,77,0);}}
+.guideHint{position:absolute;right:0;top:calc(100% + 9px);z-index:60;display:flex;align-items:center;gap:8px;width:max-content;max-width:min(260px,80vw);background:#ffb84d;color:#1b1204;font-family:var(--font-ui);font-size:.78rem;font-weight:800;line-height:1.4;padding:7px 9px 7px 12px;border-radius:9px;box-shadow:0 6px 18px rgba(0,0,0,.5);cursor:pointer;word-break:keep-all;white-space:normal;}
+.guideHint::before{content:"";position:absolute;right:26px;top:-5px;width:10px;height:10px;background:#ffb84d;transform:rotate(45deg);}
+.guideHint i{font-style:normal;flex:none;width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,.2);display:inline-flex;align-items:center;justify-content:center;font-size:.62rem;}
+@media (max-width:760px){ .guideHint{right:auto;left:0;max-width:min(260px,calc(100vw - 40px));} .guideHint::before{right:auto;left:26px;} }
+.guideHint.fade{opacity:0;pointer-events:none;transition:opacity .6s;}
 #guideBar{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:910;display:flex;align-items:center;gap:10px;background:rgba(16,26,43,.94);color:#e7edf7;border:1px solid #4da3ff;border-radius:999px;padding:6px 8px 6px 16px;font-size:.8rem;font-weight:600;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.5);}
 @media (max-width:760px){ #guideBar{bottom:auto;top:8px;font-size:.72rem;white-space:nowrap;padding:5px 6px 5px 12px;} }
 #guideOv .ghl b{position:absolute;left:-10px;top:-10px;width:20px;height:20px;border-radius:50%;background:#4da3ff;color:#06101e;font-size:.64rem;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px #0b1220;}
@@ -283,6 +295,85 @@ header{display:flex;flex-direction:column;gap:12px;}
 .cfg{display:flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid var(--border);border-left-width:5px;border-radius:9px;background:var(--panel-bg);}
 .cfg.ch{border-left-color:var(--buy);background:linear-gradient(90deg,rgba(47,111,237,.14),transparent 70%),var(--panel-bg);}
 .cfg.ins{border-left-color:var(--gold);background:linear-gradient(90deg,rgba(232,182,74,.14),transparent 70%),var(--panel-bg);}
+.loginov{position:absolute;inset:0;z-index:12;display:flex;align-items:center;justify-content:center;background:color-mix(in srgb,var(--pane-bg) 72%,transparent);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);animation:lgIn .18s ease-out;transition:opacity .3s;}
+.loginov.out{opacity:0;pointer-events:none;}
+@keyframes lgIn{from{opacity:0;}to{opacity:1;}}
+.loginov .lbox{width:min(330px,92%);background:var(--panel-bg-2,var(--panel-bg));border:1px solid var(--border-strong,var(--border));box-shadow:0 12px 34px rgba(0,0,0,.4);color:var(--fg);font-family:"Malgun Gothic",var(--font-ui);font-size:.8rem;zoom:.88;}
+.loginov .lt{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:var(--titlebar-bg);font-size:.85rem;}
+.loginov .lt em{font-style:normal;color:var(--muted);letter-spacing:.9em;font-size:.8rem;}
+.loginov .lbody{padding:8px 12px 6px;}
+.loginov .lmsg{display:flex;align-items:center;gap:12px;margin-bottom:8px;min-height:40px;}
+.loginov .lic{flex:none;width:40px;height:40px;border-radius:5px;background:#27a444;position:relative;color:#fff;font-weight:900;font-size:.62rem;text-align:center;line-height:13px;}
+.loginov .lic:before{content:"***";display:block;letter-spacing:1px;}
+.loginov .lic:after{content:"";position:absolute;left:11px;top:17px;width:18px;height:20px;border-radius:9px 9px 3px 3px;background:#fff;}
+.loginov .lic u{position:absolute;left:15px;top:13px;width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid #27a444;z-index:1;}
+.loginov .lf{display:grid;grid-template-columns:52px 1fr;gap:5px 8px;align-items:center;margin-left:8px;}
+.loginov .lf label{text-align:right;color:var(--fg);}
+.loginov .fld{height:22px;background:var(--pane-bg);border:1px solid var(--border-strong,var(--border));padding:0 6px;display:flex;align-items:center;justify-content:space-between;font-family:var(--font-mono);color:var(--fg);overflow:hidden;white-space:nowrap;}
+.loginov .fld.sel{background:var(--btn-bg);}
+.loginov .fld .arr{color:var(--muted);font-size:.6rem;}
+.loginov .fld .hl{background:var(--buy);color:#fff;padding:0 1px;}
+.loginov .fld.act{border-color:var(--buy);}
+.loginov .pwr{display:flex;align-items:center;gap:8px;}
+.loginov .pwr .fld{flex:1;}
+.loginov .cb{display:flex;align-items:center;gap:4px;font-size:.72rem;color:var(--fg);white-space:nowrap;}
+.loginov .cb i{width:13px;height:13px;border-radius:2px;background:var(--pane-bg);border:1px solid var(--muted);display:inline-block;position:relative;}
+.loginov .cb.on i{background:var(--buy);border-color:var(--buy);}
+.loginov .cb.on i:after{content:"";position:absolute;left:3px;top:0;width:4px;height:8px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg);}
+.loginov .lbtn{display:flex;justify-content:center;gap:12px;border-top:1px solid var(--border-strong,var(--border));padding:7px 0 2px;margin-top:8px;}
+.loginov .lbtn span{width:92px;text-align:center;padding:4px 0;background:var(--btn-bg);border:1px solid var(--border-strong,var(--border));border-radius:2px;}
+.loginov .lbtn span.def{border-color:var(--buy);}
+.loginov .lbtn span.press{background:var(--buy);border-color:var(--buy);color:#fff;transform:translateY(1px);}
+.loginov.ok .lmsg{color:var(--fg);font-weight:700;}
+.pane-footer .mlvl{font-family:var(--font-mono);font-size:.72rem;font-weight:700;color:var(--muted);white-space:nowrap;margin-left:2px;}
+.pane-footer .mlvl:empty{display:none;}
+.pane-footer .mlvl.lo{color:var(--bad);}
+.cfg.fd{border-left-color:#a06bff;background:linear-gradient(90deg,rgba(160,107,255,.16),transparent 70%),var(--panel-bg);}
+.cfg.fd .cfgtitle{color:#b992ff;}
+body.fund .cfg.ins,body.fund .cfg.ch{display:none;}
+body:not(.fund) .cfg.fd,body:not(.fund) .fdonly{display:none !important;}
+body.fund .panes > .acct:first-child{display:none;}
+body.fund .pane-col-right{flex-direction:row;}
+body.fund .pane-col-right > .acct{flex:1;min-width:0;}
+body.fund .jumpbar button[data-j="0"]{display:none;}
+@media (min-width:761px){ body.fund .pane-col-right .pane-wrap{height:clamp(260px,calc(100vh - 400px),1400px);} }
+@media (max-width:760px){ body.fund .pane-col-right{flex-direction:column;} }
+.log-col[data-tab="pos"] .tb-sum td{padding:0;}
+.log-col[data-tab="pos"] .tb-open td:last-child{text-align:right;padding-right:10px;}
+.log-col[data-tab="hist"] .tb-sum{display:none;}
+.sumrow td{background:rgba(255,255,255,.04);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.sumw{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:5px 10px;font-family:var(--font-mono);font-size:.8rem;white-space:nowrap;}
+.sumw .sl{display:flex;flex-wrap:wrap;gap:2px 16px;color:var(--text);}
+.sumw b{color:var(--muted);font-weight:700;}
+.sumw i{font-style:normal;font-weight:700;}
+.sumw .sgm{display:none;} .log-col.hasleg .sumw .sgm{display:inline;}
+.sumw .sr{font-weight:800;} .sumw .sr.up{color:var(--up);} .sumw .sr.bad{color:var(--bad);}
+.sumw i.eqv.danger{color:#fff;animation:dgBlink .7s steps(1) infinite;border-radius:4px;padding:0 5px;}
+.sumw i.lo{color:var(--bad);}
+.log-col.lgwait .sumw{visibility:hidden;}
+.pane-footer.in-head .pos,.pane-footer.in-head .mlvl{display:none !important;}
+.log-col.lgwait .pane-footer.in-head .pos,.log-col.lgwait .pane-footer.in-head .mlvl{visibility:hidden;}
+.mt5bar{display:flex;align-items:stretch;background:var(--titlebar-bg);border-bottom:1px solid var(--border-strong,var(--border));font-family:"Malgun Gothic",var(--font-ui);font-size:.76rem;color:var(--fg);position:relative;z-index:6;user-select:none;}
+.mt5it{position:relative;padding:3px 9px;cursor:default;white-space:nowrap;}
+.mt5it:hover,.mt5it.open{background:var(--btn-bg);}
+.pane.menuopen{overflow:visible;z-index:60;}
+.mt5dd{display:none;position:absolute;left:0;top:100%;min-width:250px;background:var(--pane-bg);border:1px solid var(--border-strong,var(--border));padding:3px 0;box-shadow:0 8px 22px rgba(0,0,0,.35);z-index:80;}
+.mt5it.open .mt5dd{display:block;}
+.mt5dd .mi{display:flex;align-items:center;gap:8px;padding:4px 14px 4px 6px;color:var(--fg);}
+.mt5dd .mi b{flex:none;width:16px;height:14px;}
+.mt5dd .mi span{flex:1;}
+.mt5dd .mi em{font-style:normal;color:var(--muted);font-size:.66rem;margin-left:16px;}
+.mt5dd .mi.sub:after{content:"▸";margin-left:10px;color:var(--muted);}
+.mt5dd .mi:hover:not(.dis){background:var(--buy);color:#fff;}
+.mt5dd .mi:hover:not(.dis) em,.mt5dd .mi:hover:not(.dis):after{color:#fff;}
+.mt5dd .mi.dis{color:var(--faint,var(--muted));opacity:.7;}
+.mt5dd .mi.login b{background:radial-gradient(circle at 50% 35%,var(--buy) 0 3px,transparent 3.5px),radial-gradient(ellipse at 50% 105%,var(--buy) 0 6px,transparent 6.5px);}
+.mt5dd .mi.login:hover b{background:radial-gradient(circle at 50% 35%,#fff 0 3px,transparent 3.5px),radial-gradient(ellipse at 50% 105%,#fff 0 6px,transparent 6.5px);}
+.mt5dd hr{border:0;border-top:1px solid var(--border);margin:3px 0;}
+#btnMode{margin-left:6px;border-color:#a06bff;color:#c9a9ff;font-weight:700;}
+body.fund #btnMode{background:rgba(160,107,255,.18);}
+:root[data-sim="win11"] #btnMode,:root[data-sim="pink"] #btnMode{background:#f1e8ff;border-color:#7a3fe0;color:#4a1fa8;}
+:root[data-sim="win11"] body.fund #btnMode,:root[data-sim="pink"] body.fund #btnMode{background:#e2d2ff;}
 .cfg.mk{border-left-color:var(--faint);margin-left:6px;padding:2px 10px;}
 .cfg.mk .cfgtitle{color:var(--muted);}
 .cfgtitle{font-size:.8rem;font-weight:700;margin-right:6px;white-space:nowrap;}
@@ -337,7 +428,7 @@ canvas.pane-chart{touch-action:pan-y;cursor:crosshair;position:absolute;inset:0;
 
 @media (max-width:760px){ .stopmsg{font-size:14.3px;white-space:normal;width:max-content;max-width:90%;padding:5px 10px;border-radius:8px;bottom:30px;} .stopmsg.show{gap:8px;} }
 .szin{display:none;}
-.symsub{position:absolute;left:10px;bottom:6px;pointer-events:none;z-index:2;font-family:var(--font-ui);font-size:.72rem;color:var(--muted);opacity:.8;white-space:nowrap;text-shadow:0 0 4px var(--bg),0 0 8px var(--bg);}
+.symsub{position:absolute;left:10px;bottom:24px;pointer-events:none;z-index:2;font-family:var(--font-ui);font-size:.72rem;color:var(--muted);opacity:.8;white-space:nowrap;text-shadow:0 0 4px var(--bg),0 0 8px var(--bg);}
 .symtag b{font-size:.92rem;font-weight:800;letter-spacing:.3px;color:var(--fg);opacity:.9;} .symtag span{font-size:.7rem;color:var(--muted);opacity:.85;}
 .ea-panel{position:absolute;top:8px;left:8px;width:104px;background:var(--float-bg);border:1px solid var(--border);border-radius:7px;overflow:hidden;font-family:var(--font-ui);backdrop-filter:blur(2px);}
 .ea-head{display:flex;align-items:center;justify-content:center;background:var(--ch-head);padding:7px 8px;}
@@ -377,6 +468,12 @@ canvas.pane-chart{touch-action:pan-y;cursor:crosshair;position:absolute;inset:0;
 .price-box.top .spread .pl{font-size:.6rem;}
 .price-box.top .spread .pv{font-size:.9rem;}
 
+/* 펀딩 모드: 펀딩 A·B도 보험금처럼 SELL | Spread | BUY 시세 상자로 표시하고, 누르면 진입 */
+body.fund .pane.ch .price-box.top{grid-template-columns:1fr 48px 1fr;left:calc(50% - 24px);gap:0;background:var(--float-bg);border:1px solid var(--border);border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.45);overflow:hidden;}
+body.fund .pane.ch .price-box.top .spread{display:flex;padding:0 4px;}
+body.fund .pane.ch .price-box.top button .pv{display:block;font-size:.9rem;}
+body.fund .pane.ch .price-box.top button{min-width:82px;padding:3px 10px;gap:0;border-radius:0;box-shadow:none;cursor:pointer;}
+body.fund .pane.ch .price-box.top button .pl{font-size:.8rem;font-weight:700;opacity:1;}
 /* 보험금 차트의 SELL/BUY는 시세 표시용: 작게, 누를 수 없게 */
 .pane.ins .price-box.top{grid-template-columns:1fr 48px 1fr;left:calc(50% - 24px);opacity:.92;}
 .pane.ins .price-box.top button{min-width:82px;padding:3px 10px;gap:0;cursor:default;pointer-events:none;filter:saturate(.75);}
@@ -446,7 +543,8 @@ canvas.pane-chart{touch-action:pan-y;cursor:crosshair;position:absolute;inset:0;
 .log-col[data-tab="pos"] .tb-hist{display:none;} .log-col[data-tab="hist"] .tb-open{display:none;}
 .log-head .ls{font-family:var(--font-mono);font-size:.8rem;color:var(--muted);}
 .log-head .ls.up{color:var(--profit);} .log-head .ls.good{color:var(--good);} .log-head .ls.bad{color:var(--bad);}
-.log-scroll{height:118px;overflow-y:auto;}
+.log-scroll{height:150px;overflow-y:auto;scrollbar-width:thin;scrollbar-color:rgba(160,170,190,.35) transparent;}
+.log-scroll::-webkit-scrollbar{width:6px;height:6px;} .log-scroll::-webkit-scrollbar-thumb{background:rgba(160,170,190,.35);border-radius:3px;} .log-scroll::-webkit-scrollbar-track{background:transparent;}
 /* 포지션/히스토리 탭: 폴더(윈도우 탐색기 탭) 스타일 — 선택된 탭이 아래 내용과 이어져 보임 */
   .log-head{background:var(--titlebar-bg);border-radius:7px 7px 0 0;padding:6px 10px 0;border-bottom:none;align-items:flex-end;}
   .log-head + .log-scroll{border-top:1px solid var(--border);}
@@ -619,7 +717,7 @@ tr.openrow td.tag{color:var(--warn);font-weight:600;}
   .log-head{flex-wrap:wrap;row-gap:6px;} .logtab{white-space:nowrap;} .log-head .ls{margin-left:auto;}
   .pane-footer.in-head{order:-1;width:100%;margin:0 0 6px;justify-content:space-between;}
   .log-head{row-gap:0;}
-  .log-scroll{height:112px;overflow:auto;}
+  .log-scroll{height:150px;overflow:auto;}
   table{min-width:0;font-size:.7rem;}
   th,td{padding:5px 5px;}
   td[data-c="pnl"]{font-size:.74rem;}   /* 모바일은 칸이 좁아 살짝만 */
@@ -628,6 +726,8 @@ tr.openrow td.tag{color:var(--warn);font-weight:600;}
   .log-col[data-tab="hist"] th:nth-child(2){width:9%;} .log-col[data-tab="hist"] th:nth-child(3){width:11%;} .log-col[data-tab="hist"] th:nth-child(4){width:15%;} .log-col[data-tab="hist"] th:nth-child(5){width:15%;} .log-col[data-tab="hist"] th:nth-child(6){width:16%;} .log-col[data-tab="hist"] th:nth-child(7){width:15%;}
   th.c-fee{white-space:nowrap;} td.fee{font-size:.66rem;padding-left:2px;padding-right:2px;}
   th:first-child,td:first-child{display:none;}   /* 시각 열은 좁은 화면에서 숨김 */
+  .tb-sum td:first-child{display:table-cell;}
+  .sumw{font-size:.66rem;padding:4px 8px;gap:6px;} .sumw .sl{gap:2px 10px;}
   .legclose{padding:5px 10px;}
 }
 </style>
@@ -647,6 +747,13 @@ tr.openrow td.tag{color:var(--warn);font-weight:600;}
           <span class="cfgfixed">$10,000</span>
           <span class="cfglab">레버리지</span>
           <select id="selInsLev"><option value="10">1:10</option><option value="20">1:20</option><option value="50">1:50</option><option value="100">1:100</option><option value="200">1:200</option><option value="500" selected>1:500</option></select>
+        </div>
+        <div class="cfg fd">
+          <span class="cfgtitle">펀딩 A·B 세팅</span>
+          <span class="cfglab">초기자본</span>
+          <select id="selFdCap"><option value="1000">$1,000</option><option value="3000" selected>$3,000</option><option value="5000">$5,000</option></select>
+          <span class="cfglab">레버리지</span>
+          <select id="selFdLev"><option value="30">1:30</option><option value="50">1:50</option><option value="100">1:100</option><option value="200">1:200</option><option value="400" selected>1:400</option><option value="500">1:500</option></select>
         </div>
         <div class="cfg ch">
           <span class="cfgtitle">챌린지 A·B 세팅</span>
@@ -671,13 +778,14 @@ tr.openrow td.tag{color:var(--warn);font-weight:600;}
             <button class="btn speed" data-speed="20">20x</button>
           </div>
           <button class="btn ghost" id="btnNew">새로 시작</button>
-          <span class="patgrp"><button class="btn ghost" id="btnPat" title="복기 차트 중 다른 차트를 랜덤으로 골라 새로 시작해요">패턴 변경</button></span>
+          <span class="patgrp"><button class="btn ghost" id="btnPat" title="복기 차트 중 다른 차트를 랜덤으로 골라 새로 시작해요">패턴 변경</button><button class="btn ghost" id="btnMode" title="보험금·챌린지 모드와 펀딩 A·B 모드를 바꿔요 (새로 시작돼요)">🔁 펀딩 모드</button></span>
         </div>
       </div>
       <div class="stat optbox">
         <div class="k">옵션</div>
         <div class="ctlrow">
           <label class="check"><input type="checkbox" id="chkLink" checked> 반대매매 연동</label>
+          <label class="check fdonly" title="켜면 한쪽 계좌의 포지션이 청산될 때 짝이 된 반대 계좌의 포지션도 함께 청산돼요. 끄면 서로 따로 청산돼요"><input type="checkbox" id="chkFundClose" checked> 동시 청산</label>
           <label class="check" hidden style="display:none" title="켜면 청산 요청 후 브로커 응답시간(약 0.1~0.2초, 뉴스 때 0.5~0.7초)만큼 뒤의 가격으로 체결돼요. 요청가와 체결가의 차이(슬리피지)가 거래내역에 표시됩니다"><input type="checkbox" id="chkLag" checked> 체결 지연</label>
           <label class="check" title="켜면 포지션이 있을 때 진입·TP·SL 라인이 모두 보이도록 차트 가격 범위를 자동으로 넓혀요"><input type="checkbox" id="chkFit" checked> TP/SL 보이게</label>
           <span class="sep"></span>
@@ -741,6 +849,10 @@ const COMMISSION_PER_LOT = 15;   // 청산 시 수수료: 1랏당 $15
 const CONTRACT = 100;         // 가격이 $1 움직일 때 1랏당 손익($) = 1랏의 온스 수
 const OUNCES_PER_LOT = 100;   // 1랏 = 100온스 (0.01랏 = 1온스)
 const INSURANCE_CAPITAL = 10000; // 보험금 계좌 초기자본(고정)
+let MODE = "ins";   // "ins" = 보험금·챌린지 반대매매 / "fund" = 펀딩 A·B 반대매매
+const FUND = ()=> MODE === "fund";
+const MAX_FUND_LEGS = 3;   // 펀딩 계좌는 계좌마다 최대 3포지션
+const SHP = ()=> FUND() ? [1,2] : [0];   // 거래내역 공유에 담을 계좌
 let TOTAL_TICKS = 300;          // 한 판 길이(분). '시장 세팅'에서 선택
 const TPS = 4;                // 1초에 가격이 갱신되는 횟수(실제 시세처럼 초당 여러 번)
 const SEC_PER_MIN = 60*TPS;   // 1분 = 240틱(1틱 = 0.25초)
@@ -765,6 +877,7 @@ const GLOSSARY = [
   ["랏(계약) · 계약 승수","1랏 = 100온스(XAUUSD 표준). 가격이 $1 움직이면 1랏당 $100, 0.1랏이면 $10, 0.01랏이면 $1의 손익이 발생합니다."],
   ["증거금 · 레버리지","포지션을 열 때 묶이는 담보금입니다. 증거금 = 랏수 × 100온스 × 진입가 ÷ 레버리지. 레버리지가 높을수록 적은 증거금으로 큰 포지션을 잡지만, 같은 가격 변동에도 평가금이 그만큼 크게 흔들려요."],
   ["마진콜 · 강제청산","증거금 대비 평가금이 너무 줄어들면 거래소가 포지션을 강제로 청산합니다. 이 시뮬레이션은 보험금 계좌는 평가금이 증거금의 50% 이하, 챌린지 계좌는 평가금이 0 이하가 되면 자동으로 강제청산해요. 다만 체결이 브로커 응답시간만큼 늦어서, 그 사이 가격이 더 움직이면 평가금이 마이너스(잔고 이하 손실)로 끝날 수도 있어요. 실제 계좌에서는 반드시 손절을 설정해 두어야 합니다."],
+  ["펀딩 스탑아웃 20%","펀딩 A·B 모드에서는 평가금이 사용 증거금의 20% 이하(증거금 유지율 20% 이하)가 되면 그 계좌의 모든 포지션이 자동으로 강제청산돼요. 청산 체결이 늦어지면 그 사이 가격이 더 움직일 수 있어요."],
   ["손절가 · 익절가","손절(SL)은 손실을 제한하는 거리, 익절(TP)은 목표 수익에서 자동 청산하는 거리입니다. 칸에는 진입가에서 떨어진 포인트(1p=$0.01)를 넣어요. 예: SL 500 = 진입가에서 $5 불리해지면 청산. 비워두면 자동 청산 없이 직접 청산 버튼을 눌러야 합니다."],
   ["원화로 보는 금값","예시로 환율을 1,400원/$로 가정하면 금 $4,131는 약 578만 원/온스 수준입니다. (연습용 추정치이며 실시간 환율이 아닙니다)"]
 ];
@@ -777,6 +890,15 @@ const PANE_DEFS = [
 ];
 const TFS = [{k:"tick",label:"tick"},{k:"1",label:"1m"},{k:"5",label:"5m"},{k:"15",label:"15m"},{k:"30",label:"30m"},{k:"60",label:"1h"}];
 const SZS = [{k:"s",label:"작게",m:1},{k:"m",label:"보통",m:1.5},{k:"l",label:"크게",m:2.6}];
+const MT5_TOP = ["파일(F)","보기(V)","삽입(I)","차트(C)","도구(T)","창(W)","도움말(H)"];
+const MT5_FILE = [["새차트 (N)","","sub"],["차트복구 (E)","","sub dis"],["화면구성 (F)","","sub"],["닫기 (C)","Ctrl+F4"],"-",
+  ["저장 (S)","Ctrl+S"],["그림으로 저장 (E)",""],["새로운 AI 도우미 (I)","Alt+/"],["데이터 폴더 열기 (D)","Ctrl+Shift+D"],"-",
+  ["인쇄 (P)","Ctrl+P"],["인쇄 미리보기 (V)",""],["인쇄 설정 (R)",""],"-",
+  ["계좌 개설 (A)",""],["예치 (T)","","dis"],["취소 (H)","","dis"],["거래 계좌 로그인 (L)","","login"],["웹 트레이더에 로그인 (W)",""],["MQL5.community 로그인",""],"-",["종료 (X)",""]];
+function mt5MenuHTML(idx){
+  return '<div class="mt5bar" data-pane="'+idx+'">'+MT5_TOP.map((t,i)=>'<span class="mt5it'+(i===0?' file':'')+'">'+t+(i===0?
+    '<div class="mt5dd">'+MT5_FILE.map(m=>m==="-"?'<hr>':'<div class="mi '+(m[2]||"")+'" data-mi="'+(/login/.test(m[2]||"")?"login":"x")+'"><b></b><span>'+m[0]+'</span><em>'+m[1]+'</em></div>').join("")+'</div>':'')+'</span>').join("")+'</div>';
+}
 function paneHTML(p){
   return '<div class="pane '+(p.idx===0?'ins':'ch')+'" data-pane="'+p.idx+'">'+
     '<div class="pane-titlebar"><div class="dots"><i></i><i></i><i></i></div>'+
@@ -784,11 +906,12 @@ function paneHTML(p){
     '<span class="szgrp">'+SZS.map(z=>'<button class="tfbtn szbtn'+(z.k==="m"?' active':'')+'" data-sz="'+z.k+'" data-pane="'+p.idx+'">'+z.label+'</button>').join('')+'</span>'+
     '<span class="tfgrp">'+TFS.map(t=>'<button class="tfbtn'+(t.k==="1"?' active':'')+'" data-tf="'+t.k+'" data-pane="'+p.idx+'">'+t.label+'</button>').join('')+'</span>'+
     '<span class="acctinfo" data-role="acctinfo" data-pane="'+p.idx+'"></span></div>'+
+    mt5MenuHTML(p.idx)+
     '<div class="pane-wrap">'+
     '<canvas class="pane-chart" data-pane="'+p.idx+'" height="'+p.height+'"></canvas>'+'<div class="axhit" data-pane="'+p.idx+'" title="드래그/휠: 가격 확대·축소"></div>'+
     '<div class="symsub">Gold Spot / U.S. Dollar</div>'+
     '<div class="szin">'+SZS.map(z=>'<button class="tfbtn szbtn'+(z.k==="m"?' active':'')+'" data-sz="'+z.k+'" data-pane="'+p.idx+'">'+z.label+'</button>').join('')+'</div>'+
-    '<div class="stopmsg" data-pane="'+p.idx+'"><span>손실 청산된 계좌입니다. 리셋 후 사용하세요</span><button class="resetbtn stopreset" data-action="reset" data-pane="'+p.idx+'" title="이 계좌 잔액을 초기자본으로 리셋 (두 번 클릭)">↺ 리셋</button></div>'+
+    '<div class="stopmsg" data-pane="'+p.idx+'"><span>손실 청산된 계좌입니다. 파일 › 거래 계좌 로그인으로 리셋하세요</span></div>'+
     '<div class="ea-panel">'+
     '<div class="ea-head"><span class="role">'+p.role+'</span></div>'+
     '<div class="ea-body">'+
@@ -811,13 +934,16 @@ function logHTML(p){
     '<button class="logtab" data-tab="hist" data-pane="'+i+'">히스토리 <b id="cntHist'+i+'">0</b></button></span>'+
     '<div class="pane-footer in-head">'+
     '<span class="pos" data-role="pos" data-pane="'+i+'">대기 · 잔액 $10,000</span>'+
+    '<span class="mlvl" data-role="mlvl" data-pane="'+i+'"></span>'+
     '<button class="closebtn" data-action="close" data-pane="'+i+'" disabled>청산</button>'+
-    '<button class="resetbtn" data-action="reset" data-pane="'+i+'" title="이 계좌 잔액을 초기자본으로 리셋 (두 번 클릭)">↺ 리셋</button>'+
     '</div>'+
     '<span class="ls" id="logSum'+i+'">거래 0회</span></div>'+
     '<div class="log-scroll"><table>'+
     '<thead><tr><th>시각</th><th>방향</th><th>랏</th><th>진입가</th><th id="thPx'+i+'">현재가</th><th>손익</th><th class="c-fee">수수료</th><th id="thRe'+i+'"></th></tr></thead>'+
-    '<tbody class="tb-open" id="openBody'+i+'"></tbody><tbody class="tb-hist" id="logBody'+i+'"></tbody></table>'+
+    '<tbody class="tb-open" id="openBody'+i+'"></tbody><tbody class="tb-sum"><tr class="sumrow"><td colspan="7"><div class="sumw"><span class="sl">'+
+      '<span class="sg"><b>잔액:</b> <i data-s="bal"></i></span><span class="sg"><b>평가금:</b> <i data-s="eq" class="eqv"></i></span>'+
+      '<span class="sg sgm"><b>마진:</b> <i data-s="mg"></i></span><span class="sg sgm"><b>가용마진:</b> <i data-s="fm"></i></span><span class="sg sgm"><b>마진 레벨:</b> <i data-s="ml"></i></span>'+
+      '</span><span class="sr" data-s="pl"></span></div></td></tr></tbody><tbody class="tb-hist" id="logBody'+i+'"></tbody></table>'+
     '<div class="empty-log" id="emptyPos'+i+'">보유 중인 포지션이 없습니다.</div>'+
     '<div class="empty-log" id="emptyLog'+i+'" style="display:none">아직 거래가 없습니다.</div></div></div>';
 }
@@ -833,8 +959,8 @@ function buildPanes(){
 function selVal(id){ return parseInt(document.getElementById(id).value, 10); }
 function newAccount(idx){
   // 보험금(idx 0)은 고정 자본, 챌린지 A/B는 선택한 초기자본
-  const start = idx===0 ? INSURANCE_CAPITAL : selVal("selChCap");
-  const lev   = idx===0 ? selVal("selInsLev") : selVal("selChLev");
+  const start = FUND() ? selVal("selFdCap") : (idx===0 ? INSURANCE_CAPITAL : selVal("selChCap"));
+  const lev   = FUND() ? selVal("selFdLev") : (idx===0 ? selVal("selInsLev") : selVal("selChLev"));
   return {start:start, lev:lev, balance:start, legs:[]};   // legs: 열린 포지션들(챌린지는 최대 1개, 보험금은 챌린지별 반대 포지션이 쌓인다)
 }
 let legSeq = 0;
@@ -1094,7 +1220,8 @@ const state = {
   panes: PANE_DEFS.map(d=>newAccount(d.idx))
 };
 let timer = null;
-const DEFAULT_TIP = document.getElementById("tipBox").textContent;
+const DEFAULT_TIP_INS = document.getElementById("tipBox").textContent;
+const FUND_TIP = "펀딩 A·B 모드: A 또는 B에서 BUY/SELL을 누르면 반대 계좌에 반대 포지션이 자동으로 들어갑니다. 랏수·TP·SL은 계좌마다 따로 입력하고, 계좌마다 포지션은 최대 3개까지 들어갈 수 있어요.";
 
 /* ---------------- helpers ---------------- */
 function fmtMoney(n){
@@ -1254,7 +1381,7 @@ function notify(msg){
   tip.textContent = msg;
   tip.style.color = "var(--warn)";
   clearTimeout(notify._t);
-  notify._t = setTimeout(()=>{ tip.textContent = DEFAULT_TIP; tip.style.color = ""; }, 8000);
+  notify._t = setTimeout(()=>{ tip.textContent = FUND() ? FUND_TIP : DEFAULT_TIP_INS; tip.style.color = ""; }, 8000);
   const mc = document.querySelector(".main-col"), toast = document.getElementById("toast");
   if(toast && mc && mc.classList.contains("railoff")){
     toast.textContent = msg; toast.classList.add("show");
@@ -1271,6 +1398,7 @@ const PRESETS = {
   5000: {ins:{lot:1.3,  tp:460, sl:2430}, ch:{lot:9.8, tp:2400, sl:0}}
 };
 function applyPreset(){
+  if(FUND()) return;   // 펀딩 모드는 랏수·TP·SL을 직접 입력
   if(!document.getElementById("chkPreset").checked) return;
   const pr = PRESETS[parseInt(document.getElementById("selChCap").value,10)];
   if(!pr) return;
@@ -1290,19 +1418,19 @@ function historyPng(){   // 4:3 (1200×900) 공유용 카드: 모바일에서 �
   const FONT = '"Pretendard","Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif', MONO = 'ui-monospace,Menlo,Consolas,monospace';
   // 4:3 기본 (거래가 많으면 모두 보이도록 세로로 늘림. 브라우저 캔버스 한계 때문에 250건까지)
   const W = 1200, PX = 48, TY = 358, RH0 = 52, FOOT = 62;
-  const nAll = state.trades.filter(t=>t.pane===0).length, MAXR = 250;
+  const nAll = state.trades.filter(t=>SHP().includes(t.pane)).length, MAXR = 250;
   const nShow = Math.min(nAll, MAXR), H = Math.max(900, TY + 44 + nShow*RH0 + FOOT);
   const dpr = Math.min(2, 14000 / H);
   const cv = document.createElement("canvas"); cv.width = Math.round(W*dpr); cv.height = Math.round(H*dpr);
   const x = cv.getContext("2d"); x.scale(dpr,dpr); x.textBaseline = "middle";
-  const all = state.trades.filter(t=>t.pane===0), net = t => t.pnl;   // 수수료는 손익에 넣지 않고 따로 표기
+  const all = state.trades.filter(t=>SHP().includes(t.pane)), net = t => t.pnl;   // 수수료는 손익에 넣지 않고 따로 표기
   const total = all.reduce((a,t)=>a+net(t),0), fees = all.reduce((a,t)=>a+(t.fee||0),0);
   const sgn = n => (n>=0?"+":"")+fmtMoney(n);
   x.fillStyle = C.bg; x.fillRect(0,0,W,H);
   // 헤더: 제목 + 트레이더 이름(크게)
   const who = pngLabel();
   x.textAlign = "left"; x.fillStyle = C.mute; x.font = "600 26px "+FONT; x.fillText("XAUUSD 반대매매 시뮬레이션", PX, 44);
-  x.fillStyle = C.gold; let fs = 60; const title = who ? who+" 트레이더" : "보험금 거래 히스토리";
+  x.fillStyle = C.gold; let fs = 60; const title = who ? who+" 트레이더" : (FUND() ? "펀딩 거래 히스토리" : "보험금 거래 히스토리");
   x.font = "800 "+fs+"px "+FONT; while(fs>30 && x.measureText(title).width > W-2*PX){ fs -= 2; x.font = "800 "+fs+"px "+FONT; }
   x.fillText(title, PX, 108);
   const now = new Date();
@@ -1341,7 +1469,7 @@ function historyPng(){   // 4:3 (1200×900) 공유용 카드: 모바일에서 �
     const yy = ty + 44 + i*RH, cy = yy + RH/2;
     if(i%2){ x.fillStyle = "rgba(127,140,160,.08)"; x.fillRect(PX-12, yy, W-2*PX+24, RH); }
     x.textAlign = "left"; x.fillStyle = C.fg; x.font = "24px "+MONO; x.fillText(kstFull(t.sec), PX+4, cy);
-    x.fillStyle = t.dir==="BUY" ? C.buy : C.bad; x.font = "800 24px "+MONO; x.fillText(t.dir, PX+190, cy);
+    x.fillStyle = t.dir==="BUY" ? C.buy : C.bad; x.font = "800 24px "+MONO; x.fillText((FUND() ? (t.pane===1?"A ":"B ") : "")+t.dir, PX+190, cy);
     x.textAlign = "right"; x.fillStyle = C.fg; x.font = "24px "+MONO; x.fillText(fmtPrice(t.entry)+" → "+fmtPrice(t.exit), PX+740, cy);
     // 방향 옆에 TP/SL 표시 (보험금의 연동 청산은 '연동 TP/SL')
     x.textAlign = "left"; const linked = t.reason === "연동청산", rr = linked ? (t.cause || "") : (t.reason || "");
@@ -1360,10 +1488,10 @@ function historyPng(){   // 4:3 (1200×900) 공유용 카드: 모바일에서 �
   return cv;
 }
 async function saveHistoryPng(){
-  if(!state.trades.some(t=>t.pane===0)){ notify("저장할 보험금 거래 내역이 아직 없어요."); return; }
+  if(!state.trades.some(t=>SHP().includes(t.pane))){ notify(FUND() ? "저장할 펀딩 거래 내역이 아직 없어요." : "저장할 보험금 거래 내역이 아직 없어요."); return; }
   const cv = historyPng();
   const blob = await new Promise(res=>cv.toBlob(res, "image/png"));
-  const d = new Date(), who = pngLabel().replace(/[\\/:*?"<>|\s]+/g,"_"), name = "보험금_거래히스토리_"+(who?who+"_":"")+d.getFullYear()+String(d.getMonth()+1).padStart(2,"0")+String(d.getDate()).padStart(2,"0")+"_"+String(d.getHours()).padStart(2,"0")+String(d.getMinutes()).padStart(2,"0")+".png";
+  const d = new Date(), who = pngLabel().replace(/[\\/:*?"<>|\s]+/g,"_"), name = (FUND() ? "펀딩_거래히스토리_" : "보험금_거래히스토리_")+(who?who+"_":"")+d.getFullYear()+String(d.getMonth()+1).padStart(2,"0")+String(d.getDate()).padStart(2,"0")+"_"+String(d.getHours()).padStart(2,"0")+String(d.getMinutes()).padStart(2,"0")+".png";
   // 모바일(터치 화면): 공유 시트를 띄워 카카오톡·문자·텔레그램 등으로 바로 보내기
   const touch = window.matchMedia && (window.matchMedia("(pointer:coarse)").matches || window.innerWidth <= 760);
   if(touch){
@@ -1387,16 +1515,16 @@ async function saveHistoryPng(){
   showPngSheet(cv.toDataURL("image/png"), name);
 }
 function shareText(){
-  const who = pngLabel(), all = state.trades.filter(t=>t.pane===0), mine = all.slice(0,10);
+  const who = pngLabel(), all = state.trades.filter(t=>SHP().includes(t.pane)), mine = all.slice(0,10);
   const total = all.reduce((a,t)=>a+t.pnl,0), fees = all.reduce((a,t)=>a+(t.fee||0),0);
-  const lines = mine.map(t=>t.dir+" "+t.lot.toFixed(2)+"lot "+fmtPrice(t.entry)+" → "+fmtPrice(t.exit)+" ("+(t.pnl>=0?"+":"")+fmtMoney(t.pnl)+")");
+  const lines = mine.map(t=>(FUND() ? (t.pane===1?"A ":"B ") : "")+t.dir+" "+t.lot.toFixed(2)+"lot "+fmtPrice(t.entry)+" → "+fmtPrice(t.exit)+" ("+(t.pnl>=0?"+":"")+fmtMoney(t.pnl)+")");
   return (who ? who+" 트레이더 · " : "")+"XAUUSD 반대매매 시뮬레이션 거래내역\n"+lines.join("\n")+(lines.length ? "\n" : "")+"실현 "+(total>=0?"+":"")+fmtMoney(total)+" · 수수료 -"+fmtMoney(fees);
 }
 function showPngSheet(url, name, file){
   let ov = document.getElementById("pngSheet");
   if(!ov){
     ov = document.createElement("div"); ov.id = "pngSheet";
-    ov.innerHTML = '<div class="pngbox"><div class="pnghead"><b>보험금 거래 히스토리</b><span>이미지를 길게 누르거나(모바일) 우클릭(PC)해서 저장하세요</span><button class="btn ghost" id="pngClose">닫기</button></div><div class="pngact"><button class="btn" id="pngShare">공유하기</button><button class="btn ghost" id="pngCopy">내역 텍스트 복사</button></div><img id="pngImg" alt="보험금 거래 히스토리"></div>';
+    ov.innerHTML = '<div class="pngbox"><div class="pnghead"><b>'+(FUND() ? "펀딩 거래 히스토리" : "보험금 거래 히스토리")+'</b><span>이미지를 길게 누르거나(모바일) 우클릭(PC)해서 저장하세요</span><button class="btn ghost" id="pngClose">닫기</button></div><div class="pngact"><button class="btn" id="pngShare">공유하기</button><button class="btn ghost" id="pngCopy">내역 텍스트 복사</button></div><img id="pngImg" alt="보험금 거래 히스토리"></div>';
     document.body.appendChild(ov);
     ov.addEventListener("click", e=>{ if(e.target === ov || e.target.id === "pngClose") ov.classList.remove("show"); });
     document.getElementById("pngCopy").addEventListener("click", async ()=>{
@@ -1441,7 +1569,7 @@ function askTraderName(){
   });
 }
 async function onSaveClick(){
-  if(!state.trades.some(t=>t.pane===0)){ notify("저장할 보험금 거래 내역이 아직 없어요."); return; }
+  if(!state.trades.some(t=>SHP().includes(t.pane))){ notify(FUND() ? "저장할 펀딩 거래 내역이 아직 없어요." : "저장할 보험금 거래 내역이 아직 없어요."); return; }
   const v = await askTraderName();
   if(v === null) return;
   const el = document.getElementById("pngName"); if(el){ el.value = v; syncTraderTag(); }
@@ -1500,7 +1628,8 @@ function sfx(kind){
     if(!SND.ctx){ const AC = window.AudioContext || window.webkitAudioContext; if(!AC) return; SND.ctx = new AC(); }
     if(SND.ctx.state === "suspended") SND.ctx.resume();
     const now = performance.now(); if(SND.last[kind] && now - SND.last[kind] < 120) return; SND.last[kind] = now;
-    if(kind === "click"){ noise(0, 0.03, 0.16, "lowpass", 3000); beep(820, 0, 0.05, "sine", 0.07, 520); }   // 부드러운 톡
+    if(kind === "login"){ bell(784, 0, 0.9, 0.14); bell(1175, 0.8, 0.8, 0.1); bell(1047, 2.0, 1.3, 0.16); bell(1568, 2.1, 1.4, 0.12); }   // 맑은 종소리: 접속 시작 → 로그인 완료 때 올라가는 두 음
+    else if(kind === "click"){ noise(0, 0.03, 0.16, "lowpass", 3000); beep(820, 0, 0.05, "sine", 0.07, 520); }   // 부드러운 톡
     else if(kind === "buy"){      // 마림바 두 음: 솔→도 (올라가는 느낌)
       wood(392, 0, 0.55, 0.2); wood(523, 0.1, 0.7, 0.2); }
     else if(kind === "sell"){     // 마림바 두 음: 미→시 (내려가는 느낌)
@@ -1520,7 +1649,9 @@ document.addEventListener("click", e=>{ const b = e.target.closest && e.target.c
 function openPosition(paneIdx, dir, opts){
   opts = opts || {};
   const p = state.panes[paneIdx];
-  if(paneIdx !== 0 && p.legs.length) return; // 챌린지는 동시에 1포지션만 (보험금은 여러 개 가능)
+  if(FUND()){
+    if(p.legs.length >= MAX_FUND_LEGS){ notify("펀딩 계좌는 포지션을 최대 3개까지만 들일 수 있어요."); return null; }
+  } else if(paneIdx !== 0 && p.legs.length) return null; // 챌린지는 동시에 1포지션만 (보험금은 여러 개 가능)
   const lot = lotOf(paneIdx);
   const tpRaw = document.querySelector('input[data-field="tp"][data-pane="'+paneIdx+'"]').value;
   const slRaw = document.querySelector('input[data-field="sl"][data-pane="'+paneIdx+'"]').value;
@@ -1534,10 +1665,17 @@ function openPosition(paneIdx, dir, opts){
   const avail = p.balance - usedMargin(p);
   if(need > avail){
     notify("증거금 부족 — "+role+" 필요 "+fmtMoney(need)+" / 가용 "+fmtMoney(avail)+" (랏수를 줄이거나 레버리지를 높여 보세요)");
-    return;
+    return null;
+  }
+  // 펀딩 모드: 반대 계좌의 포지션 한도·증거금도 미리 확인 → 부족하면 양쪽 모두 진입하지 않음
+  if(FUND() && !opts.silent && document.getElementById("chkLink").checked){
+    const oi = paneIdx===1 ? 2 : 1, op = state.panes[oi], oppDir = dir==="BUY" ? "SELL" : "BUY";
+    if(op.legs.length >= MAX_FUND_LEGS){ notify("반대 계좌의 포지션이 이미 3개라서 양쪽 모두 진입하지 않았어요."); return null; }
+    const oNeed = marginOf(lotOf(oi), oppDir==="BUY" ? ask() : bid(), op.lev), oAvail = op.balance - usedMargin(op);
+    if(oNeed > oAvail){ notify("증거금 부족 — "+PANE_DEFS[oi].role+" 필요 "+fmtMoney(oNeed)+" / 가용 "+fmtMoney(oAvail)+" (양쪽 모두 진입하지 않았어요)"); return null; }
   }
   // 반대매매 연동 시 보험금 쪽 증거금도 미리 확인 → 부족하면 양쪽 모두 진입하지 않음
-  if(!opts.silent && paneIdx !== 0 && document.getElementById("chkLink").checked){
+  if(!FUND() && !opts.silent && paneIdx !== 0 && document.getElementById("chkLink").checked){
     const ins = state.panes[0];
     const oppDir = dir==="BUY" ? "SELL" : "BUY";
     const insEntry = oppDir==="BUY" ? ask() : bid();
@@ -1545,15 +1683,15 @@ function openPosition(paneIdx, dir, opts){
     const insAvail = ins.balance - usedMargin(ins);
     if(insNeed > insAvail){
       notify("증거금 부족 — 보험금 필요 "+fmtMoney(insNeed)+" / 가용 "+fmtMoney(insAvail)+" (양쪽 모두 진입하지 않았어요)");
-      return;
+      return null;
     }
   }
   // 진입 직후 역행: 챌린지 진입 후 가격이 잠깐 반대로 살짝 밀리는 현상 (확률 60%, 10~45포인트, 3~11초에 걸쳐)
-  if(paneIdx !== 0 && !opts.silent && Math.random() < 0.6){
+  if(!FUND() && paneIdx !== 0 && !opts.silent && Math.random() < 0.6){
     const n = Math.round((3 + Math.random()*8)*TPS);
     state.advMove = {left:n, per: -sgn*(10 + Math.random()*35)*POINT/n};
   }
-  p.legs.push({
+  const newLeg = {
     id: ++legSeq,
     openSec: state.sec,
     src: opts.src != null ? opts.src : paneIdx,   // 이 포지션을 만든 계좌(보험금 쪽 반대매매는 A/B 구분용)
@@ -1565,17 +1703,30 @@ function openPosition(paneIdx, dir, opts){
     tp: tpPt > 0 ? entry + sgn*tpPt*POINT : null,
     sl: slPt > 0 ? entry - sgn*slPt*POINT : null,
     openTick: state.tick
-  });
-  if(!opts.silent) { sfx(dir === "BUY" ? "buy" : "sell"); maybeMirror(paneIdx, dir); }
+  };
+  p.legs.push(newLeg);
+  if(!opts.silent) { sfx(dir === "BUY" ? "buy" : "sell"); maybeMirror(paneIdx, dir, newLeg); }
   render();
+  return newLeg;
 }
-function maybeMirror(paneIdx, dir){
+function maybeMirror(paneIdx, dir, leg){
   const linked = document.getElementById("chkLink").checked;
   if(!linked) return;
-  if(paneIdx === 0) return; // 보험금을 수동으로 열 때는 특정 챌린지로 자동 미러링하지 않음
-  const insurance = 0;
-  const oppDir = dir === "BUY" ? "SELL" : "BUY";
-  openPosition(insurance, oppDir, {silent:true, src:paneIdx});
+  if(!FUND() && paneIdx === 0) return; // 보험금을 수동으로 열 때는 특정 챌린지로 자동 미러링하지 않음
+  const panesRef = state.panes, f = FUND();
+  const opp = dir === "BUY" ? "SELL" : "BUY";
+  const run = ()=>{
+    if(state.panes !== panesRef) return;                       // 그 사이 새 게임/리셋
+    if(leg && panesRef[paneIdx].legs.indexOf(leg) < 0) return; // 먼저 진입한 포지션이 이미 닫힘
+    if(f){   // 펀딩 A↔B
+      const oi = paneIdx===1 ? 2 : 1;
+      const m = openPosition(oi, opp, {silent:true, src:paneIdx});
+      if(m && leg){ m.pairId = leg.id; leg.pairId = m.id; }
+    } else {
+      openPosition(0, opp, {silent:true, src:paneIdx});
+    }
+  };
+  setTimeout(run, 80 + Math.random()*60);   // 반대쪽은 약 0.1초 늦게 진입
 }
 /* 청산 체결: 요청 후 브로커 응답시간(지연)만큼 지난 시점의 가격으로 체결된다 → 요청가와 체결가가 달라질 수 있음 */
 function lagOn(){ const el = document.getElementById("chkLag"); return !el || el.checked; }
@@ -1610,7 +1761,13 @@ function closeLeg(paneIdx, leg, reason, now, lagFixed){
   else { let L = lagFixed != null ? lagFixed : latencySec(); if(reason === "강제청산" && lagFixed == null) L *= 1.3;   // 스탑아웃 때는 주문이 몰려 더 늦게 체결
     leg.closing = {reason: reason, due: state.sec + Math.max(1, Math.round(L*TPS)), lagSec: L}; }
   // 동시 진입·동시 컷: 챌린지가 청산되면(수동·익절·손절·강제청산) 그 챌린지가 만든 보험금 포지션도 함께 청산 요청
-  if(paneIdx !== 0 && document.getElementById("chkLink").checked){
+  if(FUND()){   // 펀딩 모드: '동시 청산'을 켜면 짝이 된 반대 계좌 포지션도 함께 청산
+    const fc = document.getElementById("chkFundClose");
+    if(fc && fc.checked && leg.pairId){
+      const oi = paneIdx===1 ? 2 : 1, lg = leg.closing ? leg.closing.lagSec : null;
+      state.panes[oi].legs.filter(l=>l.id===leg.pairId).forEach(l=>{ l.cause = reason; closeLeg(oi, l, "연동청산", now, lg); });
+    }
+  } else if(paneIdx !== 0 && document.getElementById("chkLink").checked){
     const lg = leg.closing ? leg.closing.lagSec : null;   // 동시 컷: 챌린지와 같은 지연으로 함께 체결
     state.panes[0].legs.filter(l=>l.src===paneIdx).forEach(l=>{ l.cause = reason; closeLeg(0, l, "연동청산", now, lg); });
   }
@@ -1653,7 +1810,7 @@ function checkAutoClose(){
     if(p.legs.length && !p.legs.some(l=>l.closing)){
       const fl = p.legs.reduce((a,l)=>a + calcPnl(l, l.dir==="BUY"?bid():ask()), 0);
       // 스탑아웃 기준: 보험금은 증거금의 50%, 챌린지는 0%(평가금이 0 이하가 되면 청산)
-      const stopLine = idx===0 ? usedMargin(p)*0.5 : 0;
+      const stopLine = FUND() ? usedMargin(p)*0.2 : (idx===0 ? usedMargin(p)*0.5 : 0);   // 펀딩 모드: 증거금 유지율 20%(스탑아웃 20%)
       if(p.balance + fl <= stopLine){
         p.stopped = true;   // 손실청산 표시(리셋 전까지 차트 아래 안내 문구)
         p.legs.slice().forEach(l=>closeLeg(idx, l, "강제청산"));
@@ -1734,6 +1891,63 @@ function resetAccount(idx){
   renderLog();
   render();
   notify(PANE_DEFS[idx].role+" 계좌를 "+fmtMoney(p.start)+"로 리셋했어요.");
+  loginAnim(idx);
+}
+/* MT5 상단 메뉴: 파일 → 거래 계좌 로그인을 누르면 로그인 연출과 함께 그 계좌가 리셋됨 */
+function closeMt5Menus(){ document.querySelectorAll(".mt5it.open").forEach(e=>e.classList.remove("open")); document.querySelectorAll(".pane.menuopen").forEach(e=>e.classList.remove("menuopen")); }
+document.addEventListener("click", e=>{
+  const mi = e.target.closest && e.target.closest(".mt5dd .mi");
+  const it = e.target.closest && e.target.closest(".mt5it");
+  if(mi){
+    const bar = mi.closest(".mt5bar"), idx = +bar.dataset.pane, kind = mi.dataset.mi, dis = mi.classList.contains("dis");
+    if(dis) return;
+    closeMt5Menus();
+    if(kind === "login") resetAccount(idx);
+    return;
+  }
+  if(it && it.classList.contains("file")){
+    const was = it.classList.contains("open"); closeMt5Menus();
+    if(!was){ it.classList.add("open"); it.closest(".pane").classList.add("menuopen"); }
+    return;
+  }
+  closeMt5Menus();
+});
+/* 계좌 리셋 연출: MT5에 새 계좌로 로그인하는 것처럼 보이는 짧은 애니메이션 */
+const _loginT = {};
+function loginAnim(idx){
+  const wrap = document.querySelector('.pane[data-pane="'+idx+'"] .pane-wrap'); if(!wrap) return;
+  (_loginT[idx] || []).forEach(clearTimeout); _loginT[idx] = [];
+  wrap.querySelectorAll(".loginov").forEach(e=>e.remove());
+  const ov = document.createElement("div"); ov.className = "loginov";
+  ov.innerHTML = '<div class="lbox"><div class="lt"><span></span><em>?×</em></div><div class="lbody">'+
+    '<div class="lmsg"><div class="lic"><u></u></div><span class="lm"></span></div>'+
+    '<div class="lf"><label></label><div class="fld la-f"><span class="la"></span></div>'+
+    '<label></label><div class="pwr"><div class="fld lp-f"><span class="lp"></span></div><span class="cb"><i></i><span></span></span></div>'+
+    '<label></label><div class="fld sel"><span class="ls"></span><span class="arr">▼</span></div></div>'+
+    '<div class="lbtn"><span class="def"></span><span></span></div></div></div>';
+  const q = (sel)=>ov.querySelector(sel), labs = ov.querySelectorAll(".lf label"), btns = ov.querySelectorAll(".lbtn span");
+  q(".lt span").textContent = tr("로그인");
+  q(".lm").textContent = tr("거래 계좌에 접속하는 중…");
+  labs[0].textContent = tr("로그인")+":"; labs[1].textContent = tr("암호")+":"; labs[2].textContent = tr("서버")+":";
+  q(".cb").classList.add("on"); q(".cb span").textContent = tr("비밀번호 저장");
+  btns[0].textContent = tr("확인"); btns[1].textContent = tr("취소");
+  q(".ls").textContent = "EnsoMarkets-Server";
+  const acct = String(PANE_DEFS[idx].acct).replace(/\D/g,"") || "1071040";
+  const la = q(".la"), pw = q(".lp");
+  wrap.appendChild(ov);
+  const lc = document.querySelector('.log-col[data-pane="'+idx+'"]'); if(lc) lc.classList.add("lgwait");   // 평가금은 로그인 연출이 끝난 뒤에 표시
+  sfx("login");
+  const at = (ms, fn)=> _loginT[idx].push(setTimeout(fn, ms));
+  q(".la-f").classList.add("act");
+  for(let k=1;k<=acct.length;k++) at(60*k, ()=>{ la.textContent = acct.slice(0,k); });
+  at(60*acct.length+80, ()=>{ la.innerHTML = '<span class="hl">'+acct+'</span>'; });
+  at(550, ()=>{ q(".la-f").classList.remove("act"); q(".lp-f").classList.add("act"); });
+  for(let k=1;k<=9;k++) at(550+60*k, ()=>{ pw.textContent = "●".repeat(k); });
+  at(1250, ()=>{ q(".lp-f").classList.remove("act"); });
+  at(1550, ()=> btns[0].classList.add("press"));
+  at(1800, ()=>{ btns[0].classList.remove("press"); q(".lm").textContent = tr("거래 계좌로 접속이 허용되었습니다."); ov.classList.add("ok"); });
+  at(2700, ()=> ov.classList.add("out"));
+  at(3000, ()=>{ ov.remove(); if(lc) lc.classList.remove("lgwait"); });
 }
 /* ---------------- 복기 모드: 실제 XAUUSD 5분봉 차트(캡처 4장, 각 약 34시간)를 그대로 재생 ---------------- */
 const REAL_CHARTS = [
@@ -1919,6 +2133,7 @@ function renderStatusPill(){
 }
 
 function renderPanes(){
+  const bmd = document.getElementById("btnMode"); if(bmd){ const hs = state.panes.some(p=>p.legs.length); if(bmd.disabled !== hs){ bmd.disabled = hs; } }
   const bp = document.getElementById("btnPat"); if(bp){ const has = state.panes.some(p=>p.legs.length); if(bp.disabled !== has){ bp.disabled = has; bp.title = has ? "포지션이 있을 땐 패턴을 바꿀 수 없어요" : "복기 차트 중 다른 차트를 랜덤으로 골라 새로 시작해요"; } }
   const pn = document.getElementById("patName"); if(pn && pn.textContent !== state.regime.pat.name) pn.textContent = state.regime.pat.name;
   state.panes.forEach((p, idx)=>{
@@ -1955,10 +2170,37 @@ function renderPanes(){
       posEl.className = "pos eq " + (eq>p.start+0.005?"up":eq<p.start-0.005?"bad":"");
       posEl.textContent = "평가금 " + fmtMoney(eq);
       // 청산 임박 경고(MT5 마진콜처럼 빨갛게 깜빡임): 청산선까지 남은 여유가 20% 이하
-      const sl0 = idx===0 ? usedMargin(p)*0.5 : 0;
+      const sl0 = FUND() ? usedMargin(p)*0.2 : (idx===0 ? usedMargin(p)*0.5 : 0);
       const warn = p.legs.length>0 && !p.stopped && p.balance > sl0 && (eq - sl0) <= (p.balance - sl0)*0.20;
       posEl.classList.toggle("danger", warn);
+      {   // MT5처럼 마진레벨(%) = 평가금 ÷ 사용 증거금 × 100 (포지션이 없으면 비움)
+        const ml = document.querySelector('[data-role="mlvl"][data-pane="'+idx+'"]');
+        if(ml){
+          const um = usedMargin(p);
+          if(p.legs.length && um > 0){
+            const lv = eq / um * 100, so = FUND() ? 20 : (idx===0 ? 50 : 0);
+            ml.textContent = "마진레벨 " + lv.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}) + "%";
+            ml.title = so ? "마진레벨 = 평가금 ÷ 사용 증거금 × 100 · "+so+"% 이하가 되면 강제청산(스탑아웃)돼요" : "마진레벨 = 평가금 ÷ 사용 증거금 × 100";
+            ml.classList.toggle("lo", warn || (so>0 && lv <= so*1.5));
+          } else { ml.textContent = ""; ml.title = ""; ml.classList.remove("lo"); }
+        }
+      }
       const col = document.querySelector('.log-col[data-pane="'+idx+'"]'); if(col) col.classList.toggle("dangerpane", warn);
+      if(col){   // MT5 터미널 하단 요약줄: 잔액 · 평가금 · 마진 · 가용마진 · 마진 레벨 · 합계 손익
+        const g = k=>col.querySelector('[data-s="'+k+'"]'), nf = v=>{ const t = Math.abs(v).toFixed(2).split("."); return (v<0?"-":"")+t[0].replace(/\B(?=(\d{3})+(?!\d))/g," ")+"."+t[1]; };
+        const um = usedMargin(p), has = p.legs.length>0 && um>0;
+        col.classList.toggle("hasleg", has);
+        const sc = col.querySelector(".tb-sum td"); if(sc) sc.colSpan = matchMedia("(max-width:760px)").matches ? 6 : 7;
+        g("bal").textContent = nf(p.balance)+" USD"; g("eq").textContent = nf(eq);
+        g("eq").classList.toggle("danger", warn);
+        if(has){
+          const lv = eq/um*100, so = FUND() ? 20 : (idx===0 ? 50 : 0);
+          g("mg").textContent = nf(um); g("fm").textContent = nf(eq-um); g("ml").textContent = nf(lv)+" %";
+          g("ml").classList.toggle("lo", warn || (so>0 && lv <= so*1.5));
+        }
+        const pl = g("pl"), fl = floatOf(p);
+        pl.textContent = has ? nf(fl) : ""; pl.className = "sr "+(fl>=0?"up":"bad");
+      }
     }
   });
 }
@@ -2040,11 +2282,12 @@ function aggregate(candles, N){
   if(N <= 1) return candles;
   const L = candles.length, out = [];
   let curG = null, cur = null;
+  const clkOff = (((SESS.cur.start - (SESS.t0||0)) % N) + N) % N;
   for(let i=0;i<L;i++){
     const abs = state.tick - (L-1-i);
-    const g = Math.floor(abs / N);
+    const g = Math.floor((abs + clkOff) / N);   // 시계(KST) 기준 정각에 맞춰 묶음
     const c = candles[i];
-    if(g !== curG){ cur = {o:c.o, h:c.h, l:c.l, c:c.c}; out.push(cur); curG = g; }
+    if(g !== curG){ cur = {o:c.o, h:c.h, l:c.l, c:c.c, ab:g*N-clkOff}; out.push(cur); curG = g; }
     else { cur.h = Math.max(cur.h, c.h); cur.l = Math.min(cur.l, c.l); cur.c = c.c; }
   }
   return out;
@@ -2061,7 +2304,7 @@ function drawCandles(canvas, candles, opts){
   ctx.setTransform(dpr,0,0,dpr,0,0);
   ctx.clearRect(0,0,w,h);
 
-  const padR = 58, padT = Math.max(10, opts.padTop || 10), padB = 16, padL = 6;   // padTop: SELL/BUY 상자 아래부터 그리기 시작
+  const padR = 58, padT = Math.max(10, opts.padTop || 10), padB = 20, padL = 6;   // padTop: SELL/BUY 상자 아래부터 그리기 시작
   const plotW = w - padR - padL, plotH = h - padT - padB;
   if(candles.length===0) return;
 
@@ -2193,6 +2436,30 @@ function drawCandles(canvas, candles, opts){
   });
 
 
+  // 하단 타임라인(시간축): 캔들 시각(KST)을 일정 간격으로 표시
+  if(!isTick && visible.length){
+    const L = candles.length, absOf = (i)=>{ const c = visible[i]; return c.ab != null ? c.ab : state.tick - (L-1-(mkStart+i)); };
+    const unit = (parseInt(tf,10) || 1), stepsMin = [1,2,5,10,15,30,60,120,240,360,720,1440];
+    const minPx = 62, need = Math.ceil(minPx / cw) * unit;
+    const stepM = stepsMin.find(v=>v >= need) || 1440;
+    ctx.save();
+    ctx.font = "10.5px " + getCss("--font-mono").trim(); ctx.textBaseline = "middle"; ctx.textAlign = "center";
+    ctx.strokeStyle = getCss("--grid"); ctx.fillStyle = getCss("--muted"); ctx.lineWidth = 1;
+    const yb = h - padB; let lastX = -1e9;
+    ctx.beginPath(); ctx.moveTo(padL, yb+0.5); ctx.lineTo(w-padR, yb+0.5); ctx.stroke();
+    for(let i=0;i<visible.length;i++){
+      const ab = absOf(i);
+      const lab = kstStr(ab);
+      const mm = ((SESS.cur.start + ab - (SESS.t0||0)) % 1440 + 1440) % 1440;
+      if(i===0 || Math.floor(mm/stepM) === Math.floor((mm-(ab-absOf(i-1)))/stepM) && mm % stepM !== 0) continue;   // 눈금 경계를 지나는 캔들에 표시
+      const cx = padL + i*cw + cw/2 + slideX;
+      if(cx < padL+18 || cx > w-padR-18 || cx - lastX < minPx*0.9) continue;
+      ctx.beginPath(); ctx.moveTo(cx, yb); ctx.lineTo(cx, yb+4); ctx.stroke();
+      ctx.fillText(lab, cx, yb+11); lastX = cx;
+    }
+    ctx.restore();
+  }
+
   // MT5 스타일 진입/청산 표시: 매수 거래=파랑 ▲, 매도 거래=빨강 ▼ (청산은 반대 방향 거래), 점선으로 연결
   canvas._mk = [];
   if(!isTick && mkN){
@@ -2237,8 +2504,8 @@ function drawCandles(canvas, candles, opts){
     const sgn = n => (n>=0 ? "+" : "") + fmtMoney(n);
     const multi = opts.legs.length > 1;
     const levels = [];
-    opts.legs.forEach(pos=>{
-      const who = multi ? (pos.src===1?"A ":pos.src===2?"B ":"") : "";
+    opts.legs.forEach((pos, pi)=>{
+      const who = FUND() ? (multi ? "#"+(pi+1)+" " : "") : (multi ? (pos.src===1?"A ":pos.src===2?"B ":"") : "");
       levels.push({price:pos.entry, color:green, dash:[], tag:who+(pos.dir==="BUY"?"BUY ":"SELL ")+pos.lot.toFixed(2)+"랏"});
       if(pos.tp != null) levels.push({price:pos.tp, color:red, dash:[8,4], tag:who+"TP "+sgn(calcPnl(pos,pos.tp)-pos.lot*COMMISSION_PER_LOT)});
       if(pos.sl != null) levels.push({price:pos.sl, color:red, dash:[2,3], tag:who+"SL "+sgn(calcPnl(pos,pos.sl)-pos.lot*COMMISSION_PER_LOT)});
@@ -2321,9 +2588,37 @@ function buildGlossary(){
 }
 
 /* ---------------- events ---------------- */
+/* ---------------- 모드 전환: 보험금·챌린지 ↔ 펀딩 A·B ---------------- */
+function applyModeLabels(){
+  const F = FUND();
+  document.body.classList.toggle("fund", F);
+  PANE_DEFS[1].role = F ? "펀딩 A" : "챌린지 A";
+  PANE_DEFS[2].role = F ? "펀딩 B" : "챌린지 B";
+  [1,2].forEach(i=>{
+    const r = document.querySelector('.pane[data-pane="'+i+'"] .ea-head .role'); if(r) r.textContent = PANE_DEFS[i].role;
+    const l = document.querySelector('.log-col[data-pane="'+i+'"] .log-head .ln'); if(l) l.textContent = PANE_DEFS[i].role;
+  });
+  const jb = document.querySelectorAll("#jumpbar button[data-j]");
+  [1,2].forEach(i=>{ const b = document.querySelector('#jumpbar button[data-j="'+i+'"]'); if(b) b.textContent = F ? (i===1?"펀딩A":"펀딩B") : (i===1?"챌린지A":"챌린지B"); });
+  const bm = document.getElementById("btnMode"); if(bm) bm.textContent = F ? "🔁 보험금·챌린지 모드" : "🔁 펀딩 모드";
+  const tip = document.getElementById("tipBox");
+  if(tip){ tip.textContent = F ? FUND_TIP : DEFAULT_TIP_INS; }
+}
+function setMode(m){
+  if(m === MODE) return;
+  if(state.panes.some(p=>p.legs.length)){ notify("열린 포지션을 모두 청산한 뒤에 모드를 바꿔 주세요."); return; }
+  MODE = m;
+  applyModeLabels();
+  const q = (f,i)=>document.querySelector('input[data-field="'+f+'"][data-pane="'+i+'"]');
+  if(FUND()){ [1,2].forEach(i=>{ q("lot",i).value = "0.01"; q("tp",i).value = ""; q("sl",i).value = ""; }); }
+  else { applyPreset(); }
+  newGame();
+  notify(FUND() ? "펀딩 A·B 모드로 바꿨어요. 새로 시작합니다." : "보험금·챌린지 모드로 바꿨어요. 새로 시작합니다.");
+}
 function wireEvents(){
   document.getElementById("btnPlay").addEventListener("click", ()=> state.running ? pause() : play());
   document.getElementById("btnNew").addEventListener("click", newGame);
+  document.getElementById("btnMode").addEventListener("click", ()=> setMode(FUND() ? "ins" : "fund"));
   { const mc = document.querySelector(".main-col"); if(mc){ mc.classList.add("railoff"); setTimeout(()=>window.dispatchEvent(new Event("resize")), 60); } }   // 도움말 칸은 항상 숨김
   { const fb = document.getElementById("btnFs"), de = document.documentElement;
     const isFs = () => !!(document.fullscreenElement || document.webkitFullscreenElement);
@@ -2513,7 +2808,7 @@ function wireEvents(){
   document.getElementById("selChCap").addEventListener("change", applyPreset);
   document.getElementById("chkPreset").addEventListener("change", applyPreset);
   applyPreset();
-  ["selChCap","selChLev","selInsLev","selDay"].forEach(id=>{
+  ["selChCap","selChLev","selInsLev","selFdCap","selFdLev","selDay"].forEach(id=>{
     document.getElementById(id).addEventListener("change", newGame);
   });
   document.addEventListener("click", e=>{
@@ -2697,7 +2992,7 @@ const EX = {
  "보험금 자동 주문":["Insurance auto order","保険金の自動注文","保险金自动下单"],
  "챌린지가 진입하면 보험금이 반대 방향으로 자동 진입해요. 직접 누를 수는 없어요.":["When a challenge enters, Insurance automatically enters the opposite direction. You can't press it yourself.","チャレンジがエントリーすると、保険金が反対方向に自動でエントリーします。直接押すことはできません。","挑战开仓时，保险金会自动反向开仓。无法手动点击。"],
  "평가금 · 리셋":["Equity · Reset","評価額 · リセット","净值 · 重置"],
- "평가금은 잔액 + 평가손익이에요. ↺ 리셋은 두 번 눌러 초기자본으로 되돌려요. 손실청산된 계좌도 리셋 후 다시 써요.":["Equity is balance plus unrealized P/L. Press ↺ Reset twice to return to the initial capital. A liquidated account can be reused after resetting.","評価額は残高+評価損益です。↺ リセットを2回押すと初期資金に戻ります。ロスカットされた口座もリセット後に再利用できます。","净值 = 余额 + 浮动盈亏。连按两次 ↺ 重置可恢复到初始资金。被强制平仓的账户重置后可继续使用。"],
+ "평가금은 잔액 + 평가손익이에요. 계좌를 초기자본으로 되돌리려면 위쪽 메뉴 파일 › 거래 계좌 로그인을 눌러요. 손실청산된 계좌도 이렇게 리셋해요.":["Equity is balance plus unrealized P/L. To return the account to its initial capital, use File › Login to Trade Account in the top menu. A liquidated account is reset the same way.","評価額は残高＋評価損益です。口座を初期資金に戻すには、上部メニューの ファイル › 取引口座にログイン を押します。ロスカットされた口座も同じ方法でリセットします。","净值为余额加浮动盈亏。要把账户恢复为初始资金，请点击上方菜单 文件 › 登录交易账户。被强平的账户也这样重置。"],
  "차트 조작":["Chart controls","チャート操作","图表操作"],
  "마우스 휠 · 핀치: 봉 크기 확대/축소 · 드래그: 좌우·상하 이동 · 오른쪽 가격 숫자 드래그/휠: 가격 확대/축소 · 더블클릭(더블탭): 처음 상태로. 손을 떼고 5초 뒤 자동으로 최근 캔들로 돌아와요.":["Mouse wheel · pinch: zoom candle size · Drag: pan left/right and up/down · Drag/wheel on the price numbers at right: zoom the price scale · Double-click (double-tap): reset. About 5 seconds after you let go, the chart returns to the latest candle.","マウスホイール·ピンチ:ローソク足サイズの拡大/縮小 · ドラッグ:左右·上下に移動 · 右側の価格数字をドラッグ/ホイール:価格軸の拡大/縮小 · ダブルクリック(ダブルタップ):初期状態に戻す。操作をやめて5秒後に自動で最新のローソク足に戻ります。","鼠标滚轮 · 双指缩放：放大/缩小K线 · 拖动：左右、上下平移 · 拖动/滚动右侧价格数字：缩放价格轴 · 双击(双击屏幕)：恢复初始状态。松手约5秒后会自动回到最新K线。"],
  "포지션 탭":["Positions tab","ポジションタブ","持仓标签"],
@@ -2719,9 +3014,95 @@ const EX = {
  "모의계좌":["Demo account","デモ口座","模拟账户"],
  "작게":["Small","小","小"],"보통":["Medium","中","中"],"크게":["Large","大","大"],
  "드래그/휠: 가격 확대·축소":["Drag / wheel: zoom the price axis","ドラッグ/ホイール:価格軸の拡大·縮小","拖动/滚轮：缩放价格轴"],
+ "💡 참고해 주세요":["💡 Please note","💡 ご参考ください","💡 请注意"],
+ "이 시뮬레이션의 차트는 실제 시세가 아닌 가상의 차트입니다.":["The chart in this simulation is a virtual chart, not real market prices.","このシミュレーションのチャートは実際の相場ではなく、仮想のチャートです。","本模拟中的图表并非真实行情，而是虚拟图表。"],
+ "연습용으로만 사용해 주시기 바랍니다. 실제 투자 판단에는 사용하지 마시기 바랍니다.":["Please use it for practice only, not for real investment decisions.","練習用としてのみご利用ください。実際の投資判断には使わないでください。","请仅用于练习，不要用于实际投资决策。"],
+ "처음이시라면 '설명'을 눌러 사용법을 꼭 확인해 주세요":["First time here? Tap 'Guide' to see how it works","初めての方は「説明」を押して使い方をご確認ください","首次使用请点击“说明”了解用法"],
+ "챌린지 A · SELL / BUY 주문":["Challenge A · SELL / BUY order","チャレンジA · SELL / BUY 注文","挑战 A · SELL / BUY 下单"],
+ "챌린지 A · Lot · TP · SL":["Challenge A · Lot · TP · SL","チャレンジA · Lot · TP · SL","挑战 A · Lot · TP · SL"],
+ "챌린지 A · 평가금 · 리셋":["Challenge A · Equity · Reset","チャレンジA · 評価額 · リセット","挑战 A · 净值 · 重置"],
+ "챌린지 A · 포지션 · 거래 목록 영역":["Challenge A · Positions · trade list","チャレンジA · ポジション · 取引一覧エリア","挑战 A · 持仓 · 交易列表区域"],
+ "챌린지 B · SELL / BUY 주문":["Challenge B · SELL / BUY order","チャレンジB · SELL / BUY 注文","挑战 B · SELL / BUY 下单"],
+ "챌린지 B · Lot · TP · SL":["Challenge B · Lot · TP · SL","チャレンジB · Lot · TP · SL","挑战 B · Lot · TP · SL"],
+ "챌린지 B · 평가금 · 리셋":["Challenge B · Equity · Reset","チャレンジB · 評価額 · リセット","挑战 B · 净值 · 重置"],
+ "챌린지 B · 포지션 · 거래 목록 영역":["Challenge B · Positions · trade list","チャレンジB · ポジション · 取引一覧エリア","挑战 B · 持仓 · 交易列表区域"],
+ "🔁 펀딩 모드":["🔁 Funding mode","🔁 ファンディングモード","🔁 资金账户模式"],
+ "🔁 보험금·챌린지 모드":["🔁 Insurance·Challenge mode","🔁 保険金·チャレンジモード","🔁 保险金·挑战模式"],
+ "펀딩 A·B 세팅":["Funding A·B Setup","ファンディングA·B設定","资金 A·B 设置"],
+ "동시 청산":["Close together","同時決済","同时平仓"],
+ "모드 전환":["Switch mode","モード切替","切换模式"],
+ "펀딩 A":["Funding A","ファンディングA","资金 A"],
+ "펀딩 B":["Funding B","ファンディングB","资金 B"],
+ "펀딩A":["Funding A","ファンディングA","资金 A"],
+ "펀딩B":["Funding B","ファンディングB","资金 B"],
+ "펀딩 거래 히스토리":["Funding trade history","ファンディング取引履歴","资金账户交易记录"],
+ "보험금·챌린지 모드와 펀딩 A·B 모드를 바꿔요 (새로 시작돼요)":["Switch between Insurance·Challenge mode and Funding A·B mode (restarts the game)","保険金·チャレンジモードとファンディングA·Bモードを切り替えます(新規開始)","在保险金·挑战模式与资金 A·B 模式之间切换(将重新开始)"],
+ "보험금·챌린지 모드와 펀딩 A·B 모드를 바꿔요. 모드를 바꾸면 새로 시작되고, 포지션이 열려 있을 땐 바꿀 수 없어요.":["Switch between Insurance·Challenge mode and Funding A·B mode. Changing the mode restarts the game, and you can't switch while a position is open.","保険金·チャレンジモードとファンディングA·Bモードを切り替えます。切り替えると新規開始になり、ポジションがある間は切り替えられません。","在保险金·挑战模式与资金 A·B 模式之间切换。切换后将重新开始，持仓期间无法切换。"],
+ "펀딩 A·B의 초기자본과 레버리지를 골라요. 랏수와 TP·SL은 계좌마다 직접 입력해요.":["Choose the capital and leverage for Funding A·B. Enter lots and TP·SL for each account yourself.","ファンディングA·Bの初期資金とレバレッジを選びます。ロット数とTP·SLは口座ごとに入力します。","选择资金 A·B 的初始资金和杠杆。手数与 TP·SL 需为每个账户单独输入。"],
+ "켜면 한쪽 계좌의 포지션이 청산될 때(수동·익절·손절) 짝이 된 반대 계좌의 포지션도 함께 청산돼요. 꺼 두면 서로 따로 청산돼요.":["When on, closing a position in one account (manual, take-profit or stop-loss) also closes its paired position in the other account. When off, they close independently.","オンにすると、一方の口座のポジションが決済されたとき(手動·利確·損切り)、ペアの反対口座のポジションも一緒に決済されます。オフなら別々に決済されます。","开启后，一个账户的仓位平仓时(手动、止盈、止损)，其配对的对方账户仓位也会一并平仓。关闭则各自独立平仓。"],
+ "켜면 한쪽 계좌의 포지션이 청산될 때 짝이 된 반대 계좌의 포지션도 함께 청산돼요. 끄면 서로 따로 청산돼요":["When on, closing a position in one account also closes its paired position in the other account. When off, they close independently.","オンにすると、一方の口座のポジションが決済されたとき、ペアの反対口座のポジションも一緒に決済されます。オフなら別々に決済されます。","开启后，一个账户的仓位平仓时，其配对的对方账户仓位也会一并平仓。关闭则各自独立平仓。"],
+ "누르면 바로 주문돼요. 이때 반대 계좌에 반대 포지션이 자동으로 들어가요(반대매매 연동). 계좌마다 최대 3포지션까지 쌓을 수 있어요.":["Click to order instantly. The opposite account automatically takes the opposite position (counter-trade link). Each account can hold up to 3 positions.","押すと即注文されます。このとき反対口座に反対ポジションが自動で入ります(反対売買連動)。口座ごとに最大3ポジションまで持てます。","点击即下单。此时对方账户会自动建立反向仓位(反向对冲联动)。每个账户最多持有 3 个仓位。"],
+ "한쪽 펀딩 계좌에 진입하면 다른 펀딩 계좌에도 반대 방향 포지션이 자동으로 들어가요.":["When you enter in one funding account, the other funding account automatically takes the opposite position.","一方のファンディング口座にエントリーすると、もう一方にも反対方向のポジションが自動で入ります。","在一个资金账户开仓后，另一个资金账户会自动建立反向仓位。"],
+ "랏수와 TP·SL을 계좌마다 따로 넣어요. TP·SL은 진입가에서 떨어진 포인트(1p=$0.01)이고, SL을 비우면 자동 손절이 없어요.":["Enter lots and TP·SL separately for each account. TP·SL are points away from the entry price (1p=$0.01); leave SL empty for no automatic stop loss.","ロット数とTP·SLを口座ごとに入力します。TP·SLはエントリー価格からのポイント(1p=$0.01)で、SLが空欄なら自動損切りはありません。","手数与 TP·SL 需为每个账户分别填写。TP·SL 是距开仓价的点数(1p=$0.01)，SL 留空则无自动止损。"],
+ "펀딩 계좌는 포지션을 최대 3개까지만 들일 수 있어요.":["A funding account can hold at most 3 positions.","ファンディング口座のポジションは最大3つまでです。","资金账户最多持有 3 个仓位。"],
+ "반대 계좌의 포지션이 이미 3개라서 양쪽 모두 진입하지 않았어요.":["The other account already has 3 positions, so neither side was entered.","反対口座のポジションがすでに3つのため、どちらもエントリーしませんでした。","对方账户已有 3 个仓位，因此双方都未开仓。"],
+ "열린 포지션을 모두 청산한 뒤에 모드를 바꿔 주세요.":["Close all open positions before switching modes.","モードを切り替える前に、開いているポジションをすべて決済してください。","请先平掉所有持仓再切换模式。"],
+ "펀딩 A·B 모드로 바꿨어요. 새로 시작합니다.":["Switched to Funding A·B mode. Starting a new game.","ファンディングA·Bモードに切り替えました。新規開始します。","已切换到资金 A·B 模式，重新开始。"],
+ "보험금·챌린지 모드로 바꿨어요. 새로 시작합니다.":["Switched to Insurance·Challenge mode. Starting a new game.","保険金·チャレンジモードに切り替えました。新規開始します。","已切换到保险金·挑战模式，重新开始。"],
+ "저장할 펀딩 거래 내역이 아직 없어요.":["There is no funding trade history to save yet.","保存するファンディング取引履歴がまだありません。","还没有可保存的资金账户交易记录。"],
+ "펀딩 A·B 모드: A 또는 B에서 BUY/SELL을 누르면 반대 계좌에 반대 포지션이 자동으로 들어갑니다. 랏수·TP·SL은 계좌마다 따로 입력하고, 계좌마다 포지션은 최대 3개까지 들어갈 수 있어요.":["Funding A·B mode: press BUY/SELL in A or B and the opposite account automatically takes the opposite position. Enter lots and TP·SL separately per account; each account can hold up to 3 positions.","ファンディングA·Bモード: AまたはBでBUY/SELLを押すと、反対口座に反対ポジションが自動で入ります。ロット数とTP·SLは口座ごとに入力し、各口座は最大3ポジションまで持てます。","资金 A·B 模式：在 A 或 B 点击 BUY/SELL，对方账户会自动建立反向仓位。手数与 TP·SL 分别填写，每个账户最多 3 个仓位。"],
+ "펀딩 스탑아웃 20%":["Funding stop-out 20%","ファンディングのロスカット20%","资金账户强平线 20%"],
+ "펀딩 A·B 모드에서는 평가금이 사용 증거금의 20% 이하(증거금 유지율 20% 이하)가 되면 그 계좌의 모든 포지션이 자동으로 강제청산돼요. 청산 체결이 늦어지면 그 사이 가격이 더 움직일 수 있어요.":["In Funding A·B mode, when equity falls to 20% or less of the used margin (margin level 20% or below), all positions in that account are force-closed automatically. If the close fills late, the price may move further in between.","ファンディングA·Bモードでは、評価額が使用証拠金の20%以下(証拠金維持率20%以下)になると、その口座のすべてのポジションが自動で強制決済されます。約定が遅れると、その間に価格がさらに動くことがあります。","在资金 A·B 模式中，当净值降至已用保证金的 20% 以下(保证金比例 20% 以下)时，该账户所有仓位将被自动强制平仓。若平仓成交延迟，期间价格可能进一步波动。"],
+ "마진레벨 = 평가금 ÷ 사용 증거금 × 100":["Margin level = equity ÷ used margin × 100","証拠金維持率 = 評価額 ÷ 使用証拠金 × 100","保证金比例 = 净值 ÷ 已用保证金 × 100"],
+ "마진레벨 = 평가금 ÷ 사용 증거금 × 100 · 20% 이하가 되면 강제청산(스탑아웃)돼요":["Margin level = equity ÷ used margin × 100 · force-closed (stop-out) at 20% or below","証拠金維持率 = 評価額 ÷ 使用証拠金 × 100 · 20%以下で強制決済(ロスカット)されます","保证金比例 = 净值 ÷ 已用保证金 × 100 · 降至 20% 以下将被强制平仓(强平)"],
+ "마진레벨 = 평가금 ÷ 사용 증거금 × 100 · 50% 이하가 되면 강제청산(스탑아웃)돼요":["Margin level = equity ÷ used margin × 100 · force-closed (stop-out) at 50% or below","証拠金維持率 = 評価額 ÷ 使用証拠金 × 100 · 50%以下で強制決済(ロスカット)されます","保证金比例 = 净值 ÷ 已用保证金 × 100 · 降至 50% 以下将被强制平仓(强平)"],
+ "로그인":["Login","ログイン","登录"],
+ "계좌":["Account","口座","账户"],
+ "비밀번호":["Password","パスワード","密码"],
+ "서버":["Server","サーバー","服务器"],
+ "서버에 연결하는 중…":["Connecting to server…","サーバーに接続中…","正在连接服务器…"],
+ "인증하는 중…":["Authorizing…","認証中…","正在验证…"],
+ "계좌 정보를 받는 중…":["Receiving account data…","口座情報を受信中…","正在接收账户信息…"],
+ "로그인 완료":["Login complete","ログイン完了","登录完成"],
+ "거래 계좌에 접속하는 중…":["Connecting to the trade account…","取引口座に接続中…","正在连接交易账户…"],
+ "거래 계좌로 접속이 허용되었습니다.":["Access to the trade account has been granted.","取引口座への接続が許可されました。","已允许连接到交易账户。"],
+ "암호":["Password","パスワード","密码"],
+ "비밀번호 저장":["Save password","パスワードを保存","保存密码"],
+ "확인":["OK","OK","确定"],
+ "취소":["Cancel","キャンセル","取消"],
+ "파일(F)":["File(F)","ファイル(F)","文件(F)"],
+ "보기(V)":["View(V)","表示(V)","查看(V)"],
+ "삽입(I)":["Insert(I)","挿入(I)","插入(I)"],
+ "차트(C)":["Charts(C)","チャート(C)","图表(C)"],
+ "도구(T)":["Tools(T)","ツール(T)","工具(T)"],
+ "창(W)":["Window(W)","ウィンドウ(W)","窗口(W)"],
+ "도움말(H)":["Help(H)","ヘルプ(H)","帮助(H)"],
+ "새차트 (N)":["New Chart (N)","新規チャート (N)","新图表 (N)"],
+ "차트복구 (E)":["Profiles (E)","チャート復元 (E)","恢复图表 (E)"],
+ "화면구성 (F)":["Profile (F)","プロファイル (F)","配置 (F)"],
+ "닫기 (C)":["Close (C)","閉じる (C)","关闭 (C)"],
+ "저장 (S)":["Save (S)","保存 (S)","保存 (S)"],
+ "그림으로 저장 (E)":["Save as Picture (E)","画像として保存 (E)","另存为图片 (E)"],
+ "새로운 AI 도우미 (I)":["New AI Assistant (I)","新しいAIアシスタント (I)","新AI助手 (I)"],
+ "데이터 폴더 열기 (D)":["Open Data Folder (D)","データフォルダを開く (D)","打开数据文件夹 (D)"],
+ "인쇄 (P)":["Print (P)","印刷 (P)","打印 (P)"],
+ "인쇄 미리보기 (V)":["Print Preview (V)","印刷プレビュー (V)","打印预览 (V)"],
+ "인쇄 설정 (R)":["Print Setup (R)","印刷設定 (R)","打印设置 (R)"],
+ "계좌 개설 (A)":["Open an Account (A)","口座開設 (A)","开立账户 (A)"],
+ "예치 (T)":["Deposit (T)","入金 (T)","存款 (T)"],
+ "취소 (H)":["Withdraw (H)","出金 (H)","取款 (H)"],
+ "거래 계좌 로그인 (L)":["Login to Trade Account (L)","取引口座にログイン (L)","登录交易账户 (L)"],
+ "웹 트레이더에 로그인 (W)":["Login to Web Trader (W)","Web Traderにログイン (W)","登录Web Trader (W)"],
+ "MQL5.community 로그인":["MQL5.community Login","MQL5.community ログイン","MQL5.community 登录"],
+ "종료 (X)":["Exit (X)","終了 (X)","退出 (X)"],
+ "잔액:":["Balance:","残高:","余额:"],
+ "평가금:":["Equity:","有効証拠金:","净值:"],
+ "마진:":["Margin:","証拠金:","保证金:"],
+ "가용마진:":["Free Margin:","余剰証拠金:","可用保证金:"],
+ "마진 레벨:":["Margin Level:","証拠金維持率:","保证金比例:"],
  "웹 버전 QR":["Web version QR","Webバージョン QR","网页版二维码"],
  "스마트폰 카메라로 스캔하세요":["Scan with your phone camera","スマホのカメラでスキャン","用手机相机扫描"],
- "손실 청산된 계좌입니다. 리셋 후 사용하세요":["This account was liquidated. Reset it to continue.","ロスカットされた口座です。リセットしてからご利用ください。","该账户已被强制平仓，请重置后使用。"],
+ "손실 청산된 계좌입니다. 파일 › 거래 계좌 로그인으로 리셋하세요":["This account was liquidated. Reset it via File › Login to Trade Account.","ロスカットされた口座です。ファイル › 取引口座にログイン でリセットしてください。","该账户已被强制平仓。请通过 文件 › 登录交易账户 重置。"],
  "포인트":["Points","ポイント","点数"],
  "진입가에서 떨어진 포인트(1p=$0.01)":["Distance from entry in points (1 pt = $0.01)","エントリー価格からの距離(ポイント、1p=$0.01)","距开仓价的点数(1点=$0.01)"],
  "보험금은 챌린지 진입에 따라 자동으로 반대 포지션이 잡혀요":["Insurance automatically takes the opposite position when a challenge enters","保険金はチャレンジのエントリーに応じて自動で反対ポジションを取ります","保险金会随挑战开仓自动建立反向仓位"],
@@ -2828,7 +3209,7 @@ const TPL = [
  [/^(.+) (\d+)건 중$/, ["$1 $2 open","$1 $2件保有中","$1 持仓 $2 笔"]],
 ];
 /* 짧은 낱말(위에서 못 잡은 문장의 대비책, 긴 것부터 치환) */
-const FRAG = [[" 중"," open"," 保有中"," 持仓中"],["보험금","Insurance","保険金","保险金"],["챌린지","Challenge","チャレンジ","挑战"],["평가금","Equity","評価額","净值"],["초기자본","Capital","初期資金","初始资金"],["레버리지","Leverage","レバレッジ","杠杆"],["익절","Take profit","利確","止盈"],["손절","Stop loss","損切り","止损"],["강제청산","Liquidation","強制ロスカット","强制平仓"],["수동청산","Manual close","手動決済","手动平仓"],["연동청산","Linked close","連動決済","联动平仓"],["리셋청산","Reset close","リセット決済","重置平仓"],["전체청산","Close all","全決済","全部平仓"],["청산","Close","決済","平仓"],["수수료","Fee","手数料","手续费"],["손익","P/L","損益","盈亏"],["랏","lot","ロット","手"],["대기","Idle","待機","待机"],["세션","session","セッション","时段"]];
+const FRAG = [["마진레벨","Margin level","証拠金維持率","保证金比例"],["펀딩","Funding","ファンディング","资金"],[" 중"," open"," 保有中"," 持仓中"],["보험금","Insurance","保険金","保险金"],["챌린지","Challenge","チャレンジ","挑战"],["평가금","Equity","評価額","净值"],["초기자본","Capital","初期資金","初始资金"],["레버리지","Leverage","レバレッジ","杠杆"],["익절","Take profit","利確","止盈"],["손절","Stop loss","損切り","止损"],["강제청산","Liquidation","強制ロスカット","强制平仓"],["수동청산","Manual close","手動決済","手动平仓"],["연동청산","Linked close","連動決済","联动平仓"],["리셋청산","Reset close","リセット決済","重置平仓"],["전체청산","Close all","全決済","全部平仓"],["청산","Close","決済","平仓"],["수수료","Fee","手数料","手续费"],["손익","P/L","損益","盈亏"],["랏","lot","ロット","手"],["대기","Idle","待機","待机"],["세션","session","セッション","时段"]];
 /* ---- 번역 엔진: 화면에 나타난 한국어 텍스트(노드·속성·캔버스 글자)를 선택한 언어로 바꿔 보여준다 ---- */
 let LANG = "ko";
 const HAS_KO = /[가-힣]/;
@@ -2926,6 +3307,10 @@ const GUIDE = [
  [".speedgrp","배속","1x는 실시간, 5x·10x·20x는 그만큼 빠르게 흘러가요."],
  ["#btnNew","새로 시작","처음부터 다시 시작해요. 설정을 바꾼 뒤에 눌러 적용하세요."],
  ["#btnPat","패턴 변경","복기 차트 중 다른 차트를 랜덤으로 골라 새로 시작해요"],
+ [".mt5bar","MT5 파일 메뉴","파일 → 「거래 계좌 로그인」을 누르면 그 계좌가 MT5에 새로 로그인하는 연출과 함께 초기자본으로 리셋돼요."],
+ ["#btnMode","모드 전환","보험금·챌린지 모드와 펀딩 A·B 모드를 바꿔요. 모드를 바꾸면 새로 시작되고, 포지션이 열려 있을 땐 바꿀 수 없어요."],
+ [".cfg.fd","펀딩 A·B 세팅","펀딩 A·B의 초기자본과 레버리지를 골라요. 랏수와 TP·SL은 계좌마다 직접 입력해요."],
+ [()=>document.getElementById("chkFundClose").closest("label"),"동시 청산","켜면 한쪽 계좌의 포지션이 청산될 때(수동·익절·손절) 짝이 된 반대 계좌의 포지션도 함께 청산돼요. 꺼 두면 서로 따로 청산돼요."],
  [()=>document.getElementById("chkLink").closest("label"),"반대매매 연동","챌린지에 진입하거나 청산하면 보험금도 반대 포지션으로 함께 움직여요."],
  [()=>document.getElementById("chkFit").closest("label"),"TP/SL 보이게","켜면 포지션이 있을 때 진입·TP·SL 라인이 모두 보이도록 차트 가격 범위를 자동으로 넓혀요"],
  [()=>document.getElementById("chkSnd").closest("label"),"효과음","버튼 클릭, 진입, 익절·손절·강제청산 때 효과음이 나요"],
@@ -2939,16 +3324,21 @@ const GUIDE = [
  ['.pane[data-pane="0"] .tfgrp',"차트 주기","tick · 1m · 5m · 15m · 30m · 1h 중에서 캔들 주기를 골라요. 계좌마다 따로 바꿀 수 있어요."],
  ['.pane[data-pane="0"] .szgrp, .pane[data-pane="0"] .szin',"차트 크기","작게 · 보통 · 크게로 차트 크기를 바꿔요."],
  ['.pane[data-pane="0"] .price-box.top',"보험금 자동 주문","챌린지가 진입하면 보험금이 반대 방향으로 자동 진입해요. 직접 누를 수는 없어요."],
- ['.log-col[data-pane="0"] .pane-footer.in-head',"평가금 · 리셋","평가금은 잔액 + 평가손익이에요. ↺ 리셋은 두 번 눌러 초기자본으로 되돌려요. 손실청산된 계좌도 리셋 후 다시 써요."],
+ ['.log-col[data-pane="0"] .pane-footer.in-head',"평가금 · 리셋","평가금은 잔액 + 평가손익이에요. 계좌를 초기자본으로 되돌리려면 위쪽 메뉴 파일 › 거래 계좌 로그인을 눌러요. 손실청산된 계좌도 이렇게 리셋해요."],
  ['.log-col[data-pane="0"] .logtab[data-tab="pos"]',"포지션 탭","지금 열려 있는 포지션이에요. 방향·랏·진입가·현재가·손익을 보고, 오른쪽 '청산' 버튼으로 하나씩 닫을 수 있어요."],
  ['.log-col[data-pane="0"] .logtab[data-tab="hist"]',"히스토리 탭","청산된 거래 기록이에요. 진입가·청산가·손익·수수료와 청산 사유(익절·손절·강제청산 등)가 남아요."],
- ['.log-col[data-pane="1"] .log-scroll',"포지션 · 거래 목록 영역","포지션이 없으면 '보유 중인 포지션이 없습니다.', 청산된 거래가 없으면 '아직 거래가 없습니다.'라고 가운데에 표시돼요. 거래가 생기면 이 자리에 목록이 나타나요."],
- ['.pane[data-pane="1"] .ea-panel',"Lot · TP · SL","랏수와 TP·SL을 넣어요. TP·SL은 진입가에서 떨어진 포인트(1p=$0.01)이고, SL을 비우면 자동 손절이 없어요."],
- ['.pane[data-pane="1"] .price-box.top',"SELL / BUY 주문","누르면 바로 주문돼요. 이때 보험금에는 반대 포지션이 자동으로 들어가요."]
+ ['.pane[data-pane="1"] .price-box.top',"챌린지 A · SELL / BUY 주문","누르면 바로 주문돼요. 이때 보험금에는 반대 포지션이 자동으로 들어가요."],
+ ['.pane[data-pane="1"] .ea-panel',"챌린지 A · Lot · TP · SL","랏수와 TP·SL을 넣어요. TP·SL은 진입가에서 떨어진 포인트(1p=$0.01)이고, SL을 비우면 자동 손절이 없어요."],
+ ['.log-col[data-pane="1"] .pane-footer.in-head',"챌린지 A · 평가금 · 리셋","평가금은 잔액 + 평가손익이에요. 계좌를 초기자본으로 되돌리려면 위쪽 메뉴 파일 › 거래 계좌 로그인을 눌러요. 손실청산된 계좌도 이렇게 리셋해요."],
+ ['.log-col[data-pane="1"] .log-scroll',"챌린지 A · 포지션 · 거래 목록 영역","포지션이 없으면 '보유 중인 포지션이 없습니다.', 청산된 거래가 없으면 '아직 거래가 없습니다.'라고 가운데에 표시돼요. 거래가 생기면 이 자리에 목록이 나타나요."],
+ ['.pane[data-pane="2"] .price-box.top',"챌린지 B · SELL / BUY 주문","누르면 바로 주문돼요. 이때 보험금에는 반대 포지션이 자동으로 들어가요."],
+ ['.pane[data-pane="2"] .ea-panel',"챌린지 B · Lot · TP · SL","랏수와 TP·SL을 넣어요. TP·SL은 진입가에서 떨어진 포인트(1p=$0.01)이고, SL을 비우면 자동 손절이 없어요."],
+ ['.log-col[data-pane="2"] .pane-footer.in-head',"챌린지 B · 평가금 · 리셋","평가금은 잔액 + 평가손익이에요. 계좌를 초기자본으로 되돌리려면 위쪽 메뉴 파일 › 거래 계좌 로그인을 눌러요. 손실청산된 계좌도 이렇게 리셋해요."],
+ ['.log-col[data-pane="2"] .log-scroll',"챌린지 B · 포지션 · 거래 목록 영역","포지션이 없으면 '보유 중인 포지션이 없습니다.', 청산된 거래가 없으면 '아직 거래가 없습니다.'라고 가운데에 표시돼요. 거래가 생기면 이 자리에 목록이 나타나요."]
 ];
 let _gOv = null;
 const QR_URL = "https://hoon711.github.io/xauusd-sim/", QR_SVG = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29" class="segno"><path class="qrline" stroke="#000" d="M0 0.5h7m1 0h1m1 0h4m3 0h3m2 0h7m-29 1h1m5 0h1m1 0h3m2 0h1m2 0h1m1 0h1m1 0h1m1 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m2 0h3m1 0h2m7 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m1 0h3m4 0h1m4 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m3 0h1m1 0h1m1 0h3m2 0h1m2 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m2 0h1m3 0h1m5 0h2m1 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-21 1h2m4 0h1m2 0h2m-19 1h1m1 0h2m1 0h3m1 0h3m1 0h1m1 0h6m1 0h1m2 0h1m1 0h2m-29 1h1m1 0h2m5 0h1m3 0h1m2 0h5m1 0h1m1 0h1m3 0h1m-28 1h1m1 0h4m1 0h2m2 0h2m2 0h1m1 0h1m1 0h2m1 0h2m1 0h2m-28 1h1m1 0h2m1 0h1m1 0h1m2 0h3m2 0h2m1 0h2m1 0h1m1 0h2m3 0h1m-28 1h3m2 0h3m1 0h3m1 0h6m1 0h1m3 0h2m-25 1h1m8 0h2m1 0h3m2 0h1m1 0h2m3 0h3m-29 1h3m2 0h2m1 0h6m3 0h3m2 0h3m1 0h3m-29 1h1m1 0h3m4 0h2m3 0h3m3 0h1m2 0h1m3 0h1m-26 1h2m2 0h1m1 0h1m1 0h1m3 0h2m2 0h1m4 0h3m1 0h1m-27 1h1m1 0h2m2 0h4m1 0h1m1 0h5m1 0h2m1 0h1m1 0h3m-28 1h1m1 0h1m3 0h2m1 0h1m1 0h5m2 0h1m1 0h2m1 0h1m2 0h1m-25 1h1m2 0h1m1 0h1m1 0h1m2 0h3m1 0h2m2 0h2m2 0h1m1 0h1m-26 1h1m3 0h3m5 0h2m1 0h3m1 0h7m-19 1h1m1 0h1m1 0h1m3 0h1m1 0h1m1 0h1m3 0h5m-29 1h7m1 0h1m1 0h3m1 0h1m1 0h2m1 0h2m1 0h1m1 0h2m1 0h1m-28 1h1m5 0h1m1 0h2m3 0h4m1 0h1m1 0h1m3 0h2m1 0h2m-29 1h1m1 0h3m1 0h1m8 0h3m2 0h5m1 0h1m-27 1h1m1 0h3m1 0h1m1 0h3m1 0h1m2 0h5m3 0h3m2 0h1m-29 1h1m1 0h3m1 0h1m1 0h2m1 0h3m4 0h1m4 0h1m2 0h1m1 0h1m-29 1h1m5 0h1m3 0h1m1 0h1m2 0h2m3 0h1m1 0h1m1 0h2m1 0h1m-28 1h7m1 0h7m1 0h1m1 0h3m1 0h3m2 0h1"/></svg>';
-function closeGuide(){ const qa = document.getElementById("guideQr"); if(qa) qa.remove(); if(_gOv){ _gOv.remove(); _gOv = null; } const h = document.getElementById("guideBar"); if(h) h.remove(); document.removeEventListener("keydown", _gKey, true); }
+function closeGuide(){ const gn = document.getElementById("guideNote"); if(gn) gn.remove(); const qa = document.getElementById("guideQr"); if(qa) qa.remove(); if(_gOv){ _gOv.remove(); _gOv = null; } const h = document.getElementById("guideBar"); if(h) h.remove(); document.removeEventListener("keydown", _gKey, true); }
 function _gKey(e){ if(e.key === "Escape"){ e.stopPropagation(); closeGuide(); } }
 function openGuide(){
   if(_gOv){ closeGuide(); return; }
@@ -2963,7 +3353,14 @@ function openGuide(){
     let el = null; try{ el = typeof g[0] === "function" ? g[0]() : Array.prototype.find.call(document.querySelectorAll(g[0]), e=>e.getBoundingClientRect().width > 0); }catch(e){}
     if(!el) return; const r = el.getBoundingClientRect(); if(r.width <= 0 || r.height <= 0) return;
     const R = {x:(r.left-ob.left)/sc, y:(r.top-ob.top)/sc, w:r.width/sc, h:r.height/sc};
-    items.push({R:R, t:tr(g[1]), d:tr(g[2]), inb:g[3]});
+    let gt = g[1], gd = g[2];
+    if(FUND()){   // 펀딩 모드에서는 챌린지 → 펀딩으로 이름을 바꾸고, 달라지는 설명은 펀딩용 문구로
+      gt = gt.replace(/챌린지 ([AB])/, "펀딩 $1");
+      if(g[1].indexOf("SELL / BUY") >= 0) gd = "누르면 바로 주문돼요. 이때 반대 계좌에 반대 포지션이 자동으로 들어가요(반대매매 연동). 계좌마다 최대 3포지션까지 쌓을 수 있어요.";
+      else if(g[1] === "반대매매 연동") gd = "한쪽 펀딩 계좌에 진입하면 다른 펀딩 계좌에도 반대 방향 포지션이 자동으로 들어가요.";
+      else if(g[1].indexOf("Lot · TP · SL") >= 0) gd = "랏수와 TP·SL을 계좌마다 따로 넣어요. TP·SL은 진입가에서 떨어진 포인트(1p=$0.01)이고, SL을 비우면 자동 손절이 없어요.";
+    }
+    items.push({R:R, t:tr(gt), d:tr(gd), inb:g[3]});
   });
   const finish = (msg, onOv)=>{
     const bar = document.createElement("div"); bar.id = "guideBar";
@@ -2972,32 +3369,36 @@ function openGuide(){
     const qa = document.createElement("a"); qa.id = "guideQr"; qa.href = QR_URL; qa.target = "_blank"; qa.rel = "noopener";
     qa.innerHTML = QR_SVG + '<span></span><small></small>'; qa.children[1].textContent = tr("웹 버전 QR"); qa.children[2].textContent = tr("스마트폰 카메라로 스캔하세요");
     qa.addEventListener("click", e=>e.stopPropagation()); body.appendChild(qa);
+    const gn = document.createElement("div"); gn.id = "guideNote"; gn.innerHTML = "<b></b><p></p><p></p>";
+    gn.children[0].textContent = tr("💡 참고해 주세요"); gn.children[1].textContent = tr("이 시뮬레이션의 차트는 실제 시세가 아닌 가상의 차트입니다."); gn.children[2].textContent = tr("연습용으로만 사용해 주시기 바랍니다. 실제 투자 판단에는 사용하지 마시기 바랍니다."); if(window.innerWidth > 760) ov.appendChild(gn);
     ov.addEventListener("click", onOv); bar.addEventListener("click", closeGuide);
     document.addEventListener("keydown", _gKey, true);
   };
   if(window.innerWidth <= 760){   // 좁은 화면: 한 번에 하나씩 넘겨 보는 방식(스포트라이트)
     ov.classList.add("step"); ov.style.overflow = "hidden";
+    items.unshift({note:true, R:{x:0,y:0,w:0,h:0}, t:tr("💡 참고해 주세요"), d:tr("이 시뮬레이션의 차트는 실제 시세가 아닌 가상의 차트입니다.")+"\n"+tr("연습용으로만 사용해 주시기 바랍니다. 실제 투자 판단에는 사용하지 마시기 바랍니다.")});
     let cur = 0;
     const show = i=>{
       cur = (i + items.length) % items.length; const it = items[cur], R = it.R;
       ov.innerHTML = "";
       const hl = document.createElement("div"); hl.className = "ghl";
-      hl.style.cssText = "left:"+(R.x-3)+"px;top:"+(R.y-3)+"px;width:"+(R.w+6)+"px;height:"+(R.h+6)+"px";
+      hl.style.cssText = it.note ? "display:none" : "left:"+(R.x-3)+"px;top:"+(R.y-3)+"px;width:"+(R.w+6)+"px;height:"+(R.h+6)+"px";
       ov.appendChild(hl);
       const b = document.createElement("div"); b.className = "gb";
-      b.innerHTML = '<div class="gt"><i>'+(cur+1)+'</i><span></span><em>'+(cur+1)+' / '+items.length+'</em></div><p></p><div class="gn"><button type="button" data-d="-1">‹</button><button type="button" data-d="1">›</button></div><s></s>';
-      b.querySelector("span").textContent = it.t; b.querySelector("p").textContent = it.d;
+      b.innerHTML = '<div class="gt"><i>'+(it.note?"!":cur)+'</i><span></span><em>'+(it.note?"":cur+' / '+(items.length-1))+'</em></div><p></p><div class="gn"><button type="button" data-d="-1">‹</button><button type="button" data-d="1">›</button></div><s></s>';
+      b.querySelector("span").textContent = it.t; b.querySelector("p").textContent = it.d; if(it.note) b.querySelector("p").style.whiteSpace = "pre-line";
       b.style.visibility = "hidden"; ov.appendChild(b);
       const bw = Math.min(W-16, b.offsetWidth), bh = b.offsetHeight, vTop = window.scrollY / sc, vBot = (window.scrollY + window.innerHeight) / sc;
       let y = R.y + R.h + 14, side = "t";
       if(y + bh > Math.min(H-8, vBot - 60)){ y = R.y - bh - 14; side = "b"; }
       if(y < 8){ y = Math.min(H-bh-8, R.y + R.h + 14); side = "t"; }
-      const x = Math.max(8, Math.min(W-bw-8, R.x + R.w/2 - bw/2));
+      if(it.note){ y = window.scrollY/sc + (window.innerHeight/sc - bh)/2 - 20; side = "t"; }
+      const x = it.note ? Math.max(8, (W-bw)/2) : Math.max(8, Math.min(W-bw-8, R.x + R.w/2 - bw/2));
       b.style.left = x+"px"; b.style.top = y+"px"; b.style.visibility = "";
       const tail = b.querySelector("s"), cx = Math.max(16, Math.min(bw-16, R.x+R.w/2-x));
-      tail.style.cssText = side === "t" ? "left:"+cx+"px;top:-6px" : "left:"+cx+"px;bottom:-6px";
+      if(it.note) tail.style.display = "none"; else tail.style.cssText = side === "t" ? "left:"+cx+"px;top:-6px" : "left:"+cx+"px;bottom:-6px";
       b.addEventListener("click", e=>{ e.stopPropagation(); const d = e.target.getAttribute && e.target.getAttribute("data-d"); if(d) show(cur + parseInt(d,10)); });
-      window.scrollTo({top: Math.max(0, Math.min(R.y, y) * sc - 90), behavior:"smooth"});
+      if(!it.note) window.scrollTo({top: Math.max(0, Math.min(R.y, y) * sc - 90), behavior:"smooth"});
     };
     show(0);
     finish("화면을 누르면 다음 설명으로 넘어가요", ()=> show(cur+1));
@@ -3017,6 +3418,8 @@ function openGuide(){
     for(const c of cands){ if(c.x >= 8 && c.x+bw <= W-8 && c.y >= 8 && c.y+bh <= H-8){ best = c; break; } }
     if(!best){ const c = cands[0]; best = {x:Math.max(8,Math.min(W-bw-8,c.x)), y:Math.max(8,Math.min(H-bh-8,c.y)), s:c.s}; }
     bub.style.left = best.x+"px"; bub.style.top = best.y+"px"; bub.style.visibility = "";
+    { const gn = document.getElementById("guideNote"); if(gn){ const nr = gn.getBoundingClientRect(), br = bub.getBoundingClientRect(); gn.style.opacity = (br.left < nr.right + 8 && br.right > nr.left - 8 && br.top < nr.bottom + 8 && br.bottom > nr.top - 8) ? "0" : ""; } }
+    { const qa = document.getElementById("guideQr"); if(qa){ const qr = qa.getBoundingClientRect(), br = bub.getBoundingClientRect(); qa.style.opacity = (br.left < qr.right + 8 && br.right > qr.left - 8 && br.top < qr.bottom + 8 && br.bottom > qr.top - 8) ? "0" : ""; } }
     const tail = bub.querySelector("s"), cx = Math.max(14, Math.min(bw-14, R.x+R.w/2-best.x)), cy = Math.max(12, Math.min(bh-12, R.y+R.h/2-best.y));
     tail.style.cssText = best.s === "t" ? "left:"+cx+"px;top:-6px" : best.s === "b" ? "left:"+cx+"px;bottom:-6px" : best.s === "l" ? "left:-6px;top:"+cy+"px" : "right:-6px;top:"+cy+"px";
   };
@@ -3025,14 +3428,29 @@ function openGuide(){
     hl.style.cssText = "left:"+(it.R.x-3)+"px;top:"+(it.R.y-3)+"px;width:"+(it.R.w+6)+"px;height:"+(it.R.h+6)+"px";
     hl.innerHTML = "<b>"+(i+1)+"</b>";
     hl.addEventListener("mouseenter", ()=>{ ov.querySelectorAll(".ghl.on").forEach(e=>e.classList.remove("on")); hl.classList.add("on"); showB(it, i); });
-    hl.addEventListener("mouseleave", ()=>{ hl.classList.remove("on"); bub.style.display = "none"; });
+    hl.addEventListener("mouseleave", ()=>{ hl.classList.remove("on"); bub.style.display = "none"; const gn = document.getElementById("guideNote"); if(gn) gn.style.opacity = ""; const qa = document.getElementById("guideQr"); if(qa) qa.style.opacity = ""; });
     hl.addEventListener("click", e=>e.stopPropagation());
     ov.appendChild(hl);
   });
   finish("기능에 마우스를 올리면 설명이 나와요 · 빈 곳을 누르면 닫혀요", closeGuide);
 }
 function initGuide(){
-  const b = document.getElementById("btnGuide"); if(b) b.addEventListener("click", openGuide);
+  const b = document.getElementById("btnGuide"); if(!b) return;
+  const KEY = "xauGuideSeen";
+  let seen = false; try{ seen = localStorage.getItem(KEY) === "1"; }catch(e){}
+  let tip = null;
+  const clearHint = ()=>{ if(tip){ tip.remove(); tip = null; } b.classList.remove("guidePulse"); try{ localStorage.setItem(KEY, "1"); }catch(e){} };
+  b.addEventListener("click", ()=>{ clearHint(); openGuide(); });
+  if(seen) return;
+  // 처음 실행하는 기기: 설명 버튼을 강조하고 안내 말풍선 표시
+  const wrap = document.createElement("span"); wrap.className = "guideWrap";
+  b.parentNode.insertBefore(wrap, b); wrap.appendChild(b);
+  b.classList.add("guidePulse");
+  tip = document.createElement("span"); tip.className = "guideHint";
+  tip.innerHTML = '<span></span><i>✕</i>'; tip.firstChild.textContent = tr("처음이시라면 '설명'을 눌러 사용법을 꼭 확인해 주세요");
+  tip.addEventListener("click", e=>{ e.stopPropagation(); if(e.target.tagName === "I") clearHint(); else { clearHint(); openGuide(); } });
+  wrap.appendChild(tip);
+  setTimeout(()=>{ if(tip) tip.classList.add("fade"); }, 60000);
 }
 
 /* ---------------- boot ---------------- */
