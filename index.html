@@ -1427,65 +1427,79 @@ function historyPng(){   // 4:3 (1200×900) 공유용 카드: 모바일에서 �
   const all = state.trades.filter(t=>SHP().includes(t.pane)), net = t => t.pnl;   // 수수료는 손익에 넣지 않고 따로 표기
   const total = all.reduce((a,t)=>a+net(t),0), fees = all.reduce((a,t)=>a+(t.fee||0),0);
   const sgn = n => (n>=0?"+":"")+fmtMoney(n);
-  x.fillStyle = C.bg; x.fillRect(0,0,W,H);
-  // 헤더: 제목 + 트레이더 이름(크게)
+  const rr_ = (px,py,w,h,r)=>{ x.beginPath(); x.moveTo(px+r,py); x.arcTo(px+w,py,px+w,py+h,r); x.arcTo(px+w,py+h,px,py+h,r); x.arcTo(px,py+h,px,py,r); x.arcTo(px,py,px+w,py,r); x.closePath(); };
+  const pill = (px,py,w,h,col,alpha)=>{ x.save(); x.globalAlpha = alpha; x.fillStyle = col; rr_(px,py,w,h,h/2); x.fill(); x.restore(); };
+  const spaced = (txt,px,py,sp)=>{ let cx = px; for(const ch of txt){ x.fillText(ch, cx, py); cx += x.measureText(ch).width + sp; } return cx - px; };
+  // 배경: 은은한 세로 그라데이션 + 좌상단 금빛 글로우 + 얇은 테두리
+  { const g = x.createLinearGradient(0,0,0,H); g.addColorStop(0, C.bg); g.addColorStop(1, C.card); x.fillStyle = g; x.fillRect(0,0,W,H); }
+  { const g = x.createRadialGradient(120,0,0,120,0,620); g.addColorStop(0,"rgba(232,182,74,.20)"); g.addColorStop(1,"rgba(232,182,74,0)"); x.fillStyle = g; x.fillRect(0,0,W,H); }
+  x.strokeStyle = "rgba(160,175,200,.22)"; x.lineWidth = 2; rr_(10,10,W-20,H-20,26); x.stroke();
+  // 헤더: 브랜드 라벨 + 트레이더 이름(그라데이션) + 날짜 알약
   const who = pngLabel();
-  x.textAlign = "left"; x.fillStyle = C.mute; x.font = "600 26px "+FONT; x.fillText("XAUUSD 반대매매 시뮬레이션", PX, 44);
-  x.fillStyle = C.gold; let fs = 60; const title = who ? who+" 트레이더" : (FUND() ? "펀딩 거래 히스토리" : "보험금 거래 히스토리");
+  x.textAlign = "left"; x.fillStyle = C.gold; x.beginPath(); x.arc(PX+8, 44, 7, 0, Math.PI*2); x.fill();
+  x.fillStyle = C.mute; x.font = "700 22px "+FONT; spaced("XAUUSD  ·  반대매매 시뮬레이션", PX+26, 45, 1.5);
+  let fs = 62; const title = who ? who+" 트레이더" : (FUND() ? "펀딩 거래 히스토리" : "보험금 거래 히스토리");
   x.font = "800 "+fs+"px "+FONT; while(fs>30 && x.measureText(title).width > W-2*PX){ fs -= 2; x.font = "800 "+fs+"px "+FONT; }
-  x.fillText(title, PX, 108);
-  const now = new Date();
-  x.textAlign = "right"; x.fillStyle = C.mute; x.font = "22px "+FONT;
-  x.fillText(now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0")+"-"+String(now.getDate()).padStart(2,"0"), W-PX, 44);
-  // 요약 3칸
+  { const g = x.createLinearGradient(PX,0,PX+Math.min(x.measureText(title).width,700),0); g.addColorStop(0,"#ffe08a"); g.addColorStop(1,C.gold); x.fillStyle = g; }
+  x.fillText(title, PX, 112);
+  const now = new Date(), ds = now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0")+"-"+String(now.getDate()).padStart(2,"0");
+  x.font = "600 21px "+MONO; { const dw = x.measureText(ds).width + 36; pill(W-PX-dw, 26, dw, 36, C.mute, .16); x.textAlign = "center"; x.fillStyle = C.mute; x.fillText(ds, W-PX-dw/2, 45); }
+  // 요약 카드 2칸 (둥근 카드 + 위쪽 액센트 라인)
   const bx = [PX, PX+656], bw = [640, 448], by = 156, bh = 180;
-  const stats = [["실현 손익", sgn(total), total>=0 ? C.up : C.bad, 54], ["거래 횟수", all.length+"회", C.fg, 54]];
+  const stats = [["실현 손익", sgn(total), total>=0 ? C.up : C.bad, 56], ["거래 횟수", all.length+"회", C.fg, 56]];
   stats.forEach((st,i)=>{
-    x.fillStyle = C.card; x.fillRect(bx[i], by, bw[i], bh); x.fillStyle = C.gold; x.fillRect(bx[i], by, 5, bh);
-    x.textAlign = "left"; x.fillStyle = C.mute; x.font = "600 24px "+FONT; x.fillText(st[0], bx[i]+28, by+36);
-    x.fillStyle = st[2]; let f2 = st[3]; x.font = "800 "+f2+"px "+MONO; while(f2>28 && x.measureText(st[1]).width > bw[i]-50){ f2 -= 2; x.font = "800 "+f2+"px "+MONO; }
-    x.fillText(st[1], bx[i]+28, by+90);
+    const g = x.createLinearGradient(0,by,0,by+bh); g.addColorStop(0,"rgba(255,255,255,.07)"); g.addColorStop(1,"rgba(255,255,255,.02)");
+    x.fillStyle = g; rr_(bx[i],by,bw[i],bh,20); x.fill();
+    x.strokeStyle = "rgba(160,175,200,.22)"; x.lineWidth = 1.5; rr_(bx[i],by,bw[i],bh,20); x.stroke();
+    x.save(); rr_(bx[i],by,bw[i],bh,20); x.clip(); x.fillStyle = i===0 ? st[2] : C.gold; x.globalAlpha = .9; x.fillRect(bx[i],by,bw[i],5); x.restore();
+    x.textAlign = "left"; x.fillStyle = C.mute; x.font = "700 22px "+FONT; spaced(st[0], bx[i]+30, by+40, 1);
+    x.fillStyle = st[2]; let f2 = st[3]; x.font = "800 "+f2+"px "+MONO; while(f2>28 && x.measureText(st[1]).width > bw[i]-60){ f2 -= 2; x.font = "800 "+f2+"px "+MONO; }
+    x.fillText(st[1], bx[i]+30, by+94);
   });
-  // 실현 손익 칸 아래줄: 수익 합산 / 손실 합산 (수수료 제외)
+  // 보조 수치: 알약 라벨 + 값 (수익 합산 / 손실 합산 / 수수료)
+  const chip = (label, val, col, px, py)=>{
+    x.font = "700 20px "+FONT; const lw = x.measureText(label).width + 28; pill(px, py-17, lw, 34, C.mute, .16);
+    x.textAlign = "center"; x.fillStyle = C.mute; x.fillText(label, px+lw/2, py+1);
+    x.textAlign = "left"; x.fillStyle = col; x.font = "800 26px "+MONO; x.fillText(val, px+lw+12, py+1);
+  };
   const profitSum = all.reduce((a2,t)=>a2+(net(t)>0 ? net(t) : 0),0), lossSum = all.reduce((a2,t)=>a2+(net(t)<0 ? net(t) : 0),0);
-  [["수익 합산", profitSum, C.up, 0], ["손실 합산", lossSum, C.bad, 310]].forEach(it=>{
-    const px = bx[0]+28+it[3], py = by+144;
-    x.textAlign = "left"; x.fillStyle = C.mute; x.font = "600 22px "+FONT; x.fillText(it[0], px, py);
-    const lw = x.measureText(it[0]).width;
-    x.fillStyle = it[1] === 0 ? C.mute : it[2]; x.font = "800 26px "+MONO; x.fillText(it[1] === 0 ? "$0.00" : sgn(it[1]), px+lw+12, py);
-  });
-  // 거래 횟수 칸 아래줄: 수수료 합계(손익과 따로)
-  x.textAlign = "left"; x.fillStyle = C.mute; x.font = "600 22px "+FONT; x.fillText("수수료", bx[1]+28, by+144);
-  { const fw = x.measureText("수수료").width; x.fillStyle = fees > 0 ? C.bad : C.mute; x.font = "800 26px "+MONO; x.fillText(fees > 0 ? "-"+fmtMoney(fees) : "$0.00", bx[1]+28+fw+12, by+144); }
-  // 표
+  chip("수익 합산", profitSum === 0 ? "$0.00" : sgn(profitSum), profitSum === 0 ? C.mute : C.up, bx[0]+30, by+146);
+  chip("손실 합산", lossSum === 0 ? "$0.00" : sgn(lossSum), lossSum === 0 ? C.mute : C.bad, bx[0]+330, by+146);
+  chip("수수료", fees > 0 ? "-"+fmtMoney(fees) : "$0.00", fees > 0 ? C.bad : C.mute, bx[1]+30, by+146);
+  // 표 머리글
   const ty = TY, RH = RH0, maxRows = Math.max(Math.floor((H - ty - 44 - FOOT) / RH), nShow);
-  x.fillStyle = C.head; x.fillRect(PX-12, ty, W-2*PX+24, 44);
-  x.fillStyle = C.mute; x.font = "600 22px "+FONT;
-  x.textAlign = "left"; x.fillText("시각", PX+4, ty+22); x.fillText("방향", PX+190, ty+22);
+  x.fillStyle = C.mute; x.font = "700 20px "+FONT; x.textBaseline = "middle";
+  x.textAlign = "left"; spaced("시각", PX+4, ty+22, 2); spaced("방향", PX+190, ty+22, 2);
   x.textAlign = "right"; x.fillText("진입 → 청산", PX+740, ty+22); x.fillText("손익", W-PX-4, ty+22);
-  x.textAlign = "left"; x.fillText("수수료", PX+790, ty+22);
+  x.textAlign = "left"; spaced("수수료", PX+790, ty+22, 2);
+  x.strokeStyle = C.gold; x.globalAlpha = .55; x.lineWidth = 2; x.beginPath(); x.moveTo(PX-12, ty+44); x.lineTo(W-PX+12, ty+44); x.stroke(); x.globalAlpha = 1;
   const rows = all.slice(0, maxRows);
   if(!rows.length){ x.textAlign = "center"; x.fillStyle = C.mute; x.font = "600 30px "+FONT; x.fillText("아직 거래가 없습니다.", W/2, ty+44+(maxRows*RH)/2); }
   rows.forEach((t,i)=>{
     const yy = ty + 44 + i*RH, cy = yy + RH/2;
-    if(i%2){ x.fillStyle = "rgba(127,140,160,.08)"; x.fillRect(PX-12, yy, W-2*PX+24, RH); }
+    if(i%2){ x.fillStyle = "rgba(127,140,160,.07)"; rr_(PX-12, yy+3, W-2*PX+24, RH-6, 10); x.fill(); }
     x.textAlign = "left"; x.fillStyle = C.fg; x.font = "24px "+MONO; x.fillText(kstFull(t.sec), PX+4, cy);
-    x.fillStyle = t.dir==="BUY" ? C.buy : C.bad; x.font = "800 24px "+MONO; x.fillText((FUND() ? (t.pane===1?"A ":"B ") : "")+t.dir, PX+190, cy);
+    // 방향: 알약 배지
+    const dtxt = (FUND() ? (t.pane===1?"A ":"B ") : "")+t.dir, dcol = t.dir==="BUY" ? C.buy : C.bad;
+    x.font = "800 22px "+MONO; const dw = x.measureText(dtxt).width + 28; pill(PX+176, cy-17, dw, 34, dcol, .18);
+    x.textAlign = "center"; x.fillStyle = dcol; x.fillText(dtxt, PX+176+dw/2, cy+1);
     x.textAlign = "right"; x.fillStyle = C.fg; x.font = "24px "+MONO; x.fillText(fmtPrice(t.entry)+" → "+fmtPrice(t.exit), PX+740, cy);
-    // 방향 옆에 TP/SL 표시 (보험금의 연동 청산은 '연동 TP/SL')
-    x.textAlign = "left"; const linked = t.reason === "연동청산", rr = linked ? (t.cause || "") : (t.reason || "");
+    // TP/SL 표시 (보험금의 연동 청산은 '연동 TP/SL') — 알약
+    const linked = t.reason === "연동청산", rr = linked ? (t.cause || "") : (t.reason || "");
     const tag = rr === "익절" ? [linked ? "연동 TP" : "TP", linked ? C.fg : C.up] : rr === "손절" ? [linked ? "연동 SL" : "SL", linked ? C.fg : C.bad] : null;
-    if(tag){ x.fillStyle = tag[1]; x.font = "800 22px "+FONT; x.fillText(tag[0], PX+290, cy); }
-    // 수수료는 사유 자리에 따로 표기
-    x.fillStyle = C.mute; x.font = "24px "+MONO; x.fillText("-"+fmtMoney(t.fee||0), PX+790, cy);
-    x.textAlign = "right";
-    x.fillStyle = net(t)>=0 ? C.up : C.bad; x.font = "800 26px "+MONO; x.fillText(sgn(net(t)), W-PX-4, cy);
+    if(tag){ x.font = "800 20px "+FONT; const tw = x.measureText(tag[0]).width + 22, tx = PX+176+dw+12; pill(tx, cy-15, tw, 30, tag[1], .16); x.textAlign = "center"; x.fillStyle = tag[1]; x.fillText(tag[0], tx+tw/2, cy+1); }
+    x.textAlign = "left"; x.fillStyle = C.mute; x.font = "24px "+MONO; x.fillText("-"+fmtMoney(t.fee||0), PX+790, cy);
+    // 손익: 색 알약 배경
+    const pc = net(t)>=0 ? C.up : C.bad, ptxt = sgn(net(t));
+    x.font = "800 26px "+MONO; const pw = x.measureText(ptxt).width + 28; pill(W-PX-4-pw+14, cy-19, pw, 38, pc, .12);
+    x.textAlign = "right"; x.fillStyle = pc; x.fillText(ptxt, W-PX-4, cy);
   });
-  // 하단
+  // 하단: 구분선 + 안내 + 크레딧
+  x.strokeStyle = "rgba(160,175,200,.22)"; x.lineWidth = 1.5; x.beginPath(); x.moveTo(PX-12, H-62); x.lineTo(W-PX+12, H-62); x.stroke();
   x.textAlign = "left"; x.fillStyle = C.mute; x.font = "20px "+FONT;
   const more = all.length - rows.length;
   x.fillText(more > 0 ? "최근 "+rows.length+"건만 표시 · 이전 "+more+"건 생략" : "손익은 수수료 제외 · 수수료는 별도 표기", PX, H-34);
-  x.textAlign = "right"; x.fillText("Created by Hoon.D", W-PX, H-34);
+  x.textAlign = "right"; x.fillStyle = C.gold; x.font = "700 20px "+FONT; x.fillText("Created by Hoon.D", W-PX, H-34);
   return cv;
 }
 async function saveHistoryPng(){
@@ -1508,12 +1522,8 @@ async function saveHistoryPng(){
     showPngSheet(cv.toDataURL("image/png"), name, file);
     return;
   }
-  try{
-    const dl = (window.claude && window.claude.use) ? await window.claude.use("downloads") : null;
-    if(dl){ await dl.save({filename:name, data:blob}); notify("히스토리를 PNG로 저장했어요."); return; }
-  }catch(e){ if(e && e.code === "declined") return; }
-  // 파일 저장 권한이 없는 경우(조직 구성원이 아닌 사람 등): 이미지를 화면에 띄워 길게 누르거나 우클릭으로 저장
-  showPngSheet(cv.toDataURL("image/png"), name);
+  // PC: 먼저 이미지 미리보기를 띄우고, '이미지 다운로드' 버튼으로 저장
+  showPngSheet(cv.toDataURL("image/png"), name, null, blob);
 }
 function shareText(){
   const who = pngLabel(), all = state.trades.filter(t=>SHP().includes(t.pane)), mine = all.slice(0,10);
@@ -1521,17 +1531,30 @@ function shareText(){
   const lines = mine.map(t=>(FUND() ? (t.pane===1?"A ":"B ") : "")+t.dir+" "+t.lot.toFixed(2)+"lot "+fmtPrice(t.entry)+" → "+fmtPrice(t.exit)+" ("+(t.pnl>=0?"+":"")+fmtMoney(t.pnl)+")");
   return (who ? who+" 트레이더 · " : "")+"XAUUSD 반대매매 시뮬레이션 거래내역\n"+lines.join("\n")+(lines.length ? "\n" : "")+"실현 "+(total>=0?"+":"")+fmtMoney(total)+" · 수수료 -"+fmtMoney(fees);
 }
-function showPngSheet(url, name, file){
+function showPngSheet(url, name, file, blob){
   let ov = document.getElementById("pngSheet");
   if(!ov){
     ov = document.createElement("div"); ov.id = "pngSheet";
-    ov.innerHTML = '<div class="pngbox"><div class="pnghead"><b>'+(FUND() ? "펀딩 거래 히스토리" : "보험금 거래 히스토리")+'</b><span>이미지를 길게 누르거나(모바일) 우클릭(PC)해서 저장하세요</span><button class="btn ghost" id="pngClose">닫기</button></div><div class="pngact"><button class="btn" id="pngShare">공유하기</button><button class="btn ghost" id="pngCopy">내역 텍스트 복사</button></div><img id="pngImg" alt="보험금 거래 히스토리"></div>';
+    ov.innerHTML = '<div class="pngbox"><div class="pnghead"><b>'+(FUND() ? "펀딩 거래 히스토리" : "보험금 거래 히스토리")+'</b><span>이미지를 길게 누르거나(모바일) 우클릭(PC)해서 저장하세요</span><button class="btn ghost" id="pngClose">닫기</button></div><div class="pngact"><button class="btn primary" id="pngDl">이미지 다운로드</button><button class="btn" id="pngShare">공유하기</button><button class="btn ghost" id="pngCopy">내역 텍스트 복사</button></div><img id="pngImg" alt="보험금 거래 히스토리"></div>';
     document.body.appendChild(ov);
     ov.addEventListener("click", e=>{ if(e.target === ov || e.target.id === "pngClose") ov.classList.remove("show"); });
     document.getElementById("pngCopy").addEventListener("click", async ()=>{
       const t = shareText();
       try{ await navigator.clipboard.writeText(t); notify("거래 내역을 복사했어요. 카톡·텔레그램에 붙여넣으세요."); }
       catch(e){ const ta = document.createElement("textarea"); ta.value = t; document.body.appendChild(ta); ta.select(); try{ document.execCommand("copy"); notify("거래 내역을 복사했어요. 카톡·텔레그램에 붙여넣으세요."); }catch(_){ notify("복사하지 못했어요. 이미지를 길게 눌러 저장해 주세요."); } ta.remove(); }
+    });
+    document.getElementById("pngDl").addEventListener("click", async ()=>{
+      const b = ov._blob, nm = ov._name || "history.png";
+      if(!b){ notify("저장할 이미지가 없어요."); return; }
+      try{
+        const dl = (window.claude && window.claude.use) ? await window.claude.use("downloads") : null;
+        if(dl){ await dl.save({filename:nm, data:b}); notify("히스토리를 PNG로 저장했어요."); return; }
+      }catch(e){ if(e && e.code === "declined") return; }
+      try{
+        const u = URL.createObjectURL(b), a = document.createElement("a");
+        a.href = u; a.download = nm; document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(()=>URL.revokeObjectURL(u), 4000); notify("히스토리를 PNG로 저장했어요.");
+      }catch(e){ notify("이 환경에서는 바로 저장할 수 없어요. 이미지를 우클릭해서 저장하세요."); }
     });
     document.getElementById("pngShare").addEventListener("click", async ()=>{
       const f = ov._file;
@@ -1544,7 +1567,10 @@ function showPngSheet(url, name, file){
       notify("이 환경에서는 공유창을 열 수 없어요. 이미지를 길게 눌러 저장하거나, 내역 텍스트를 복사해 붙여넣으세요.");
     });
   }
-  ov._file = file || null;
+  ov._file = file || null; ov._blob = blob || null; ov._name = name;
+  ov.querySelector(".pnghead b").textContent = FUND() ? "펀딩 거래 히스토리" : "보험금 거래 히스토리";
+  ov.querySelector(".pnghead span").textContent = blob ? "미리보기 · '이미지 다운로드'로 저장하세요 (우클릭 저장도 가능)" : "이미지를 길게 누르거나(모바일) 우클릭(PC)해서 저장하세요";
+  ov.querySelector("#pngDl").style.display = blob ? "" : "none";
   ov.querySelector("#pngShare").style.display = (file && navigator.share) || navigator.share ? "" : "none";
   const img = document.getElementById("pngImg"); img.src = url; img.dataset.name = name;
   ov.classList.add("show");
@@ -3106,6 +3132,10 @@ const EX = {
  "마진:":["Margin:","証拠金:","保证金:"],
  "가용마진:":["Free Margin:","余剰証拠金:","可用保证金:"],
  "마진 레벨:":["Margin Level:","証拠金維持率:","保证金比例:"],
+ "이미지 다운로드":["Download image","画像をダウンロード","下载图片"],
+ "미리보기 · '이미지 다운로드'로 저장하세요 (우클릭 저장도 가능)":["Preview · save with 'Download image' (right-click also works)","プレビュー · 「画像をダウンロード」で保存してください(右クリック保存も可)","预览 · 点击“下载图片”保存(也可右键保存)"],
+ "저장할 이미지가 없어요.":["No image to save.","保存する画像がありません。","没有可保存的图片。"],
+ "이 환경에서는 바로 저장할 수 없어요. 이미지를 우클릭해서 저장하세요.":["Can't save directly here. Right-click the image to save it.","この環境では直接保存できません。画像を右クリックして保存してください。","此环境无法直接保存。请右键点击图片保存。"],
  "웹 버전 QR":["Web version QR","Webバージョン QR","网页版二维码"],
  "스마트폰 카메라로 스캔하세요":["Scan with your phone camera","スマホのカメラでスキャン","用手机相机扫描"],
  "손실 청산된 계좌입니다. 파일 › 거래 계좌 로그인으로 리셋하세요":["This account was liquidated. Reset it via File › Login to Trade Account.","ロスカットされた口座です。ファイル › 取引口座にログイン でリセットしてください。","该账户已被强制平仓。请通过 文件 › 登录交易账户 重置。"],
