@@ -918,7 +918,7 @@ html.authlock body > *:not(#authGate){visibility:hidden !important;}
 #authGate .agwho{font-size:.82rem;color:var(--muted,#7c8aa3);margin-bottom:2px;word-break:break-all;}
 #authChip{position:fixed;left:10px;bottom:10px;z-index:90;display:flex;gap:8px;align-items:center;font-size:.7rem;color:var(--muted,#7c8aa3);background:var(--panel-bg,#0d1420);border:1px solid var(--border,#1f2b3d);border-radius:999px;padding:4px 10px;opacity:.85;}
 #authChip button{background:none;border:none;color:var(--gold,#e8b64a);cursor:pointer;font:inherit;padding:0;text-decoration:underline;}
-@media (max-width:760px){#authChip{bottom:66px;}}
+@media (max-width:760px){#authChip{position:absolute;top:8px;bottom:auto;left:50%;transform:translateX(-50%);max-width:calc(100% - 20px);font-size:.74rem;padding:5px 12px;opacity:.95;} #authChip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;} body.hasChip .app{padding-top:40px;}}
 </style>
 <script>
 /* ---------------- 구글 계정 로그인 (이용 기록 수집용) ----------------
@@ -951,7 +951,7 @@ html.authlock body > *:not(#authGate){visibility:hidden !important;}
     if(pn && nm){ pn.value = nm; pn.dispatchEvent(new Event("input")); }   // 상단 제목의 '○○ 트레이더'에 미리 반영
     if(!document.getElementById("authChip")){
       var c = document.createElement("div"); c.id = "authChip"; c.innerHTML = '<span></span><button type="button">로그아웃</button>';
-      c.firstChild.textContent = u.email; document.body.appendChild(c);
+      c.firstChild.textContent = u.email; document.body.appendChild(c); document.body.classList.add("hasChip");
       c.querySelector("button").onclick = function(){ store(null); try{ google.accounts.id.disableAutoSelect(); }catch(e){} location.reload(); };
     }
   }
@@ -1952,6 +1952,7 @@ function fundAnim(idxs, amount, cfg, done){
     o.wrap.appendChild(ov);
     return {ov:ov, steps:steps, bar:ov.querySelector(".dbar u"), amt:ov.querySelector(".damt"), fin:ov.querySelector(".dfin"), i:o.i};
   });
+  if(matchMedia("(max-width:1100px)").matches){ try{ setTimeout(()=>views[0].ov.querySelector(".dbox").scrollIntoView({block:"center", behavior:"smooth"}), 60); }catch(_){} }   // 모바일·태블릿: 연출이 나오는 위치로 이동
   const each = fn=> views.forEach(fn);
   const mark = (k, st)=> each(v=>{ v.steps[k].className = "dstep " + st; });
   const barTo = w=> each(v=>{ v.bar.style.width = w; });
