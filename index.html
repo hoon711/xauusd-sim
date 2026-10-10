@@ -917,8 +917,8 @@ html.authlock body > *:not(#authGate){visibility:hidden !important;}
 #authGate .aglink{background:none;border:none;color:var(--muted,#7c8aa3);font:inherit;font-size:.78rem;cursor:pointer;text-decoration:underline;padding:2px;}
 #authGate .agwho{font-size:.82rem;color:var(--muted,#7c8aa3);margin-bottom:2px;word-break:break-all;}
 #authChip{position:fixed;left:10px;bottom:10px;z-index:90;display:flex;gap:8px;align-items:center;font-size:.7rem;color:var(--muted,#7c8aa3);background:var(--panel-bg,#0d1420);border:1px solid var(--border,#1f2b3d);border-radius:999px;padding:4px 10px;opacity:.85;}
-#authChip button{background:none;border:none;color:var(--gold,#e8b64a);cursor:pointer;font:inherit;padding:0;text-decoration:underline;}
-@media (max-width:760px){#authChip{position:absolute;top:8px;bottom:auto;left:50%;transform:translateX(-50%);max-width:calc(100% - 20px);font-size:.74rem;padding:5px 12px;opacity:.95;} #authChip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;} body.hasChip .app{padding-top:40px;}}
+#authChip button{flex:none;white-space:nowrap;background:none;border:none;color:var(--gold,#e8b64a);cursor:pointer;font:inherit;padding:0;text-decoration:underline;}
+@media (max-width:760px){#authChip{position:absolute;top:8px;bottom:auto;left:0;right:0;margin:0 auto;transform:none;width:max-content;max-width:calc(100% - 20px);font-size:.74rem;padding:5px 12px;opacity:.95;} #authChip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;} body.hasChip .app{padding-top:40px;}}
 </style>
 <script>
 /* ---------------- 구글 계정 로그인 (이용 기록 수집용) ----------------
