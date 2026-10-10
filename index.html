@@ -848,7 +848,7 @@ html.authlock body > *:not(#authGate){visibility:hidden !important;}
 #authGate .agbrand{font-size:.78rem;letter-spacing:.14em;color:var(--muted,#7c8aa3);font-weight:700;}
 #authGate h1{margin:10px 0 6px;font-size:1.2rem;line-height:1.4;color:var(--gold,#e8b64a);word-break:keep-all;}
 #authGate p{margin:0 0 18px;font-size:.88rem;line-height:1.55;color:var(--muted,#7c8aa3);}
-#authGate #agBtn{display:flex;justify-content:center;align-items:center;width:max-content;max-width:100%;min-height:48px;margin:8px auto 16px;padding:4px 6px;background:#fff;border-radius:999px;color-scheme:light;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.35);}
+#authGate #agBtn{display:flex;justify-content:center;align-items:center;width:max-content;max-width:100%;min-height:48px;margin:4px auto 16px;padding:4px 6px;background:#fff;border-radius:999px;color-scheme:light;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.35);}
 #authGate #agBtn:empty{display:none;}
 #authGate .agmsg{min-height:1.3em;font-size:.82rem;color:var(--bad,#ff6b6b);margin-bottom:8px;}
 #authGate .agnote{font-size:.74rem;line-height:1.5;color:var(--muted,#7c8aa3);opacity:.9;border-top:1px solid var(--border,#1f2b3d);padding-top:12px;margin:0;}
@@ -906,9 +906,10 @@ html.authlock body > *:not(#authGate){visibility:hidden !important;}
     if(!g){
       g = document.createElement("div"); g.id = "authGate";
       g.innerHTML = '<div class="agbox"><div class="agbrand">XAUUSD · SIMULATION</div><h1>XAUUSD 금 선물 반대매매 시뮬레이션</h1>'+
-        '<p>구글 계정 또는 이메일로 시작할 수 있습니다.</p><div id="agBtn"></div><div class="agor"><span>또는</span></div>'+
+        '<p>이메일 또는 구글 계정으로 시작할 수 있습니다.</p>'+
         '<form id="agEmailForm" novalidate><input type="email" id="agEmail" placeholder="이메일 주소" autocomplete="email" inputmode="email"><button class="aggo" type="submit">계속</button></form>'+
         '<form id="agNickForm" hidden novalidate><div class="agwho" id="agWho"></div><input type="text" id="agNick" maxlength="20" placeholder="닉네임 (트레이더 이름)" autocomplete="nickname"><button class="aggo" type="submit">시작하기</button><button class="aglink" type="button" id="agBack">← 이메일 다시 입력</button></form>'+
+        '<div class="agor"><span>또는</span></div><div id="agBtn"></div>'+
         '<div class="agmsg" id="agMsg"></div>'+
         '<p class="agnote">로그인 시 이메일·이름·접속 시각이 이용 기록으로 저장됩니다. 가상의 차트로 진행되는 연습용 시뮬레이션이며, 연습 이외의 용도로는 사용할 수 없습니다.</p></div>';
       document.body.appendChild(g);
