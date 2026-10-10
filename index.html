@@ -206,7 +206,7 @@
 #guideNote p{margin:0;} #guideNote p+p{margin-top:3px;}
 @media (max-width:760px){ #guideNote{left:8px;right:8px;width:auto;bottom:56px;font-size:.7rem;padding:7px 10px 8px;} #guideNote b{font-size:.72rem;margin-bottom:2px;} }
 .guideWrap{position:relative;display:inline-block;}
-.btn.guidePulse{border-color:#ffb84d !important;color:#ffd58a;animation:gPulse 1.3s ease-in-out infinite;}
+.btn.guidePulse{border-color:#ffb84d !important;color:#ffd58a;animation:gPulse 1.3s ease-in-out 4;}
 @keyframes gPulse{0%,100%{box-shadow:0 0 0 0 rgba(255,184,77,.65);}50%{box-shadow:0 0 0 7px rgba(255,184,77,0);}}
 .guideHint{position:absolute;right:0;top:calc(100% + 9px);z-index:60;display:flex;align-items:center;gap:8px;width:max-content;max-width:min(260px,80vw);background:#ffb84d;color:#1b1204;font-family:var(--font-ui);font-size:.78rem;font-weight:800;line-height:1.4;padding:7px 9px 7px 12px;border-radius:9px;box-shadow:0 6px 18px rgba(0,0,0,.5);cursor:pointer;word-break:keep-all;white-space:normal;}
 .guideHint::before{content:"";position:absolute;right:26px;top:-5px;width:10px;height:10px;background:#ffb84d;transform:rotate(45deg);}
@@ -376,11 +376,11 @@ body.fund #btnMode{background:rgba(160,107,255,.18);}
 :root[data-sim="win11"] body.fund #btnMode,:root[data-sim="pink"] body.fund #btnMode{background:#e2d2ff;}
 .cfg.mk{border-left-color:var(--faint);margin-left:6px;padding:2px 10px;}
 .cfg.mk .cfgtitle{color:var(--muted);}
-.cfgtitle{font-size:.8rem;font-weight:700;margin-right:6px;white-space:nowrap;}
+.cfgtitle{font-size:.92rem;font-weight:700;margin-right:6px;white-space:nowrap;}
 .cfg.ch .cfgtitle{color:var(--role-ch);} .cfg.ins .cfgtitle{color:var(--gold);}
-.cfglab{font-size:.74rem;color:var(--muted);white-space:nowrap;}
+.cfglab{font-size:.82rem;color:var(--muted);white-space:nowrap;}
 .cfgfixed{font-family:var(--font-mono);font-size:.78rem;color:var(--fg);padding:5px 6px;margin-right:6px;}
-.cfg select{font-family:var(--font-mono);font-size:.78rem;background:var(--panel-bg-2);color:var(--fg);border:1px solid var(--border);border-radius:6px;padding:5px 6px;cursor:pointer;margin-right:6px;}
+.cfg select{font-family:var(--font-mono);font-size:.84rem;background:var(--panel-bg-2);color:var(--fg);border:1px solid var(--border);border-radius:6px;padding:5px 6px;cursor:pointer;margin-right:6px;}
 .cfg select:focus{outline:1px solid var(--buy);}
 .statuspill{margin-left:auto;font-size:.78rem;color:var(--muted);background:var(--panel-bg-2);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-family:var(--font-mono);}
 
@@ -413,6 +413,49 @@ body.fund #btnMode{background:rgba(160,107,255,.18);}
 .pane.ins .ea-head{background:var(--ins-head);}
 .pane.ins .ea-head .role{color:var(--gold);}
 /* 오른쪽 창(챌린지 A/B)은 고정 높이, 왼쪽 보험금 창은 오른쪽 열 전체 높이에 맞춰 늘어남 */
+.capwrap{display:inline-flex;align-items:center;gap:6px;margin-right:6px;}
+.capwrap input{font-family:var(--font-mono);font-size:.78rem;width:104px;box-sizing:border-box;background:var(--panel-bg-2);color:var(--fg);border:1px solid var(--border);border-radius:6px;padding:5px 7px;text-align:right;}
+.capwrap input:focus{outline:1px solid var(--gold);}
+.capwrap .btn{padding:5px 10px;font-size:.78rem;}
+@media (max-width:760px){ .cfg.ins .capwrap{width:100%;margin:0;} .cfg.ins .capwrap input{flex:1;min-width:0;width:auto;font-size:.8rem;padding:7px 8px;} .cfg.ins .capwrap .btn{padding:7px 10px;} }
+.setov{position:absolute;inset:0;z-index:6;display:none;align-items:center;justify-content:center;pointer-events:none;}
+.setov.show{display:flex;}
+.setov .sbox{pointer-events:auto;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;padding:16px 24px;border-radius:12px;background:color-mix(in srgb,var(--panel-bg) 90%,transparent);border:1px solid var(--border-strong);box-shadow:0 8px 28px rgba(0,0,0,.4);max-width:88%;}
+.setov .st{font-size:1.02rem;color:var(--gold);font-family:var(--font-ui);}
+.setov[data-set="ch"] .st{color:var(--role-ch,var(--buy));}
+.setov[data-set="fd"] .st{color:#b992ff;}
+.setov .ss{font-size:.78rem;color:var(--muted);line-height:1.45;font-family:var(--font-ui);}
+.pane.ch .setov .sbox{padding:10px 16px;gap:5px;max-width:92%;}
+.setov .btn.primary{animation:setPulse 1.6s ease-in-out infinite;}
+.setov .sbox.nudge{animation:setNudge .45s;}
+@keyframes setPulse{0%,100%{box-shadow:0 0 0 0 rgba(232,182,74,.55);}60%{box-shadow:0 0 0 9px rgba(232,182,74,0);}}
+@keyframes setNudge{0%,100%{transform:translateX(0);}20%{transform:translateX(-7px);}40%{transform:translateX(6px);}60%{transform:translateX(-4px);}80%{transform:translateX(3px);}}
+#spotDim{position:fixed;inset:0;z-index:8000;background:rgba(2,6,12,.62);}
+.spotting{position:relative !important;z-index:8001 !important;box-shadow:0 0 0 3px var(--gold),0 0 24px 5px rgba(232,182,74,.55) !important;animation:spotPulse 1.2s ease-in-out infinite;}
+@keyframes spotPulse{0%,100%{box-shadow:0 0 0 3px var(--gold),0 0 12px 2px rgba(232,182,74,.35);}50%{box-shadow:0 0 0 3px var(--gold),0 0 28px 8px rgba(232,182,74,.7);}}
+.spotTip{position:absolute;left:0;top:calc(100% + 12px);z-index:8002;white-space:nowrap;font-family:var(--font-ui);font-size:.82rem;font-weight:700;color:#1a1405;background:var(--gold);padding:7px 12px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,.45);}
+.spotTip::before{content:"";position:absolute;left:22px;top:-6px;border:6px solid transparent;border-top:0;border-bottom-color:var(--gold);}
+@media (max-width:760px){ .spotTip{white-space:normal;width:max-content;max-width:100%;} }
+.depov{position:absolute;inset:0;z-index:7;display:flex;align-items:center;justify-content:center;background:rgba(3,7,12,.66);font-family:var(--font-ui);}
+.depov .dbox{width:min(300px,92%);background:var(--panel-bg);border:1px solid var(--border-strong);border-radius:10px;overflow:hidden;box-shadow:0 14px 40px rgba(0,0,0,.55);color:var(--fg);}
+.depov .dh{display:flex;align-items:baseline;gap:8px;padding:9px 14px;background:var(--titlebar-bg);border-bottom:1px solid var(--border);font-weight:700;font-size:.86rem;}
+.pane.ch .depov .dacc{display:none;} .pane.ch .depov .dbd{padding:8px 14px 10px;gap:4px;} .pane.ch .depov .damt{font-size:1.3rem;} .pane.ch .depov .dstep{font-size:.72rem;} .pane.ch .depov .dh{padding:6px 12px;}
+.depov .dh em{font-style:normal;font-weight:500;font-size:.72rem;color:var(--muted);}
+.depov .dbd{padding:12px 16px 14px;display:flex;flex-direction:column;gap:7px;}
+.depov .dacc{font-size:.72rem;color:var(--muted);}
+.depov .damt{font-family:var(--font-mono);font-size:1.7rem;font-weight:700;color:var(--gold);letter-spacing:.01em;}
+.depov .dstep{display:flex;align-items:center;gap:8px;font-size:.78rem;color:var(--muted);}
+.depov .dstep i{width:14px;height:14px;border-radius:50%;border:2px solid var(--border-strong);flex:none;box-sizing:border-box;}
+.depov .dstep.act{color:var(--fg);} .depov .dstep.act i{border-color:var(--gold);border-top-color:transparent;animation:depSpin .7s linear infinite;}
+.depov .dstep.ok{color:var(--fg);} .depov .dstep.ok i{border-color:var(--profit,#4ad295);background:var(--profit,#4ad295);position:relative;}
+.depov .dstep.ok i::after{content:"";position:absolute;left:3px;top:0;width:3px;height:6px;border:solid #06130c;border-width:0 2px 2px 0;transform:rotate(45deg);}
+.depov .dbar{height:5px;border-radius:3px;background:var(--border);overflow:hidden;margin-top:2px;} .depov .dbar u{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--profit,#4ad295));transition:width .7s ease;}
+.depov .dfin{min-height:1.2em;font-size:.84rem;font-weight:700;color:var(--profit,#4ad295);}
+@keyframes depSpin{to{transform:rotate(360deg);}}
+#ruleWarn{position:fixed;top:12px;left:50%;transform:translate(-50%,-140%);z-index:7000;display:flex;flex-direction:column;gap:3px;max-width:min(560px,92vw);padding:11px 18px 12px;border-radius:12px;background:#c62828;color:#fff;border:2px solid #ff8a80;box-shadow:0 10px 34px rgba(0,0,0,.55);font-family:var(--font-ui);cursor:pointer;opacity:0;pointer-events:none;transition:transform .35s cubic-bezier(.2,1.2,.4,1),opacity .25s;}
+#ruleWarn.show{transform:translate(-50%,0);opacity:1;pointer-events:auto;animation:ruleShake .5s .3s;}
+#ruleWarn b{font-size:1.02rem;letter-spacing:.01em;} #ruleWarn span{font-size:.84rem;font-weight:700;} #ruleWarn em{font-style:normal;font-size:.76rem;opacity:.92;line-height:1.4;}
+@keyframes ruleShake{0%,100%{margin-left:0;}20%{margin-left:-8px;}40%{margin-left:7px;}60%{margin-left:-5px;}80%{margin-left:3px;}}
 .pane-wrap{position:relative;flex:1 1 auto;min-height:0;}
 .pane-col-right .pane{flex:none;}
 .pane-col-right .pane-wrap{flex:none;height:clamp(200px,calc((100vh - 574px)/2),1400px);}   /* 화면 높이에 맞춰 차트 높이가 늘고 줄어듦 */
@@ -505,6 +548,8 @@ body.fund .pane.ch .price-box.top button .pl{font-size:.8rem;font-weight:700;opa
 .resetbtn{background:rgba(239,83,80,.14);border-color:rgba(239,83,80,.45);color:#d9534f;}
 .resetbtn:hover{background:rgba(239,83,80,.24);color:#c9302c;}
 .resetbtn.armed{background:var(--sell);border-color:var(--sell);color:#fff;}
+#btnNew.armed{background:var(--sell,#e5484d) !important;border-color:var(--sell,#e5484d) !important;color:#fff !important;font-weight:700;animation:armPulse .9s ease-in-out infinite;}
+@keyframes armPulse{0%,100%{box-shadow:0 0 0 0 rgba(229,72,77,.6);}50%{box-shadow:0 0 0 7px rgba(229,72,77,0);}}
 .closebtn{font-family:var(--font-ui);font-weight:700;font-size:.72rem;border-radius:5px;border:1px solid var(--border);padding:5px 10px;cursor:pointer;background:var(--btn-bg);color:var(--muted);}
 .closebtn.live{background:var(--sell);border-color:var(--sell);color:#fff;}
 .closebtn:disabled{opacity:.45;cursor:not-allowed;}
@@ -629,6 +674,16 @@ tr.openrow td.tag{color:var(--warn);font-weight:600;}
   .price-box.top button{min-width:78px;padding:7px 10px;}
 }
 
+.price-box.top{z-index:4;}   /* 가격축 드래그 영역(.axhit) 위로 올려, 좁은 화면에서 BUY가 가려져 안 눌리는 문제 방지 */
+/* ---------- 태블릿 (761~1100px): 상단 설정·컨트롤이 가로로 넘치지 않게 줄바꿈 ---------- */
+@media (min-width:761px) and (max-width:1100px){
+  .title-row .settings{margin-left:0;width:100%;flex-wrap:wrap;}
+  .title-row .settings .cfg{flex:1 1 auto;flex-wrap:wrap;row-gap:6px;}
+  .stat-strip{flex-wrap:wrap;}
+  .stat.sq{flex:1 1 220px;}
+  .stat.speedbox{flex:1 1 auto;}
+  .stat.optbox{flex:1 1 100%;}
+}
 .jumpbar{display:none;}
 /* ---------- 모바일 (폭 760px 이하): 세로 한 줄 구조, 데스크톱 레이아웃은 그대로 ---------- */
 @media (max-width:760px){
@@ -712,14 +767,14 @@ tr.openrow td.tag{color:var(--warn);font-weight:600;}
   .pane.ch .price-box.top button{padding:8px 16px;min-width:80px;}
   .pane.ins .price-box.top button{padding:7px 10px;min-width:80px;}
   .pane-footer{left:6px;max-width:calc(100% - 12px);flex-wrap:wrap;z-index:3;}
-  .pane-footer{padding:4px 6px;gap:6px;font-size:.68rem;align-items:center;bottom:6px;}
+  .pane-footer{padding:4px 6px;gap:6px;font-size:.74rem;align-items:center;bottom:6px;}
   .pane-footer .pos{min-width:136px;}
-  .closebtn,.resetbtn{padding:3px 8px;font-size:.66rem;} .resetbtn{font-size:.74rem;}
+  .closebtn,.resetbtn{padding:3px 8px;font-size:.72rem;} .resetbtn{font-size:.74rem;}
   .log-head{flex-wrap:wrap;row-gap:6px;} .logtab{white-space:nowrap;} .log-head .ls{margin-left:auto;}
   .pane-footer.in-head{order:-1;width:100%;margin:0 0 6px;justify-content:space-between;}
   .log-head{row-gap:0;}
   .log-scroll{height:150px;overflow:auto;}
-  table{min-width:0;font-size:.7rem;}
+  table{min-width:0;font-size:.76rem;} th{font-size:.74rem;}
   th,td{padding:5px 5px;}
   td[data-c="pnl"]{font-size:.74rem;}   /* 모바일은 칸이 좁아 살짝만 */
   th:nth-child(2){width:15%;} th:nth-child(3){width:13%;} th:nth-child(4){width:19%;} th:nth-child(5){width:19%;} th:nth-child(6){width:22%;}
@@ -728,8 +783,8 @@ tr.openrow td.tag{color:var(--warn);font-weight:600;}
   th.c-fee{white-space:nowrap;} td.fee{font-size:.66rem;padding-left:2px;padding-right:2px;}
   th:first-child,td:first-child{display:none;}   /* 시각 열은 좁은 화면에서 숨김 */
   .tb-sum td:first-child{display:table-cell;}
-  .sumw{font-size:.66rem;padding:4px 8px;gap:6px;} .sumw .sl{gap:2px 10px;}
-  .legclose{padding:5px 10px;}
+  .sumw{font-size:.76rem;padding:4px 8px;gap:6px;} .sumw .sl{gap:2px 10px;}
+  .legclose{padding:5px 10px;font-size:.74rem;} .price-box .spread .pl{font-size:.64rem;} .price-box.top .spread .pl{font-size:.64rem;} .stat .k{font-size:.72rem;}
 }
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -745,21 +800,21 @@ tr.openrow td.tag{color:var(--warn);font-weight:600;}
         <div class="cfg ins">
           <span class="cfgtitle">보험금 세팅</span>
           <span class="cfglab">초기자본</span>
-          <span class="cfgfixed">$10,000</span>
+          <span class="capwrap"><input type="text" id="inpInsCap" inputmode="numeric" autocomplete="off" maxlength="11" placeholder="금액 입력" title="보험금 계좌에 입금할 초기자본(달러)"><button type="button" class="btn ghost" id="btnInsDep">입금</button></span>
           <span class="cfglab">레버리지</span>
           <select id="selInsLev"><option value="10">1:10</option><option value="20">1:20</option><option value="50">1:50</option><option value="100">1:100</option><option value="200">1:200</option><option value="500" selected>1:500</option></select>
         </div>
         <div class="cfg fd">
           <span class="cfgtitle">펀딩 A·B 세팅</span>
           <span class="cfglab">초기자본</span>
-          <select id="selFdCap"><option value="1000">$1,000</option><option value="3000" selected>$3,000</option><option value="5000">$5,000</option></select>
+          <select id="selFdCap"><option value="" selected>선택하세요</option><option value="1000">$1,000</option><option value="3000">$3,000</option><option value="5000">$5,000</option></select>
           <span class="cfglab">레버리지</span>
           <select id="selFdLev"><option value="30">1:30</option><option value="50">1:50</option><option value="100">1:100</option><option value="200">1:200</option><option value="400" selected>1:400</option><option value="500">1:500</option></select>
         </div>
         <div class="cfg ch">
           <span class="cfgtitle">챌린지 A·B 세팅</span>
           <span class="cfglab">초기자본</span>
-          <select id="selChCap"><option value="1000">$1,000 (100불)</option><option value="3000" selected>$3,000 (300불)</option><option value="5000">$5,000 (500불)</option></select>
+          <select id="selChCap"><option value="" selected>선택하세요</option><option value="1000">$1,000 (100불)</option><option value="3000">$3,000 (300불)</option><option value="5000">$5,000 (500불)</option></select>
           <span class="cfglab">레버리지</span>
           <select id="selChLev"><option value="10">1:10</option><option value="20">1:20</option><option value="50">1:50</option><option value="100">1:100</option><option value="200">1:200</option><option value="500">1:500</option><option value="1500" selected>1:1500</option></select>
           <label class="check" title="챌린지 금액을 고르면 보험금·챌린지의 랏수와 TP/SL을 기본값으로 자동 입력"><input type="checkbox" id="chkPreset" checked> 자동세팅</label>
@@ -967,10 +1022,15 @@ html.authlock body > *:not(#authGate){visibility:hidden !important;}
 "use strict";
 
 /* ---------------- constants ---------------- */
-const COMMISSION_PER_LOT = 15;   // 청산 시 수수료: 1랏당 $15
+const COMMISSION_PER_LOT = 15;   // 청산 시 수수료: 1랏당 $15 (보험금·펀딩)
+const COMMISSION_CHALLENGE = 20; // 챌린지 계좌는 1랏당 $20 (MT5 계좌 속성)
+function feeOf(leg){ return leg.lot * ((!FUND() && leg.pane > 0) ? COMMISSION_CHALLENGE : COMMISSION_PER_LOT); }
 const CONTRACT = 100;         // 가격이 $1 움직일 때 1랏당 손익($) = 1랏의 온스 수
 const OUNCES_PER_LOT = 100;   // 1랏 = 100온스 (0.01랏 = 1온스)
-const INSURANCE_CAPITAL = 10000; // 보험금 계좌 초기자본(고정)
+let INS_CAP = 0;   // 보험금 계좌 초기자본: 처음엔 0원, 사용자가 직접 입금(세팅)
+let _depBusy = false;
+function fdKind(){ return parseInt(document.getElementById("selFdCap").value, 10) || 0; }   // 0 = 펀딩 계좌 미세팅
+function chKind(){ return parseInt(document.getElementById("selChCap").value, 10) || 0; }   // 0 = 챌린지 종류 미선택
 let MODE = "ins";   // "ins" = 보험금·챌린지 반대매매 / "fund" = 펀딩 A·B 반대매매
 const FUND = ()=> MODE === "fund";
 const MAX_FUND_LEGS = 3;   // 펀딩 계좌는 계좌마다 최대 3포지션
@@ -1034,6 +1094,10 @@ function paneHTML(p){
     '<div class="symsub">Gold Spot / U.S. Dollar</div>'+
     '<div class="szin">'+SZS.map(z=>'<button class="tfbtn szbtn'+(z.k==="m"?' active':'')+'" data-sz="'+z.k+'" data-pane="'+p.idx+'">'+z.label+'</button>').join('')+'</div>'+
     '<div class="stopmsg" data-pane="'+p.idx+'"><span>손실 청산된 계좌입니다. 파일 › 거래 계좌 로그인으로 리셋하세요</span></div>'+
+    (p.idx===0
+      ? '<div class="setov" data-set="ins"><div class="sbox"><b class="st">보험금 자본을 세팅하세요</b><span class="ss">거래를 시작하려면 먼저 보험금 계좌에 자본을 입금해야 해요</span><button type="button" class="btn primary" data-setgo="ins">세팅하기</button></div></div>'
+      : '<div class="setov" data-set="ch"><div class="sbox"><b class="st">챌린지 종류를 선택하세요</b><span class="ss">거래를 시작하려면 먼저 챌린지 종류를 골라야 해요</span><button type="button" class="btn primary" data-setgo="ch">선택하기</button></div></div>'+
+         '<div class="setov" data-set="fd"><div class="sbox"><b class="st">펀딩 계좌를 세팅하세요</b><span class="ss">거래를 시작하려면 먼저 펀딩 계좌 금액을 골라야 해요</span><button type="button" class="btn primary" data-setgo="fd">세팅하기</button></div></div>')+
     '<div class="ea-panel">'+
     '<div class="ea-head"><span class="role">'+p.role+'</span></div>'+
     '<div class="ea-body">'+
@@ -1080,13 +1144,24 @@ function buildPanes(){
 /* ---------------- accounts (초기자본 · 레버리지) ---------------- */
 function selVal(id){ return parseInt(document.getElementById(id).value, 10); }
 function newAccount(idx){
-  // 보험금(idx 0)은 고정 자본, 챌린지 A/B는 선택한 초기자본
-  const start = FUND() ? selVal("selFdCap") : (idx===0 ? INSURANCE_CAPITAL : selVal("selChCap"));
+  // 보험금(idx 0)은 직접 입금한 자본(처음 0), 챌린지 A/B는 선택한 초기자본(미선택 0)
+  const start = FUND() ? fdKind() : (idx===0 ? INS_CAP : chKind());
   const lev   = FUND() ? selVal("selFdLev") : (idx===0 ? selVal("selInsLev") : selVal("selChLev"));
   return {start:start, lev:lev, balance:start, legs:[]};   // legs: 열린 포지션들(챌린지는 최대 1개, 보험금은 챌린지별 반대 포지션이 쌓인다)
 }
 let legSeq = 0;
-function usedMargin(p){ return p.legs.reduce((a,l)=>a+l.margin,0); }
+/* 보험금 계좌의 헤지 증거금: 매수·매도가 겹치는(헤지된) 물량은 랏당 $40(1:500 기준)만 잡고, 나머지 순포지션만 일반 증거금 */
+const HEDGE_MARGIN = 40;
+function marginOfLegs(p, legs){
+  const plain = legs.reduce((a,l)=>a+l.margin, 0);
+  if(FUND() || p !== state.panes[0]) return plain;
+  let bl = 0, sl = 0, bm = 0, sm = 0;
+  legs.forEach(l=>{ if(l.dir === "BUY"){ bl += l.lot; bm += l.margin; } else { sl += l.lot; sm += l.margin; } });
+  const hedged = Math.min(bl, sl); if(hedged <= 0) return plain;
+  const net = bl >= sl ? (bm / bl) * (bl - sl) : (sm / sl) * (sl - bl);
+  return Math.min(plain, net + hedged * HEDGE_MARGIN * 500 / p.lev);
+}
+function usedMargin(p){ return marginOfLegs(p, p.legs); }
 function marginOf(lot, price, lev){ return lot * OUNCES_PER_LOT * price / lev; }
 
 /* ---------------- state ---------------- */
@@ -1770,32 +1845,203 @@ function gong(freq, t0, vol){   // 낮은 징: 길게 울리는 비정수 배음
   [[1,1,1.5],[1.47,0.7,1.2],[2.09,0.5,1.0],[2.56,0.35,0.8],[3.2,0.22,0.6]].forEach(pr=>beep(freq*pr[0], t0, pr[2], "sine", vol*pr[1]));
   thud(freq*0.7, t0, 0.35, vol*0.9);
 }
+/* 아이폰 스타일: 맑고 짧은 유리(글라스) 톤 + 키보드 '톡' 소리. 폰 스피커에서도 들리도록 중고음 위주 */
+function glass(freq, t0, dur, vol){   // 유리잔을 톡 친 듯한 맑은 종소리: 기음 + 옥타브 + 높은 배음(빨리 사라짐)
+  beep(freq, t0, dur, "sine", vol); beep(freq*2, t0, dur*0.55, "sine", vol*0.3); beep(freq*4.2, t0, dur*0.2, "sine", vol*0.1);
+  noise(t0, 0.008, vol*0.25, "highpass", 6000);
+}
+function tock(freq, t0, vol){   // 아이폰 키보드 '톡': 아주 짧고 마른 소리
+  beep(freq, t0, 0.045, "sine", vol, freq*0.62); noise(t0, 0.014, vol*0.45, "bandpass", 2400, 1.2);
+}
+function sndPlay(kind){
+  if(kind === "login"){ glass(784, 0, 0.9, 0.2); glass(1175, 0.8, 0.8, 0.16); glass(1047, 2.0, 1.2, 0.22); glass(1568, 2.1, 1.3, 0.18); }   // 접속 시작 → 로그인 완료 때 올라가는 두 음
+  else if(kind === "click"){ tock(1250, 0, 0.16); }
+  else if(kind === "buy"){ glass(784, 0, 0.5, 0.26); glass(1175, 0.09, 0.8, 0.28); }     // 위로 올라가는 두 음 (솔→레)
+  else if(kind === "sell"){ glass(988, 0, 0.5, 0.26); glass(659, 0.09, 0.8, 0.28); }     // 아래로 내려오는 두 음 (시→미)
+  else if(kind === "tp"){       // 성공 차임: 맑은 4음 아르페지오 + 여운 (폰 스피커에서도 또렷하게 크게)
+    glass(1047, 0, 0.9, 0.3); glass(1319, 0.08, 0.9, 0.3); glass(1568, 0.16, 1.0, 0.3); glass(2093, 0.25, 1.4, 0.26); }
+  else if(kind === "sl"){       // 부드럽게 가라앉는 두 음 + 낮은 '툭'
+    glass(659, 0, 0.55, 0.26); glass(523, 0.12, 0.8, 0.26); beep(170, 0, 0.22, "sine", 0.32, 90); }
+  else if(kind === "liq"){      // 경고: 내려가는 세 음 두 번 + 묵직한 타격
+    [0, 0.42].forEach(o=>{ glass(880, o, 0.35, 0.3); glass(740, o+0.12, 0.35, 0.3); glass(622, o+0.24, 0.45, 0.3); });
+    beep(95, 0, 0.45, "sine", 0.42, 55); noise(0, 0.12, 0.2, "lowpass", 500); }
+  else if(kind === "close"){ glass(1568, 0, 0.35, 0.24); }   // '띵' 한 번
+}
+/* 모바일: 소리는 사용자 터치 뒤에야 켜지고(iOS), 앱 전환·화면 꺼짐 뒤에는 멈춰요 → 터치할 때마다 다시 깨워 둔다 */
+function sndCtx(){
+  if(!SND.ctx){
+    const AC = window.AudioContext || window.webkitAudioContext; if(!AC) return null;
+    SND.ctx = new AC();
+    try{ if(navigator.audioSession) navigator.audioSession.type = "playback"; }catch(e){}   // iOS 17+: 무음 스위치가 켜져 있어도 소리 나게
+  }
+  return SND.ctx;
+}
+function sndUnlock(){
+  try{
+    const c = sndCtx(); if(!c) return;
+    if(c.state !== "running"){ const r = c.resume(); if(r && r.catch) r.catch(()=>{}); }
+    if(!SND.primed){ SND.primed = true; const b = c.createBuffer(1, 1, 22050), s = c.createBufferSource(); s.buffer = b; s.connect(c.destination); s.start(0); }   // iOS 잠금 해제용 무음
+  }catch(e){}
+}
+["pointerdown","touchstart","touchend","click","keydown"].forEach(ev=> document.addEventListener(ev, sndUnlock, {capture:true, passive:true}));
+document.addEventListener("visibilitychange", ()=>{ if(!document.hidden && SND.ctx && SND.ctx.state !== "running"){ try{ SND.ctx.resume(); }catch(e){} } });
 function sfx(kind){
   if(!sndOn()) return;
   try{
-    if(!SND.ctx){ const AC = window.AudioContext || window.webkitAudioContext; if(!AC) return; SND.ctx = new AC(); }
-    if(SND.ctx.state === "suspended") SND.ctx.resume();
+    const c = sndCtx(); if(!c) return;
     const now = performance.now(); if(SND.last[kind] && now - SND.last[kind] < 120) return; SND.last[kind] = now;
-    if(kind === "login"){ bell(784, 0, 0.9, 0.14); bell(1175, 0.8, 0.8, 0.1); bell(1047, 2.0, 1.3, 0.16); bell(1568, 2.1, 1.4, 0.12); }   // 맑은 종소리: 접속 시작 → 로그인 완료 때 올라가는 두 음
-    else if(kind === "click"){ noise(0, 0.03, 0.16, "lowpass", 3000); beep(820, 0, 0.05, "sine", 0.07, 520); }   // 부드러운 톡
-    else if(kind === "buy"){      // 마림바 두 음: 솔→도 (올라가는 느낌)
-      wood(392, 0, 0.55, 0.2); wood(523, 0.1, 0.7, 0.2); }
-    else if(kind === "sell"){     // 마림바 두 음: 미→시 (내려가는 느낌)
-      wood(330, 0, 0.55, 0.2); wood(247, 0.1, 0.7, 0.22); }
-    else if(kind === "tp"){       // 동전이 부딪히는 소리 + 맑은 마림바
-      coin(2300, 0, 0.1); coin(3000, 0.07, 0.09); coin(2600, 0.15, 0.07);
-      wood(784, 0.12, 0.8, 0.12); wood(1047, 0.24, 0.9, 0.1); }
-    else if(kind === "sl"){       // 둔탁하게 쿵 + 낮은 나무음
-      thud(120, 0, 0.32, 0.4); wood(185, 0.05, 0.5, 0.12); }
-    else if(kind === "liq"){      // 낮은 징 두 번 + 묵직한 충격
-      thud(75, 0, 0.5, 0.45); gong(98, 0, 0.16); gong(87, 0.55, 0.13); }
-    else if(kind === "close"){    // 짧은 나무 톡 + 가벼운 한 음
-      noise(0, 0.03, 0.16, "lowpass", 2200); wood(587, 0.02, 0.4, 0.2); }
+    if(c.state === "running"){ sndPlay(kind); return; }
+    const r = c.resume();   // 멈춰 있으면 깨운 뒤 재생 (터치 없이 깨워지지 않으면 소리는 건너뜀)
+    if(r && r.then) r.then(()=>{ if(c.state === "running") sndPlay(kind); }).catch(()=>{});
   }catch(e){}
 }
 document.addEventListener("click", e=>{ const b = e.target.closest && e.target.closest("button"); if(b && !b.disabled) sfx("click"); }, true);
+
+/* ---------------- 처음 세팅: 보험금 자본 입금 · 챌린지 종류 선택 ---------------- */
+function syncSetOv(){
+  const F = FUND();
+  document.querySelectorAll(".setov").forEach(el=>{
+    const k = el.dataset.set;
+    el.classList.toggle("show", k === "fd" ? (F && !fdKind()) : (!F && (k === "ins" ? !INS_CAP : !chKind())));
+  });
+}
+function pulseSet(kind){
+  const b = document.querySelector('.setov[data-set="'+kind+'"].show .sbox'); if(!b) return;
+  b.classList.remove("nudge"); void b.offsetWidth; b.classList.add("nudge");
+  setTimeout(()=>b.classList.remove("nudge"), 600);
+}
+let _spot = null;
+function endSpot(){
+  if(!_spot) return;
+  _spot.el.classList.remove("spotting"); if(_spot.tip) _spot.tip.remove(); if(_spot.dim) _spot.dim.remove();
+  document.removeEventListener("keydown", _spot.key, true); _spot = null;
+}
+function startSpot(el, msg){
+  if(!el) return; endSpot();
+  const dim = document.createElement("div"); dim.id = "spotDim"; document.body.appendChild(dim);
+  const tip = document.createElement("div"); tip.className = "spotTip"; tip.textContent = tr(msg);
+  el.classList.add("spotting"); el.appendChild(tip);
+  const key = e=>{ if(e.key === "Escape"){ e.stopPropagation(); endSpot(); } };
+  document.addEventListener("keydown", key, true);
+  dim.addEventListener("click", endSpot);
+  _spot = {el:el, dim:dim, tip:tip, key:key};
+  try{ el.scrollIntoView({block:"center", behavior:"smooth"}); }catch(e){}
+}
+function fmtCapInput(inp){
+  const d = inp.value.replace(/\D/g,"").replace(/^0+/,"");
+  inp.value = d.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+let _depT = [], _depN = 0;
+/* 자금이 채워지는 연출: 보험금 입금 · 챌린지/펀딩 자금 지급 공통 (여러 계좌에 동시에 띄울 수 있음) */
+function fundAnim(idxs, amount, cfg, done){
+  _depN++; _depBusy = true;
+  const T = (fn, ms)=> _depT.push(setTimeout(fn, ms));
+  const fin = ()=>{ _depN = Math.max(0, _depN - 1); _depBusy = _depN > 0; };
+  const list = idxs.map(i=>({i:i, wrap:document.querySelector('.pane[data-pane="'+i+'"] .pane-wrap')})).filter(o=>o.wrap);
+  if(!list.length){ fin(); done && done(); return; }
+  const views = list.map(o=>{
+    o.wrap.querySelectorAll(".depov").forEach(e=>e.remove());
+    const ov = document.createElement("div"); ov.className = "depov";
+    ov.innerHTML = '<div class="dbox"><div class="dh"><span></span></div><div class="dbd"><div class="dacc"></div><div class="damt"></div>'+
+      '<div class="dstep"><i></i><span></span></div><div class="dstep"><i></i><span></span></div><div class="dstep"><i></i><span></span></div>'+
+      '<div class="dbar"><u></u></div><div class="dfin"></div></div></div>';
+    ov.querySelector(".dh span").textContent = tr(cfg.title);
+    ov.querySelector(".dacc").textContent = PANE_DEFS[o.i].acct + " · " + tr(cfg.acct);
+    const steps = ov.querySelectorAll(".dstep"); cfg.steps.forEach((t,k)=> steps[k].lastChild.textContent = tr(t));
+    ov.querySelector(".damt").textContent = "$0";
+    o.wrap.appendChild(ov);
+    return {ov:ov, steps:steps, bar:ov.querySelector(".dbar u"), amt:ov.querySelector(".damt"), fin:ov.querySelector(".dfin"), i:o.i};
+  });
+  const each = fn=> views.forEach(fn);
+  const mark = (k, st)=> each(v=>{ v.steps[k].className = "dstep " + st; });
+  const barTo = w=> each(v=>{ v.bar.style.width = w; });
+  mark(0,"act"); barTo("18%");
+  const t0 = performance.now(), D = 2300;
+  _depT.push(setInterval(()=>{ const k = Math.min(1, (performance.now()-t0)/D), e = 1 - Math.pow(1-k, 3); each(v=>{ v.amt.textContent = fmtMoney(Math.round(amount*e)); }); }, 40));
+  T(()=>{ mark(0,"ok"); mark(1,"act"); barTo("48%"); }, 700);
+  T(()=>{ mark(1,"ok"); mark(2,"act"); barTo("80%"); }, 1500);
+  T(()=>{
+    mark(2,"ok"); barTo("100%"); each(v=>{ v.amt.textContent = fmtMoney(amount); v.fin.textContent = tr(cfg.fin); });
+    sfx("tp");
+    idxs.forEach(i=>{ const q = state.panes[i]; if(q){ q.balance = q.start; q.stopped = false; } }); render();
+  }, 2300);
+  T(()=>{ each(v=>v.ov.remove()); fin(); syncSetOv(); notify(cfg.msg); done && done(); }, 3400);
+}
+function depositAnim(amount, done){
+  fundAnim([0], amount, {title:"입금", acct:"보험금 계좌", steps:["입금 요청 접수","자금 이체 확인","계좌에 반영"], fin:"입금이 완료되었어요", msg:"보험금 계좌에 "+fmtMoney(amount)+"가 입금되었어요."}, done);
+}
+/* 챌린지/펀딩 금액을 고르면 두 계좌(A·B)에 자금이 채워지는 연출 */
+function grantAnim(){
+  const F = FUND(), amt = F ? fdKind() : chKind(); if(!amt) return;
+  const nm = F ? "펀딩" : "챌린지";
+  state.panes[1].balance = 0; state.panes[2].balance = 0; render();
+  fundAnim([1,2], amt, {title:nm+" 자금 지급", acct:"모의계좌", steps:["신청 접수","계좌 확인","자금 지급 반영"], fin:"계정 로그인이 완료되었어요", msg:nm+" A·B 계좌에 "+fmtMoney(amt)+"가 지급되었어요."}, null);
+}
+function depositIns(){
+  const inp = document.getElementById("inpInsCap");
+  const amt = parseInt(inp.value.replace(/\D/g,""), 10) || 0;
+  if(_depBusy) return;
+  if(amt < 100){ notify("보험금 자본은 $100 이상으로 입력해 주세요."); inp.focus(); return; }
+  if(amt > 10000000){ notify("보험금 자본은 $10,000,000 이하로 입력해 주세요."); inp.focus(); return; }
+  const p = state.panes[0];
+  if(p.legs.length){ notify("보험금 포지션이 열려 있어요. 청산한 뒤에 자본을 바꿀 수 있어요."); return; }
+  endSpot(); inp.blur();
+  INS_CAP = amt; p.start = amt; p.balance = 0; p.stopped = false;
+  render(); syncSetOv();
+  depositAnim(amt, ()=>{});
+}
+function wireSetup(){
+  const inp = document.getElementById("inpInsCap");
+  inp.addEventListener("input", ()=> fmtCapInput(inp));
+  inp.addEventListener("keydown", e=>{ if(e.key === "Enter"){ e.preventDefault(); depositIns(); } });
+  document.getElementById("btnInsDep").addEventListener("click", depositIns);
+  ["selChCap","selFdCap"].forEach(id=> document.getElementById(id).addEventListener("change", ()=>{ endSpot(); setTimeout(grantAnim, 0); }));   // 새 게임이 시작된 직후 자금 채우기 연출
+  document.addEventListener("click", e=>{
+    const b = e.target.closest && e.target.closest("[data-setgo]"); if(!b) return;
+    if(b.dataset.setgo === "ins"){
+      startSpot(document.querySelector(".cfg.ins"), "여기에 입금할 금액을 입력하고 '입금'을 눌러 주세요");
+      setTimeout(()=>{ try{ inp.focus(); }catch(_){} }, 350);
+    } else {
+      const fd = b.dataset.setgo === "fd";
+      startSpot(document.querySelector(fd ? ".cfg.fd" : ".cfg.ch"), fd ? "여기서 펀딩 계좌 금액을 골라 주세요" : "여기서 챌린지 종류를 골라 주세요");
+      const sel = document.getElementById(fd ? "selFdCap" : "selChCap");
+      setTimeout(()=>{ try{ sel.focus(); if(sel.showPicker) sel.showPicker(); }catch(_){} }, 450);
+    }
+  });
+}
+/* 5분 규정: 한 챌린지에 진입한 뒤, 차트시간 기준 5분이 지나기 전에 다른 챌린지에 반대 포지션으로 진입하면 경고 */
+const FIVE_MIN_SEC = 300;
+function fmtGap(sec){ const m = Math.floor(sec/60), r = Math.floor(sec%60); return LANG === "ko" ? (m ? m+"분 " : "")+r+"초" : (m ? m+"m " : "")+r+"s"; }
+function checkFiveMin(paneIdx, dir){
+  const other = paneIdx === 1 ? 2 : 1, op = state.panes[other]; if(!op) return;
+  let hit = null;
+  op.legs.forEach(l=>{
+    if(l.dir === dir) return;
+    const gap = (state.sec - l.openSec) / TPS;
+    if(gap <= FIVE_MIN_SEC && (!hit || gap < hit.gap)) hit = {gap:gap, dir:l.dir};
+  });
+  if(!hit) return;
+  showRuleWarn(PANE_DEFS[other].role + " " + hit.dir, PANE_DEFS[paneIdx].role + " " + dir, hit.gap);
+}
+let _ruleT = null;
+function showRuleWarn(a, b, gap){
+  let el = document.getElementById("ruleWarn");
+  if(!el){ el = document.createElement("div"); el.id = "ruleWarn"; el.innerHTML = '<b></b><span></span><em></em>'; el.addEventListener("click", ()=>el.classList.remove("show")); document.body.appendChild(el); }
+  el.children[0].textContent = "⚠ " + tr("5분 규정 위반");
+  el.children[1].textContent = tr(a.split(" ")[0]+" "+a.split(" ")[1]) + " " + a.split(" ")[2] + " → " + tr(b.split(" ")[0]+" "+b.split(" ")[1]) + " " + b.split(" ")[2] + " · " + tr("진입 간격") + " " + fmtGap(gap);
+  el.children[2].textContent = tr("반대 방향 진입은 차트시간으로 5분 이상 간격을 두어야 해요.");
+  el.classList.remove("show"); void el.offsetWidth; el.classList.add("show");
+  clearTimeout(_ruleT); _ruleT = setTimeout(()=>el.classList.remove("show"), 8000);
+  sfx("sl"); notify("5분 규정 위반: 반대 포지션 진입 간격이 5분 이내예요.");
+}
 function openPosition(paneIdx, dir, opts){
   opts = opts || {};
+  if(_depBusy && !opts.silent){ notify("자금이 들어오는 중이에요. 잠시만 기다려 주세요."); return null; }
+  if(FUND() && !opts.silent && !fdKind()){ notify("먼저 펀딩 계좌를 세팅해 주세요."); pulseSet("fd"); return null; }
+  if(!FUND() && !opts.silent){
+    if(paneIdx !== 0 && !chKind()){ notify("먼저 챌린지 종류를 선택해 주세요."); pulseSet("ch"); return null; }
+    if(paneIdx !== 0 && !INS_CAP && document.getElementById("chkLink").checked){ notify("먼저 보험금 자본을 세팅해 주세요."); pulseSet("ins"); return null; }
+  }
   const p = state.panes[paneIdx];
   if(FUND()){
     if(p.legs.length >= MAX_FUND_LEGS){ notify("펀딩 계좌는 포지션을 최대 3개까지만 들일 수 있어요."); return null; }
@@ -1810,9 +2056,10 @@ function openPosition(paneIdx, dir, opts){
 
   // 증거금 확인 (필요 증거금 > 가용 잔액이면 주문 거부)
   const need = marginOf(lot, entry, p.lev);
+  const needInc = marginOfLegs(p, p.legs.concat([{dir:dir, lot:lot, margin:need}])) - usedMargin(p);   // 헤지되면 늘어나는 증거금이 더 적어요
   const avail = p.balance - usedMargin(p);
-  if(need > avail){
-    notify("증거금 부족 — "+role+" 필요 "+fmtMoney(need)+" / 가용 "+fmtMoney(avail)+" (랏수를 줄이거나 레버리지를 높여 보세요)");
+  if(needInc > avail){
+    notify("증거금 부족 — "+role+" 필요 "+fmtMoney(needInc)+" / 가용 "+fmtMoney(avail)+" (랏수를 줄이거나 레버리지를 높여 보세요)");
     return null;
   }
   // 펀딩 모드: 반대 계좌의 포지션 한도·증거금도 미리 확인 → 부족하면 양쪽 모두 진입하지 않음
@@ -1827,7 +2074,8 @@ function openPosition(paneIdx, dir, opts){
     const ins = state.panes[0];
     const oppDir = dir==="BUY" ? "SELL" : "BUY";
     const insEntry = oppDir==="BUY" ? ask() : bid();
-    const insNeed = marginOf(lotOf(0), insEntry, ins.lev);
+    const insFull = marginOf(lotOf(0), insEntry, ins.lev);
+    const insNeed = marginOfLegs(ins, ins.legs.concat([{dir:oppDir, lot:lotOf(0), margin:insFull}])) - usedMargin(ins);   // 헤지 증거금 반영
     const insAvail = ins.balance - usedMargin(ins);
     if(insNeed > insAvail){
       notify("증거금 부족 — 보험금 필요 "+fmtMoney(insNeed)+" / 가용 "+fmtMoney(insAvail)+" (양쪽 모두 진입하지 않았어요)");
@@ -1841,6 +2089,7 @@ function openPosition(paneIdx, dir, opts){
   }
   const newLeg = {
     id: ++legSeq,
+    pane: paneIdx,
     openSec: state.sec,
     src: opts.src != null ? opts.src : paneIdx,   // 이 포지션을 만든 계좌(보험금 쪽 반대매매는 A/B 구분용)
     dir: dir,
@@ -1854,6 +2103,7 @@ function openPosition(paneIdx, dir, opts){
   };
   p.legs.push(newLeg);
   if(!opts.silent) { sfx(dir === "BUY" ? "buy" : "sell"); maybeMirror(paneIdx, dir, newLeg); }
+  if(!FUND() && paneIdx !== 0 && !opts.silent) checkFiveMin(paneIdx, dir);
   render();
   return newLeg;
 }
@@ -1894,7 +2144,7 @@ function execLeg(paneIdx, leg, reason){
   const reqPx = leg.reqPx != null ? leg.reqPx : exit;
   const slip = pnl - calcPnl(leg, reqPx);
   const lag = (leg.closing && leg.closing.lagSec != null) ? leg.closing.lagSec : (leg.reqSec != null ? (state.sec - leg.reqSec)/TPS : 0);
-  const fee = leg.lot * COMMISSION_PER_LOT;
+  const fee = feeOf(leg);
   p.balance += pnl - fee;
   logTrade(paneIdx, leg, exit, pnl, reason || "수동청산", {lag:lag, slip:slip, fee:fee});
   p.legs.splice(k, 1);
@@ -1916,8 +2166,10 @@ function closeLeg(paneIdx, leg, reason, now, lagFixed){
       state.panes[oi].legs.filter(l=>l.id===leg.pairId).forEach(l=>{ l.cause = reason; closeLeg(oi, l, "연동청산", now, lg); });
     }
   } else if(paneIdx !== 0 && document.getElementById("chkLink").checked){
-    const lg = leg.closing ? leg.closing.lagSec : null;   // 동시 컷: 챌린지와 같은 지연으로 함께 체결
-    state.panes[0].legs.filter(l=>l.src===paneIdx).forEach(l=>{ l.cause = reason; closeLeg(0, l, "연동청산", now, lg); });
+    // 동시 컷: 보험금은 챌린지보다 더 빠르게 체결(챌린지 지연의 약 40%) → 틱(0.25초)보다 짧으면 요청 즉시 체결
+    const lg0 = leg.closing ? leg.closing.lagSec : null, lg = lg0 != null ? lg0 * 0.4 : null;
+    const quick = now || (lg != null && Math.round(lg*TPS) < 1);
+    state.panes[0].legs.filter(l=>l.src===paneIdx).forEach(l=>{ l.cause = reason; closeLeg(0, l, "연동청산", quick, lg); });
   }
 }
 function processPending(){
@@ -2195,7 +2447,7 @@ function replayNextPx(){
 
 let GAME_MODE = "replay";   // 기본은 복기(실제 차트 재생), 랜덤 패턴은 '랜덤 모드'
 function newGame(){
-  pause();
+  pause(); endSpot();
   SESS.cur = pickSession(); SESS.t0 = 0; SESS.t0s = 0;
   state.events = dayEvents();
   const vol0 = randomVol();
@@ -2243,12 +2495,13 @@ function newGame(){
 function floatOf(p){ return p.legs.reduce((a,l)=>a + calcPnl(l, l.dir==="BUY"?bid():ask()), 0); }
 function netOf(p){ return p.legs.reduce((a,l)=>a + (l.dir==="BUY"?l.lot:-l.lot), 0); }
 function render(){
+  syncSetOv();
   document.querySelectorAll(".stopmsg").forEach(el=>{ const pp = state.panes[+el.dataset.pane]; el.classList.toggle("show", !!(pp && pp.stopped)); });
   // 평가자산·수익률·평가손익·증거금은 '보험금(실제자본)' 계좌만 계산. 챌린지 A·B는 시뮬레이션 자산이라 제외
   const ins = state.panes[0];
   const floatPnl = floatOf(ins);
   const equity = ins.balance + floatPnl;
-  const pct = (equity - ins.start) / ins.start * 100;
+  const pct = ins.start > 0 ? (equity - ins.start) / ins.start * 100 : 0;
   const netLots = state.panes.reduce((s,p)=> s + netOf(p), 0);
   const marginPct = equity>0 ? (usedMargin(ins)/equity*100) : 0;
 
@@ -2339,7 +2592,7 @@ function renderPanes(){
         const g = k=>col.querySelector('[data-s="'+k+'"]'), nf = v=>{ const t = Math.abs(v).toFixed(2).split("."); return (v<0?"-":"")+t[0].replace(/\B(?=(\d{3})+(?!\d))/g," ")+"."+t[1]; };
         const um = usedMargin(p), has = p.legs.length>0 && um>0;
         col.classList.toggle("hasleg", has);
-        const sc = col.querySelector(".tb-sum td"); if(sc) sc.colSpan = matchMedia("(max-width:760px)").matches ? 6 : 7;
+        const sc = col.querySelector(".tb-sum td"); if(sc){ const cs = matchMedia("(max-width:760px)").matches ? 6 : 7; if(sc.colSpan!==cs) sc.colSpan = cs; }
         g("bal").textContent = nf(p.balance)+" USD"; g("eq").textContent = nf(eq);
         g("eq").classList.toggle("danger", warn);
         if(has){
@@ -2660,8 +2913,8 @@ function drawCandles(canvas, candles, opts){
     opts.legs.forEach((pos, pi)=>{
       const who = FUND() ? (multi ? "#"+(pi+1)+" " : "") : (multi ? (pos.src===1?"A ":pos.src===2?"B ":"") : "");
       levels.push({price:pos.entry, color:green, dash:[], tag:who+(pos.dir==="BUY"?"BUY ":"SELL ")+pos.lot.toFixed(2)+"랏"});
-      if(pos.tp != null) levels.push({price:pos.tp, color:red, dash:[8,4], tag:who+"TP "+sgn(calcPnl(pos,pos.tp)-pos.lot*COMMISSION_PER_LOT)});
-      if(pos.sl != null) levels.push({price:pos.sl, color:red, dash:[2,3], tag:who+"SL "+sgn(calcPnl(pos,pos.sl)-pos.lot*COMMISSION_PER_LOT)});
+      if(pos.tp != null) levels.push({price:pos.tp, color:red, dash:[8,4], tag:who+"TP "+sgn(calcPnl(pos,pos.tp)-feeOf(pos))});
+      if(pos.sl != null) levels.push({price:pos.sl, color:red, dash:[2,3], tag:who+"SL "+sgn(calcPnl(pos,pos.sl)-feeOf(pos))});
     });
     let nAbove = 0, nBelow = 0;
     levels.forEach(L=>{
@@ -2770,7 +3023,13 @@ function setMode(m){
 }
 function wireEvents(){
   document.getElementById("btnPlay").addEventListener("click", ()=> state.running ? pause() : play());
-  document.getElementById("btnNew").addEventListener("click", newGame);
+  wireConfirm(document.getElementById("btnNew"), "새로 시작", ()=>{
+    if(_depBusy) return;
+    endSpot();   // 자본·종류 세팅도 처음부터
+    if(FUND()) document.getElementById("selFdCap").value = "";
+    else { INS_CAP = 0; document.getElementById("inpInsCap").value = ""; document.getElementById("selChCap").value = ""; }
+    newGame();
+  });
   document.getElementById("btnMode").addEventListener("click", ()=> setMode(FUND() ? "ins" : "fund"));
   { const mc = document.querySelector(".main-col"); if(mc){ mc.classList.add("railoff"); setTimeout(()=>window.dispatchEvent(new Event("resize")), 60); } }   // 도움말 칸은 항상 숨김
   { const fb = document.getElementById("btnFs"), de = document.documentElement;
@@ -2958,6 +3217,7 @@ function wireEvents(){
   document.querySelectorAll('button[data-action="reset"]').forEach(btn=>{
     wireConfirm(btn, "↺ 리셋", ()=> resetAccount(parseInt(btn.dataset.pane,10)));
   });
+  wireSetup();
   document.getElementById("selChCap").addEventListener("change", applyPreset);
   document.getElementById("chkPreset").addEventListener("change", applyPreset);
   applyPreset();
@@ -3132,7 +3392,7 @@ const EX = {
  "차트 재생을 시작하거나 잠시 멈춰요.":["Starts or pauses chart playback.","チャートの再生を開始または一時停止します。","开始或暂停图表播放。"],
  "배속":["Speed","倍速","倍速"],
  "1x는 실시간, 5x·10x·20x는 그만큼 빠르게 흘러가요.":["1x is real time; 5x, 10x and 20x run that much faster.","1xはリアルタイム、5x·10x·20xはその分だけ速く進みます。","1x 为实时，5x、10x、20x 则按相应倍数加速。"],
- "처음부터 다시 시작해요. 설정을 바꾼 뒤에 눌러 적용하세요.":["Restarts from the beginning. Press it after changing settings to apply them.","最初からやり直します。設定を変更した後に押して反映してください。","从头重新开始。更改设置后请点击以应用。"],
+ "처음부터 다시 시작해요. 실수로 누르지 않도록 두 번 눌러야 시작돼요. 보험금 자본과 챌린지 종류도 처음부터 다시 세팅해요. 설정을 바꾼 뒤에 눌러 적용하세요.":["Restarts from the beginning. Press it twice so it can't be hit by accident. The Insurance capital and challenge type are set up again from scratch. Press it after changing settings to apply them.","最初からやり直します。誤って押さないよう2回押す必要があります。保険金の資金とチャレンジの種類も最初から設定し直します。設定を変更した後に押して反映してください。","从头重新开始。为防误触需点击两次。保险金资金和挑战类型也会重新设置。更改设置后请点击以应用。"],
  "반대매매 연동":["Linked counter-trade","反対売買の連動","对冲联动"],
  "챌린지에 진입하거나 청산하면 보험금도 반대 포지션으로 함께 움직여요.":["When a challenge enters or closes, Insurance moves with it on the opposite side.","チャレンジでエントリーまたは決済すると、保険金も反対ポジションで一緒に動きます。","挑战开仓或平仓时，保险金也会以反向仓位一同操作。"],
  "열려 있는 모든 계좌의 포지션을 한꺼번에 청산해요.":["Closes the positions of every account at once.","開いているすべての口座のポジションを一括で決済します。","一次性平掉所有账户的持仓。"],
@@ -3191,7 +3451,7 @@ const EX = {
  "펀딩 거래 히스토리":["Funding trade history","ファンディング取引履歴","资金账户交易记录"],
  "보험금·챌린지 모드와 펀딩 A·B 모드를 바꿔요 (새로 시작돼요)":["Switch between Insurance·Challenge mode and Funding A·B mode (restarts the game)","保険金·チャレンジモードとファンディングA·Bモードを切り替えます(新規開始)","在保险金·挑战模式与资金 A·B 模式之间切换(将重新开始)"],
  "보험금·챌린지 모드와 펀딩 A·B 모드를 바꿔요. 모드를 바꾸면 새로 시작되고, 포지션이 열려 있을 땐 바꿀 수 없어요.":["Switch between Insurance·Challenge mode and Funding A·B mode. Changing the mode restarts the game, and you can't switch while a position is open.","保険金·チャレンジモードとファンディングA·Bモードを切り替えます。切り替えると新規開始になり、ポジションがある間は切り替えられません。","在保险金·挑战模式与资金 A·B 模式之间切换。切换后将重新开始，持仓期间无法切换。"],
- "펀딩 A·B의 초기자본과 레버리지를 골라요. 랏수와 TP·SL은 계좌마다 직접 입력해요.":["Choose the capital and leverage for Funding A·B. Enter lots and TP·SL for each account yourself.","ファンディングA·Bの初期資金とレバレッジを選びます。ロット数とTP·SLは口座ごとに入力します。","选择资金 A·B 的初始资金和杠杆。手数与 TP·SL 需为每个账户单独输入。"],
+ "펀딩 A·B의 초기자본과 레버리지를 골라요. 금액을 고르기 전에는 거래할 수 없어요. 랏수와 TP·SL은 계좌마다 직접 입력해요.":["Choose the capital and leverage for Funding A·B. You can't trade until an amount is chosen. Enter lots and TP·SL for each account yourself.","ファンディングA·Bの初期資金とレバレッジを選びます。金額を選ぶまで取引できません。ロット数とTP·SLは口座ごとに入力します。","选择资金 A·B 的初始资金和杠杆。选择金额之前无法交易。手数与 TP·SL 需为每个账户单独输入。"],
  "켜면 한쪽 계좌의 포지션이 청산될 때(수동·익절·손절) 짝이 된 반대 계좌의 포지션도 함께 청산돼요. 꺼 두면 서로 따로 청산돼요.":["When on, closing a position in one account (manual, take-profit or stop-loss) also closes its paired position in the other account. When off, they close independently.","オンにすると、一方の口座のポジションが決済されたとき(手動·利確·損切り)、ペアの反対口座のポジションも一緒に決済されます。オフなら別々に決済されます。","开启后，一个账户的仓位平仓时(手动、止盈、止损)，其配对的对方账户仓位也会一并平仓。关闭则各自独立平仓。"],
  "켜면 한쪽 계좌의 포지션이 청산될 때 짝이 된 반대 계좌의 포지션도 함께 청산돼요. 끄면 서로 따로 청산돼요":["When on, closing a position in one account also closes its paired position in the other account. When off, they close independently.","オンにすると、一方の口座のポジションが決済されたとき、ペアの反対口座のポジションも一緒に決済されます。オフなら別々に決済されます。","开启后，一个账户的仓位平仓时，其配对的对方账户仓位也会一并平仓。关闭则各自独立平仓。"],
  "누르면 바로 주문돼요. 이때 반대 계좌에 반대 포지션이 자동으로 들어가요(반대매매 연동). 계좌마다 최대 3포지션까지 쌓을 수 있어요.":["Click to order instantly. The opposite account automatically takes the opposite position (counter-trade link). Each account can hold up to 3 positions.","押すと即注文されます。このとき反対口座に反対ポジションが自動で入ります(反対売買連動)。口座ごとに最大3ポジションまで持てます。","点击即下单。此时对方账户会自动建立反向仓位(反向对冲联动)。每个账户最多持有 3 个仓位。"],
@@ -3257,6 +3517,65 @@ const EX = {
  "미리보기 · '이미지 다운로드'로 저장하세요 (우클릭 저장도 가능)":["Preview · save with 'Download image' (right-click also works)","プレビュー · 「画像をダウンロード」で保存してください(右クリック保存も可)","预览 · 点击“下载图片”保存(也可右键保存)"],
  "저장할 이미지가 없어요.":["No image to save.","保存する画像がありません。","没有可保存的图片。"],
  "이 환경에서는 바로 저장할 수 없어요. 이미지를 우클릭해서 저장하세요.":["Can't save directly here. Right-click the image to save it.","この環境では直接保存できません。画像を右クリックして保存してください。","此环境无法直接保存。请右键点击图片保存。"],
+ "보험금 자본을 세팅하세요":["Set your Insurance capital", "保険金の資金を設定してください", "请设置保险金资金"],
+ "거래를 시작하려면 먼저 보험금 계좌에 자본을 입금해야 해요":["To start trading, first deposit capital into the Insurance account", "取引を始めるには、まず保険金口座に資金を入金してください", "要开始交易，请先向保险金账户存入资金"],
+ "세팅하기":["Set up", "設定する", "去设置"],
+ "챌린지 종류를 선택하세요":["Choose a challenge type", "チャレンジの種類を選択してください", "请选择挑战类型"],
+ "거래를 시작하려면 먼저 챌린지 종류를 골라야 해요":["To start trading, first choose the challenge type", "取引を始めるには、まずチャレンジの種類を選んでください", "要开始交易，请先选择挑战类型"],
+ "선택하기":["Choose", "選択する", "去选择"],
+ "선택하세요":["Select", "選択してください", "请选择"],
+ "금액 입력":["Enter amount", "金額を入力", "输入金额"],
+ "보험금 계좌에 입금할 초기자본(달러)":["Initial capital (USD) to deposit into the Insurance account", "保険金口座に入金する初期資金(ドル)", "存入保险金账户的初始资金(美元)"],
+ "입금":["Deposit", "入金", "存入"],
+ "여기에 입금할 금액을 입력하고 '입금'을 눌러 주세요":["Enter the amount to deposit here and press 'Deposit'", "ここに入金額を入力して「入金」を押してください", "请在此输入存入金额并点击「存入」"],
+ "여기서 챌린지 종류를 골라 주세요":["Choose the challenge type here", "ここでチャレンジの種類を選んでください", "请在此选择挑战类型"],
+ "보험금 계좌":["Insurance account", "保険金口座", "保险金账户"],
+ "입금 요청 접수":["Deposit request received", "入金リクエスト受付", "已受理存款请求"],
+ "자금 이체 확인":["Confirming fund transfer", "資金移動を確認中", "确认资金转账"],
+ "계좌에 반영":["Crediting the account", "口座に反映", "计入账户"],
+ "입금이 완료되었어요":["Deposit complete", "入金が完了しました", "存款已完成"],
+ "먼저 챌린지 종류를 선택해 주세요.":["Please choose a challenge type first.", "先にチャレンジの種類を選択してください。", "请先选择挑战类型。"],
+ "먼저 보험금 자본을 세팅해 주세요.":["Please set up the Insurance capital first.", "先に保険金の資金を設定してください。", "请先设置保险金资金。"],
+ "보험금 입금이 처리되는 중이에요. 잠시만 기다려 주세요.":["The Insurance deposit is being processed. Please wait a moment.", "保険金の入金を処理中です。しばらくお待ちください。", "保险金存款处理中，请稍候。"],
+ "보험금 자본은 $100 이상으로 입력해 주세요.":["Enter at least $100 for the Insurance capital.", "保険金の資金は$100以上で入力してください。", "保险金资金请至少输入 $100。"],
+ "보험금 자본은 $10,000,000 이하로 입력해 주세요.":["Enter $10,000,000 or less for the Insurance capital.", "保険金の資金は$10,000,000以下で入力してください。", "保险金资金请输入 $10,000,000 以下。"],
+ "보험금 포지션이 열려 있어요. 청산한 뒤에 자본을 바꿀 수 있어요.":["An Insurance position is open. Close it before changing the capital.", "保険金のポジションが開いています。決済してから資金を変更できます。", "保险金有持仓未平。平仓后才能更改资金。"],
+ "레버리지는 내 증거금 대비 포지션 크기의 배율이에요. 1:500이면 $1로 최대 $500어치 포지션을 잡을 수 있어요. 필요 증거금 = 랏수 × 100온스 × 진입가 ÷ 레버리지. 높을수록 적은 돈으로 큰 포지션을 잡지만, 같은 가격 변동에도 평가금이 크게 흔들려 강제청산 위험이 커져요.":["Leverage is the multiple of position size relative to your margin. At 1:500, $1 can hold up to $500 of position. Required margin = lots × 100 oz × entry price ÷ leverage. Higher leverage lets you hold a big position with little money, but equity swings more for the same price move, so liquidation risk rises.", "レバレッジは証拠金に対するポジションサイズの倍率です。1:500なら$1で最大$500分のポジションを持てます。必要証拠金 = ロット数 × 100オンス × 約定価格 ÷ レバレッジ。高いほど少ない資金で大きなポジションを持てますが、同じ値動きでも評価額が大きく揺れ、ロスカットのリスクが高まります。", "杠杆是持仓规模相对于保证金的倍数。1:500 时 $1 最多可持有 $500 的仓位。所需保证金 = 手数 × 100 盎司 × 开仓价 ÷ 杠杆。杠杆越高，用少量资金就能持有大仓位，但同样的价格波动会让净值波动更大，强平风险也更高。"],
+ "레버리지 (보험금)":["Leverage (Insurance)", "レバレッジ(保険金)", "杠杆(保险金)"],
+ "레버리지 (챌린지)":["Leverage (Challenge)", "レバレッジ(チャレンジ)", "杠杆(挑战)"],
+ "레버리지 (펀딩)":["Leverage (Funding)", "レバレッジ(ファンディング)", "杠杆(资金)"],
+ "보험금 계좌에 입금할 초기자본을 직접 입력해요(처음엔 0원). 금액을 쓰고 '입금'을 누르면 입금 연출과 함께 잔액에 들어가요. 레버리지도 여기서 골라요.":["Type the initial capital to deposit into the Insurance account (it starts at $0). Enter an amount and press 'Deposit' to see the deposit animation and have it added to your balance. Leverage is chosen here too.", "保険金口座に入金する初期資金を直接入力します(最初は0円)。金額を入力して「入金」を押すと、入金演出とともに残高に入ります。レバレッジもここで選びます。", "直接输入存入保险金账户的初始资金(初始为 $0)。输入金额并点击「存入」，会出现存款动画并计入余额。杠杆也在这里选择。"],
+ "챌린지 종류와 레버리지를 골라요. 종류를 고르기 전에는 거래할 수 없어요. '자동세팅'을 켜면 금액에 맞는 랏수와 TP/SL이 자동으로 들어가요.":["Choose the challenge type and leverage. You can't trade until a type is chosen. With 'Auto preset' on, lots and TP/SL matching the amount are filled in automatically.", "チャレンジの種類とレバレッジを選びます。種類を選ぶまで取引できません。「自動設定」をオンにすると、金額に合ったロット数とTP/SLが自動で入ります。", "选择挑战类型和杠杆。选择类型之前无法交易。开启「自动设置」后，会自动填入与金额匹配的手数和 TP/SL。"],
+ "주문 크기예요. 1랏 = 100온스라서, 가격이 $1 움직이면 1랏은 $100, 0.1랏은 $10, 0.01랏은 $1의 손익이 나요. 랏이 클수록 손익도, 필요한 증거금도 커져요.":["Order size. 1 lot = 100 oz, so when price moves $1, 1 lot gains or loses $100, 0.1 lot $10 and 0.01 lot $1. The larger the lot, the larger both the P/L and the required margin.", "注文サイズです。1ロット = 100オンスなので、価格が$1動くと1ロットは$100、0.1ロットは$10、0.01ロットは$1の損益になります。ロットが大きいほど損益も必要証拠金も大きくなります。", "下单手数。1 手 = 100 盎司，价格变动 $1 时，1 手盈亏 $100，0.1 手 $10，0.01 手 $1。手数越大，盈亏和所需保证金都越大。"],
+ "익절(Take Profit)이에요. 진입가에서 유리한 쪽으로 몇 포인트(1p=$0.01) 움직이면 자동으로 청산해 이익을 확정할지 정해요. 예: TP 500 = BUY는 $5 오르면, SELL은 $5 내리면 청산. 비우면 자동 익절이 없어요.":["Take Profit. Sets how many points (1p=$0.01) price must move in your favor from entry before the position closes automatically to lock in profit. Example: TP 500 = closes when BUY rises $5 / SELL falls $5. Leave blank for no automatic take-profit.", "利確(Take Profit)です。建値から有利な方向に何ポイント(1p=$0.01)動いたら自動で決済して利益を確定するかを決めます。例: TP 500 = BUYは$5上昇、SELLは$5下落で決済。空欄なら自動利確はありません。", "止盈(Take Profit)。设定价格从开仓价向有利方向移动多少点(1p=$0.01)时自动平仓锁定盈利。例：TP 500 = BUY 上涨 $5、SELL 下跌 $5 时平仓。留空则不自动止盈。"],
+ "손절(Stop Loss)이에요. 진입가에서 불리한 쪽으로 몇 포인트(1p=$0.01) 움직이면 자동으로 청산해 손실을 제한할지 정해요. 예: SL 500 = $5 불리해지면 청산. 비우면 자동 손절이 없어서 강제청산까지 갈 수 있어요.":["Stop Loss. Sets how many points (1p=$0.01) price must move against you from entry before the position closes automatically to limit the loss. Example: SL 500 = closes when price moves $5 against you. Leave blank for no automatic stop-loss, which can lead all the way to liquidation.", "損切(Stop Loss)です。建値から不利な方向に何ポイント(1p=$0.01)動いたら自動で決済して損失を限定するかを決めます。例: SL 500 = $5不利になったら決済。空欄なら自動損切りがなく、ロスカットまで進むことがあります。", "止损(Stop Loss)。设定价格从开仓价向不利方向移动多少点(1p=$0.01)时自动平仓以限制亏损。例：SL 500 = 不利变动 $5 时平仓。留空则不自动止损，可能一路亏到强平。"],
+ "챌린지 A · Lot":["Challenge A · Lot", "チャレンジA · Lot", "挑战 A · 手数"],
+ "챌린지 A · TP":["Challenge A · TP", "チャレンジA · TP", "挑战 A · TP"],
+ "챌린지 A · SL":["Challenge A · SL", "チャレンジA · SL", "挑战 A · SL"],
+ "챌린지 B · Lot":["Challenge B · Lot", "チャレンジB · Lot", "挑战 B · 手数"],
+ "챌린지 B · TP":["Challenge B · TP", "チャレンジB · TP", "挑战 B · TP"],
+ "챌린지 B · SL":["Challenge B · SL", "チャレンジB · SL", "挑战 B · SL"],
+ "펀딩 A · Lot":["Funding A · Lot", "ファンディングA · Lot", "资金 A · 手数"],
+ "펀딩 A · TP":["Funding A · TP", "ファンディングA · TP", "资金 A · TP"],
+ "펀딩 A · SL":["Funding A · SL", "ファンディングA · SL", "资金 A · SL"],
+ "펀딩 B · Lot":["Funding B · Lot", "ファンディングB · Lot", "资金 B · 手数"],
+ "펀딩 B · TP":["Funding B · TP", "ファンディングB · TP", "资金 B · TP"],
+ "펀딩 B · SL":["Funding B · SL", "ファンディングB · SL", "资金 B · SL"],
+ "펀딩 계좌를 세팅하세요":["Set up your Funding account", "ファンディング口座を設定してください", "请设置资金账户"],
+ "거래를 시작하려면 먼저 펀딩 계좌 금액을 골라야 해요":["To start trading, first choose the Funding account amount", "取引を始めるには、まずファンディング口座の金額を選んでください", "要开始交易，请先选择资金账户金额"],
+ "먼저 펀딩 계좌를 세팅해 주세요.":["Please set up the Funding account first.", "先にファンディング口座を設定してください。", "请先设置资金账户。"],
+ "여기서 펀딩 계좌 금액을 골라 주세요":["Choose the Funding account amount here", "ここでファンディング口座の金額を選んでください", "请在此选择资金账户金额"],
+ "챌린지 자금 지급":["Challenge funding", "チャレンジ資金の支給", "挑战资金发放"],
+ "펀딩 자금 지급":["Funding disbursement", "ファンディング資金の支給", "资金账户拨款"],
+ "신청 접수":["Application received", "申請受付", "已受理申请"],
+ "계좌 확인":["Verifying the account", "口座を確認中", "确认账户"],
+ "자금 지급 반영":["Crediting the funds", "資金の支給を反映", "发放资金入账"],
+ "계정 로그인이 완료되었어요":["Account login complete", "アカウントへのログインが完了しました", "账户登录已完成"],
+ "자금이 들어오는 중이에요. 잠시만 기다려 주세요.":["Funds are being credited. Please wait a moment.", "資金を入金中です。しばらくお待ちください。", "资金正在到账，请稍候。"],
+ "5분 규정 위반":["5-minute rule violation", "5分ルール違反", "违反5分钟规定"],
+ "진입 간격":["entry gap", "エントリー間隔", "开仓间隔"],
+ "반대 방향 진입은 차트시간으로 5분 이상 간격을 두어야 해요.":["Opposite-direction entries must be at least 5 minutes apart in chart time.", "反対方向のエントリーはチャート時間で5分以上の間隔を空ける必要があります。", "反向开仓必须间隔图表时间 5 分钟以上。"],
+ "5분 규정 위반: 반대 포지션 진입 간격이 5분 이내예요.":["5-minute rule violation: the opposite entry was within 5 minutes.", "5分ルール違反:反対ポジションのエントリー間隔が5分以内です。", "违反5分钟规定：反向仓位开仓间隔在 5 分钟以内。"],
  "웹 버전 QR":["Web version QR","Webバージョン QR","网页版二维码"],
  "스마트폰 카메라로 스캔하세요":["Scan with your phone camera","スマホのカメラでスキャン","用手机相机扫描"],
  "손실 청산된 계좌입니다. 파일 › 거래 계좌 로그인으로 리셋하세요":["This account was liquidated. Reset it via File › Login to Trade Account.","ロスカットされた口座です。ファイル › 取引口座にログイン でリセットしてください。","该账户已被强制平仓。请通过 文件 › 登录交易账户 重置。"],
@@ -3352,6 +3671,9 @@ const TPL = [
  [/^거래 (\d+)회 · 평가금 (.+) \(초기 (.+)\)$/, ["$1 trades · Equity $2 (initial $3)","取引 $1回 · 評価額 $2(初期 $3)","交易 $1 次 · 净值 $2(初始 $3)"]],
  [/^손익 (.+?)\s+·\s+수수료 -(.+)$/, ["P/L $1  ·  Fees -$2","損益 $1  ·  手数料 -$2","盈亏 $1  ·  手续费 -$2"]],
  [/^저장 (.+?) · 시세 (.+?) \(KST\) · 손익은 수수료 제외, 실현 = 손익 − 수수료$/, ["Saved $1 · Quotes $2 (KST) · P/L excludes fees, Realized = P/L − fees","保存 $1 · 相場 $2(KST) · 損益は手数料を除く、実現=損益−手数料","保存 $1 · 行情 $2(KST) · 盈亏不含手续费，已实现 = 盈亏 − 手续费"]],
+ [/^보험금 계좌에 (.+)가 입금되었어요\.$/, ["$1 was deposited into the Insurance account.","保険金口座に$1が入金されました。","$1 已存入保险金账户。"]],
+ [/^챌린지 A·B 계좌에 (.+)가 지급되었어요\.$/, ["Challenge A·B accounts were credited with $1.","チャレンジA·B口座に$1が支給されました。","挑战 A·B 账户已发放 $1。"]],
+ [/^펀딩 A·B 계좌에 (.+)가 지급되었어요\.$/, ["Funding A·B accounts were credited with $1.","ファンディングA·B口座に$1が支給されました。","资金 A·B 账户已发放 $1。"]],
  [/^(.+) 트레이더$/, ["$1 Trader","$1 トレーダー","$1 交易员"]],
  [/^(.+) · 모의계좌$/, ["$1 · Demo account","$1 · デモ口座","$1 · 模拟账户"]],
  [/^증거금 부족 — 보험금 필요 (.+) \/ 가용 (.+) \(양쪽 모두 진입하지 않았어요\)$/, ["Not enough margin — Insurance needs $1 / available $2 (neither side was entered)","証拠金不足 — 保険金に必要 $1 / 利用可能 $2(両方ともエントリーしませんでした)","保证金不足 — 保险金需要 $1 / 可用 $2(两边均未开仓)"]],
@@ -3457,16 +3779,19 @@ function initI18n(){
 
 /* ---------------- 설명 모드: 화면을 살짝 흐리게 하고 각 기능에 말풍선을 띄운다 ---------------- */
 const GUIDE = [
- [".cfg.ins","보험금 세팅","보험금 계좌의 초기자본은 $10,000로 고정이고, 레버리지만 고를 수 있어요."],
- [".cfg.ch","챌린지 A·B 세팅","챌린지 A·B의 초기자본과 레버리지를 골라요. '자동세팅'을 켜면 금액에 맞는 랏수와 TP/SL이 자동으로 들어가요."],
+ [".cfg.ins","보험금 세팅","보험금 계좌에 입금할 초기자본을 직접 입력해요(처음엔 0원). 금액을 쓰고 '입금'을 누르면 입금 연출과 함께 잔액에 들어가요. 레버리지도 여기서 골라요."],
+ ["#selInsLev","레버리지 (보험금)","레버리지는 내 증거금 대비 포지션 크기의 배율이에요. 1:500이면 $1로 최대 $500어치 포지션을 잡을 수 있어요. 필요 증거금 = 랏수 × 100온스 × 진입가 ÷ 레버리지. 높을수록 적은 돈으로 큰 포지션을 잡지만, 같은 가격 변동에도 평가금이 크게 흔들려 강제청산 위험이 커져요."],
+ [".cfg.ch","챌린지 A·B 세팅","챌린지 종류와 레버리지를 골라요. 종류를 고르기 전에는 거래할 수 없어요. '자동세팅'을 켜면 금액에 맞는 랏수와 TP/SL이 자동으로 들어가요."],
+ ["#selChLev","레버리지 (챌린지)","레버리지는 내 증거금 대비 포지션 크기의 배율이에요. 1:500이면 $1로 최대 $500어치 포지션을 잡을 수 있어요. 필요 증거금 = 랏수 × 100온스 × 진입가 ÷ 레버리지. 높을수록 적은 돈으로 큰 포지션을 잡지만, 같은 가격 변동에도 평가금이 크게 흔들려 강제청산 위험이 커져요."],
  [()=>document.getElementById("statTick").closest(".stat"),"차트시간","지금 재생 중인 차트의 시장 시간(KST)이에요."],
  ["#btnPlay","시작 · 정지","차트 재생을 시작하거나 잠시 멈춰요."],
  [".speedgrp","배속","1x는 실시간, 5x·10x·20x는 그만큼 빠르게 흘러가요."],
- ["#btnNew","새로 시작","처음부터 다시 시작해요. 설정을 바꾼 뒤에 눌러 적용하세요."],
+ ["#btnNew","새로 시작","처음부터 다시 시작해요. 실수로 누르지 않도록 두 번 눌러야 시작돼요. 보험금 자본과 챌린지 종류도 처음부터 다시 세팅해요. 설정을 바꾼 뒤에 눌러 적용하세요."],
  ["#btnPat","패턴 변경","복기 차트 중 다른 차트를 랜덤으로 골라 새로 시작해요"],
  [".mt5bar","MT5 파일 메뉴","파일 → 「거래 계좌 로그인」을 누르면 그 계좌가 MT5에 새로 로그인하는 연출과 함께 초기자본으로 리셋돼요."],
  ["#btnMode","모드 전환","보험금·챌린지 모드와 펀딩 A·B 모드를 바꿔요. 모드를 바꾸면 새로 시작되고, 포지션이 열려 있을 땐 바꿀 수 없어요."],
- [".cfg.fd","펀딩 A·B 세팅","펀딩 A·B의 초기자본과 레버리지를 골라요. 랏수와 TP·SL은 계좌마다 직접 입력해요."],
+ [".cfg.fd","펀딩 A·B 세팅","펀딩 A·B의 초기자본과 레버리지를 골라요. 금액을 고르기 전에는 거래할 수 없어요. 랏수와 TP·SL은 계좌마다 직접 입력해요."],
+ ["#selFdLev","레버리지 (펀딩)","레버리지는 내 증거금 대비 포지션 크기의 배율이에요. 1:500이면 $1로 최대 $500어치 포지션을 잡을 수 있어요. 필요 증거금 = 랏수 × 100온스 × 진입가 ÷ 레버리지. 높을수록 적은 돈으로 큰 포지션을 잡지만, 같은 가격 변동에도 평가금이 크게 흔들려 강제청산 위험이 커져요."],
  [()=>document.getElementById("chkFundClose").closest("label"),"동시 청산","켜면 한쪽 계좌의 포지션이 청산될 때(수동·익절·손절) 짝이 된 반대 계좌의 포지션도 함께 청산돼요. 꺼 두면 서로 따로 청산돼요."],
  [()=>document.getElementById("chkLink").closest("label"),"반대매매 연동","챌린지에 진입하거나 청산하면 보험금도 반대 포지션으로 함께 움직여요."],
  [()=>document.getElementById("chkFit").closest("label"),"TP/SL 보이게","켜면 포지션이 있을 때 진입·TP·SL 라인이 모두 보이도록 차트 가격 범위를 자동으로 넓혀요"],
@@ -3485,11 +3810,15 @@ const GUIDE = [
  ['.log-col[data-pane="0"] .logtab[data-tab="pos"]',"포지션 탭","지금 열려 있는 포지션이에요. 방향·랏·진입가·현재가·손익을 보고, 오른쪽 '청산' 버튼으로 하나씩 닫을 수 있어요."],
  ['.log-col[data-pane="0"] .logtab[data-tab="hist"]',"히스토리 탭","청산된 거래 기록이에요. 진입가·청산가·손익·수수료와 청산 사유(익절·손절·강제청산 등)가 남아요."],
  ['.pane[data-pane="1"] .price-box.top',"챌린지 A · SELL / BUY 주문","누르면 바로 주문돼요. 이때 보험금에는 반대 포지션이 자동으로 들어가요."],
- ['.pane[data-pane="1"] .ea-panel',"챌린지 A · Lot · TP · SL","랏수와 TP·SL을 넣어요. TP·SL은 진입가에서 떨어진 포인트(1p=$0.01)이고, SL을 비우면 자동 손절이 없어요."],
+ ['.pane[data-pane="1"] .ea-body .ea-row:nth-child(1)',"챌린지 A · Lot","주문 크기예요. 1랏 = 100온스라서, 가격이 $1 움직이면 1랏은 $100, 0.1랏은 $10, 0.01랏은 $1의 손익이 나요. 랏이 클수록 손익도, 필요한 증거금도 커져요."],
+ ['.pane[data-pane="1"] .ea-body .ea-row:nth-child(2)',"챌린지 A · TP","익절(Take Profit)이에요. 진입가에서 유리한 쪽으로 몇 포인트(1p=$0.01) 움직이면 자동으로 청산해 이익을 확정할지 정해요. 예: TP 500 = BUY는 $5 오르면, SELL은 $5 내리면 청산. 비우면 자동 익절이 없어요."],
+ ['.pane[data-pane="1"] .ea-body .ea-row:nth-child(3)',"챌린지 A · SL","손절(Stop Loss)이에요. 진입가에서 불리한 쪽으로 몇 포인트(1p=$0.01) 움직이면 자동으로 청산해 손실을 제한할지 정해요. 예: SL 500 = $5 불리해지면 청산. 비우면 자동 손절이 없어서 강제청산까지 갈 수 있어요."],
  ['.log-col[data-pane="1"] .pane-footer.in-head',"챌린지 A · 평가금 · 리셋","평가금은 잔액 + 평가손익이에요. 계좌를 초기자본으로 되돌리려면 위쪽 메뉴 파일 › 거래 계좌 로그인을 눌러요. 손실청산된 계좌도 이렇게 리셋해요."],
  ['.log-col[data-pane="1"] .log-scroll',"챌린지 A · 포지션 · 거래 목록 영역","포지션이 없으면 '보유 중인 포지션이 없습니다.', 청산된 거래가 없으면 '아직 거래가 없습니다.'라고 가운데에 표시돼요. 거래가 생기면 이 자리에 목록이 나타나요."],
  ['.pane[data-pane="2"] .price-box.top',"챌린지 B · SELL / BUY 주문","누르면 바로 주문돼요. 이때 보험금에는 반대 포지션이 자동으로 들어가요."],
- ['.pane[data-pane="2"] .ea-panel',"챌린지 B · Lot · TP · SL","랏수와 TP·SL을 넣어요. TP·SL은 진입가에서 떨어진 포인트(1p=$0.01)이고, SL을 비우면 자동 손절이 없어요."],
+ ['.pane[data-pane="2"] .ea-body .ea-row:nth-child(1)',"챌린지 B · Lot","주문 크기예요. 1랏 = 100온스라서, 가격이 $1 움직이면 1랏은 $100, 0.1랏은 $10, 0.01랏은 $1의 손익이 나요. 랏이 클수록 손익도, 필요한 증거금도 커져요."],
+ ['.pane[data-pane="2"] .ea-body .ea-row:nth-child(2)',"챌린지 B · TP","익절(Take Profit)이에요. 진입가에서 유리한 쪽으로 몇 포인트(1p=$0.01) 움직이면 자동으로 청산해 이익을 확정할지 정해요. 예: TP 500 = BUY는 $5 오르면, SELL은 $5 내리면 청산. 비우면 자동 익절이 없어요."],
+ ['.pane[data-pane="2"] .ea-body .ea-row:nth-child(3)',"챌린지 B · SL","손절(Stop Loss)이에요. 진입가에서 불리한 쪽으로 몇 포인트(1p=$0.01) 움직이면 자동으로 청산해 손실을 제한할지 정해요. 예: SL 500 = $5 불리해지면 청산. 비우면 자동 손절이 없어서 강제청산까지 갈 수 있어요."],
  ['.log-col[data-pane="2"] .pane-footer.in-head',"챌린지 B · 평가금 · 리셋","평가금은 잔액 + 평가손익이에요. 계좌를 초기자본으로 되돌리려면 위쪽 메뉴 파일 › 거래 계좌 로그인을 눌러요. 손실청산된 계좌도 이렇게 리셋해요."],
  ['.log-col[data-pane="2"] .log-scroll',"챌린지 B · 포지션 · 거래 목록 영역","포지션이 없으면 '보유 중인 포지션이 없습니다.', 청산된 거래가 없으면 '아직 거래가 없습니다.'라고 가운데에 표시돼요. 거래가 생기면 이 자리에 목록이 나타나요."]
 ];
@@ -3515,7 +3844,6 @@ function openGuide(){
       gt = gt.replace(/챌린지 ([AB])/, "펀딩 $1");
       if(g[1].indexOf("SELL / BUY") >= 0) gd = "누르면 바로 주문돼요. 이때 반대 계좌에 반대 포지션이 자동으로 들어가요(반대매매 연동). 계좌마다 최대 3포지션까지 쌓을 수 있어요.";
       else if(g[1] === "반대매매 연동") gd = "한쪽 펀딩 계좌에 진입하면 다른 펀딩 계좌에도 반대 방향 포지션이 자동으로 들어가요.";
-      else if(g[1].indexOf("Lot · TP · SL") >= 0) gd = "랏수와 TP·SL을 계좌마다 따로 넣어요. TP·SL은 진입가에서 떨어진 포인트(1p=$0.01)이고, SL을 비우면 자동 손절이 없어요.";
     }
     items.push({R:R, t:tr(gt), d:tr(gd), inb:g[3]});
   });
