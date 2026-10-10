@@ -841,6 +841,87 @@ tr.openrow td.tag{color:var(--warn);font-weight:600;}
 
 <div id="toast" role="status" aria-live="polite"></div>
 <nav class="jumpbar" id="jumpbar"><button data-j="top" class="jtop" aria-label="맨 위로">↑</button><button data-j="0">보험금</button><button data-j="1">챌린지A</button><button data-j="2">챌린지B</button></nav>
+<style>
+html.authlock body > *:not(#authGate){visibility:hidden !important;}
+#authGate{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(900px 500px at 15% 0%,rgba(232,182,74,.18),transparent 60%),var(--bg,#0a0e16);color:var(--fg,#e7edf7);font-family:var(--font-ui,system-ui,sans-serif);}
+#authGate .agbox{width:min(420px,100%);background:var(--panel-bg,#0d1420);border:1px solid var(--border-strong,#2a3850);border-radius:18px;padding:30px 26px 22px;box-shadow:0 18px 50px rgba(0,0,0,.45);text-align:center;}
+#authGate .agbrand{font-size:.78rem;letter-spacing:.14em;color:var(--muted,#7c8aa3);font-weight:700;}
+#authGate h1{margin:10px 0 6px;font-size:1.2rem;line-height:1.4;color:var(--gold,#e8b64a);word-break:keep-all;}
+#authGate p{margin:0 0 18px;font-size:.88rem;line-height:1.55;color:var(--muted,#7c8aa3);}
+#authGate #agBtn{display:flex;justify-content:center;min-height:44px;margin:6px 0 14px;}
+#authGate .agmsg{min-height:1.3em;font-size:.82rem;color:var(--bad,#ff6b6b);margin-bottom:8px;}
+#authGate .agnote{font-size:.74rem;line-height:1.5;color:var(--muted,#7c8aa3);opacity:.9;border-top:1px solid var(--border,#1f2b3d);padding-top:12px;margin:0;}
+#authChip{position:fixed;left:10px;bottom:10px;z-index:90;display:flex;gap:8px;align-items:center;font-size:.7rem;color:var(--muted,#7c8aa3);background:var(--panel-bg,#0d1420);border:1px solid var(--border,#1f2b3d);border-radius:999px;padding:4px 10px;opacity:.85;}
+#authChip button{background:none;border:none;color:var(--gold,#e8b64a);cursor:pointer;font:inherit;padding:0;text-decoration:underline;}
+@media (max-width:760px){#authChip{bottom:66px;}}
+</style>
+<script>
+/* ---------------- 구글 계정 로그인 (이용 기록 수집용) ----------------
+   · GOOGLE_CLIENT_ID 가 비어 있으면 로그인 창이 뜨지 않고 그냥 사용돼요(지금 상태).
+   · 로그인 창은 GATE_HOSTS 의 주소(GitHub Pages)에서만 동작해요. (파일로 직접 연 경우·claude.ai 미리보기는 건너뜀)
+   · 로그인하면 LOG_URL(구글 앱스스크립트)로 이메일·이름·시각을 보내 시트에 한 줄 기록돼요.
+   · 나중에 승인된 사람만 쓰게 하려면 APPROVAL_REQUIRED 를 true 로 바꾸고, 시트의 '승인' 탭에 이메일을 적어요. */
+(function(){
+  var GOOGLE_CLIENT_ID = "1090844240801-h6lvj67j2ngul8kkf9a2u14rmn9a86bs.apps.googleusercontent.com";
+  var LOG_URL = "https://script.google.com/macros/s/AKfycbzp1wUV4cp58InBJMEBAnc4-xbuX062rtCA6QtfKVq9r1YccbQboc3NfmOYqvLtveGJYw/exec";
+  var APPROVAL_REQUIRED = false;      // true: 시트 '승인' 탭에 있는 이메일만 사용 가능
+  var GATE_HOSTS = ["hoon711.github.io"];
+  var KEY = "xauUser", DAYS = 30;
+  var demo = /[?&]authdemo\b/.test(location.search) && (location.hostname === "localhost" || location.hostname === "127.0.0.1");
+  if(!GOOGLE_CLIENT_ID || (GATE_HOSTS.indexOf(location.hostname) < 0 && !demo)) return;
+  var root = document.documentElement;
+  function store(u){ try{ if(u) localStorage.setItem(KEY, JSON.stringify(u)); else localStorage.removeItem(KEY); }catch(e){} }
+  function load(){ try{ var u = JSON.parse(localStorage.getItem(KEY) || "null"); return (u && u.email && Date.now() - u.t < DAYS*864e5) ? u : null; }catch(e){ return null; } }
+  function decode(cred){ try{ var b = cred.split(".")[1].replace(/-/g,"+").replace(/_/g,"/"); return JSON.parse(decodeURIComponent(escape(atob(b)))); }catch(e){ return null; } }
+  function send(body){
+    if(!LOG_URL) return Promise.resolve(null);
+    body.ua = navigator.userAgent; body.lang = navigator.language; body.tz = (Intl.DateTimeFormat().resolvedOptions().timeZone || ""); body.scr = screen.width+"x"+screen.height;
+    return fetch(LOG_URL, {method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body: JSON.stringify(body), redirect:"follow"})
+      .then(function(r){ return r.json(); }).catch(function(){ return null; });
+  }
+  function unlock(u){
+    root.classList.remove("authlock");
+    var g = document.getElementById("authGate"); if(g) g.remove();
+    if(!document.getElementById("authChip")){
+      var c = document.createElement("div"); c.id = "authChip"; c.innerHTML = '<span></span><button type="button">로그아웃</button>';
+      c.firstChild.textContent = u.email; document.body.appendChild(c);
+      c.querySelector("button").onclick = function(){ store(null); try{ google.accounts.id.disableAutoSelect(); }catch(e){} location.reload(); };
+    }
+  }
+  function gate(msg){
+    root.classList.add("authlock");
+    var g = document.getElementById("authGate");
+    if(!g){
+      g = document.createElement("div"); g.id = "authGate";
+      g.innerHTML = '<div class="agbox"><div class="agbrand">XAUUSD · SIMULATION</div><h1>XAUUSD 금 선물 반대매매 시뮬레이션</h1>'+
+        '<p>구글 계정으로 로그인하면 바로 사용할 수 있습니다.</p><div id="agBtn"></div><div class="agmsg" id="agMsg"></div>'+
+        '<p class="agnote">로그인 시 이메일·이름·접속 시각이 이용 기록으로 저장됩니다. 가상의 차트로 진행되는 연습용 시뮬레이션이며, 연습 이외의 용도로는 사용할 수 없습니다.</p></div>';
+      document.body.appendChild(g);
+    }
+    document.getElementById("agMsg").textContent = msg || "";
+  }
+  function onCred(resp){
+    var p = decode(resp.credential);
+    if(!p || !p.email){ gate("로그인 정보를 확인하지 못했어요. 다시 시도해 주세요."); return; }
+    document.getElementById("agMsg").textContent = "";
+    send({type:"login", credential: resp.credential}).then(function(r){
+      if(APPROVAL_REQUIRED && !(r && r.approved)){ store(null); gate(r ? "아직 승인되지 않은 계정입니다. 승인 후 이용할 수 있어요." : "승인 여부를 확인하지 못했어요. 잠시 후 다시 시도해 주세요."); return; }
+      var u = {email:p.email, name:p.name || "", t:Date.now()}; store(u); unlock(u);
+    });
+  }
+  function init(){
+    var u = load();
+    if(u && !APPROVAL_REQUIRED){ unlock(u); send({type:"visit", email:u.email}); return; }   // 로그인 유지(30일): 방문만 기록
+    gate();
+    google.accounts.id.initialize({client_id: GOOGLE_CLIENT_ID, callback: onCred, ux_mode:"popup"});
+    google.accounts.id.renderButton(document.getElementById("agBtn"), {theme:"filled_blue", size:"large", shape:"pill", text:"signin_with", locale:"ko", width:280});
+  }
+  root.classList.add("authlock");
+  function boot(){ var u0 = load(); if(u0 && !APPROVAL_REQUIRED){ unlock(u0); send({type:"visit", email:u0.email}); return; }
+    if(window.google && google.accounts && google.accounts.id){ init(); } else { var s = document.createElement("script"); s.src = "https://accounts.google.com/gsi/client"; s.async = true; s.onload = init; s.onerror = function(){ gate("구글 로그인 창을 불러오지 못했어요. 네트워크를 확인해 주세요."); }; document.head.appendChild(s); } }
+  if(document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot); else boot();
+})();
+</script>
 <script>
 (function(){
 "use strict";
