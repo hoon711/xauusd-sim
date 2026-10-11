@@ -980,7 +980,7 @@ html.authlock body > *:not(#authGate){visibility:hidden !important;}
 #authGate #agBg .agR{animation-direction:reverse;}
 #authGate #agBg .agB{animation:agBob var(--agd,4s) ease-in-out infinite;}
 #authGate #agBg .agD{animation:agDrift var(--agd,12s) ease-in-out infinite;}
-#authGate #agBg .agP{position:absolute;inset:-3%;will-change:transform;}
+#authGate #agBg .agP{position:absolute;inset:0;}
 #authGate #agBg .agP svg{position:absolute;inset:0;}
 #authGate #agBg .agAu{position:absolute;inset:-10%;will-change:transform;mix-blend-mode:screen;pointer-events:none;}
 #authGate #agBg .agAu i{position:absolute;border-radius:50%;width:60vmax;height:60vmax;opacity:.5;animation:agFloat var(--agd,22s) ease-in-out infinite;}
@@ -1051,32 +1051,32 @@ html.authlock body > *:not(#authGate){visibility:hidden !important;}
   }
   // 로그인 배경: 트레이딩 분위기의 그림 3종(멀티 차트 / 보케 캔들 / 황금 격자+시세판) 중 랜덤
   function authBg(g){
-    var land = window.innerWidth >= window.innerHeight, W = land ? 1280 : 720, H = land ? 720 : 1280, R = Math.random, ns = "http://www.w3.org/2000/svg";
+    var W = Math.max(320, Math.round(window.innerWidth)), H = Math.max(400, Math.round(window.innerHeight)), land = W >= H, SC = Math.max(.7, Math.min(1.6, Math.min(W, H*1.78) / 1280)), R = Math.random, ns = "http://www.w3.org/2000/svg";   // 실제 화면 크기에 맞춰 그림 (잘림 없음)
     var UP = "#2ecc8f", DN = "#ef5a62", GOLD = "#e8b64a";
     function rg(a,b){ return a + R()*(b-a); }
     function gauss(sd){ return (R()+R()+R()+R()-2) * sd * 1.7; }
     function candles(n, x0, x1, ym, amp, dr, lim){ var o = [], p = ym, w = (x1-x0)/n; for(var i=0;i<n;i++){ var op = p, c = op + gauss(amp) + dr; if(lim) c = Math.max(ym-lim, Math.min(ym+lim, c)); var hi = Math.min(op,c) - Math.abs(gauss(amp*.7)), lo = Math.max(op,c) + Math.abs(gauss(amp*.7)); p = c; o.push([x0+i*w+w/2, op, c, hi, lo, w]); } return o; }
     function drawC(cs, op, bw){ var t = ""; cs.forEach(function(k){ var col = k[2] < k[1] ? UP : DN; t += '<line x1="'+k[0].toFixed(1)+'" x2="'+k[0].toFixed(1)+'" y1="'+k[3].toFixed(1)+'" y2="'+k[4].toFixed(1)+'" stroke="'+col+'" stroke-width="1.6" opacity="'+op+'"/><rect x="'+(k[0]-k[5]*bw/2).toFixed(1)+'" y="'+Math.min(k[1],k[2]).toFixed(1)+'" width="'+(k[5]*bw).toFixed(1)+'" height="'+Math.max(Math.abs(k[2]-k[1]),2).toFixed(1)+'" fill="'+col+'" opacity="'+op+'"/>'; }); return t; }
-    var kind = Math.floor(R()*3), dm = /[?&]bg=([012])/.exec(location.search); if(dm && (location.hostname === "localhost" || location.hostname === "127.0.0.1")) kind = +dm[1];
+    var kind = (g._agKind != null) ? g._agKind : Math.floor(R()*3), dm = /[?&]bg=([012])/.exec(location.search); if(dm && (location.hostname === "localhost" || location.hostname === "127.0.0.1")) kind = +dm[1]; g._agKind = kind;
     var body = "", bgc = "#060a12", CLIPDEFS = "";
     if(kind === 0){   // 멀티 차트 터미널
-      var names = ["XAUUSD","XAGUSD","EURUSD","USDJPY","BTCUSD","US500","WTI","NAS100","GBPUSD","USDKRW","DXY","XPTUSD"], cols = land ? 4 : 2, rows = land ? 3 : 4, gx = 20, gw = (W - gx*(cols+1))/cols, gh = (H - gx*(rows+1))/rows, k = 0;
-      var nn = land ? 28 : 22, defsClip = "";
+      var names = ["XAUUSD","XAGUSD","EURUSD","USDJPY","BTCUSD","US500","WTI","NAS100","GBPUSD","USDKRW","DXY","XPTUSD"], cols = Math.max(2, Math.round(W/310)), rows = Math.max(2, Math.round(H/235)), gx = 20, gw = (W - gx*(cols+1))/cols, gh = (H - gx*(rows+1))/rows, k = 0;
+      var nn = Math.max(12, Math.round(gw/10)), defsClip = "";
       for(var cx=0; cx<cols; cx++) for(var cy=0; cy<rows; cy++){ var x = gx + cx*(gw+gx), y = gx + cy*(gh+gx), cw = (gw-16)/nn, cs = candles(nn, x+8, x+gw-8, y+gh*.55, gh*.07, -.3, gh*.3), cs2 = cs.map(function(c){ return [c[0]+gw-16, c[1], c[2], c[3], c[4], c[5]]; }), id = "cp"+k;
         defsClip += '<clipPath id="'+id+'"><rect x="'+(x+1)+'" y="'+(y+24)+'" width="'+(gw-2)+'" height="'+(gh-26)+'"/></clipPath>';
         body += '<rect x="'+x+'" y="'+y+'" width="'+gw+'" height="'+gh+'" rx="8" fill="#0b1220" stroke="#1d2a42"/><text x="'+(x+12)+'" y="'+(y+20)+'" fill="#7c8aa3" font-size="12" font-family="monospace">'+names[(k++)%names.length]+' · M1</text><g clip-path="url(#'+id+')"><g class="agS" style="--agp:-'+(gw-16).toFixed(1)+'px;--agd:'+rg(9,18).toFixed(1)+'s">'+drawC(cs,.8,.6)+drawC(cs2,.8,.6)+'</g></g>'; }
       CLIPDEFS = defsClip;
       body += '<rect width="'+W+'" height="'+H+'" fill="url(#vg)"/>'; bgc = "#060a12";
     } else if(kind === 1){   // 보케 + 큰 캔들
-      var bk = ""; for(var i=0;i<34;i++){ var cci = Math.floor(R()*4), rr2 = rg(18,70); bk += '<circle class="agD" style="--agd:'+rg(9,20).toFixed(1)+'s;--dx:'+rg(-60,60).toFixed(0)+'px;--dy:'+rg(-60,60).toFixed(0)+'px" cx="'+rg(0,W).toFixed(0)+'" cy="'+rg(0,H).toFixed(0)+'" r="'+rr2.toFixed(0)+'" fill="url(#bk'+cci+')" opacity="'+rg(.55,1).toFixed(2)+'"/>'; }
-      var nC = land ? 12 : 7, step = (W-80)/nC, p2 = H*.78, big = "", mid = (nC-1)/2;
-      for(var j=0;j<nC;j++){ var o2 = p2, c2 = o2 + gauss(40) - (land ? 30 : 60); var hi = Math.min(o2,c2) - rg(20,70), lo = Math.max(o2,c2) + rg(20,60); p2 = c2; if(p2 < H*.12) p2 = H*.12 + 40;
-        var col2 = c2 < o2 ? UP : DN, dep = Math.abs(j-mid)/(mid+1.5), x2 = 40 + j*step, bw2 = Math.min(60, step*.58);
+      var bk = ""; for(var i=0, nb = Math.max(14, Math.min(60, Math.round(W*H/27000))); i<nb; i++){ var cci = Math.floor(R()*4), rr2 = rg(18,70); bk += '<circle class="agD" style="--agd:'+rg(9,20).toFixed(1)+'s;--dx:'+rg(-60,60).toFixed(0)+'px;--dy:'+rg(-60,60).toFixed(0)+'px" cx="'+rg(0,W).toFixed(0)+'" cy="'+rg(0,H).toFixed(0)+'" r="'+rr2.toFixed(0)+'" fill="url(#bk'+cci+')" opacity="'+rg(.55,1).toFixed(2)+'"/>'; }
+      var nC = Math.max(5, Math.round(W/105)), step = (W-80)/nC, p2 = H*.78, big = "", mid = (nC-1)/2;
+      for(var j=0;j<nC;j++){ var o2 = p2, c2 = o2 + gauss(40*SC) - (land ? 30*SC : 60); var hi = Math.min(o2,c2) - rg(20,70)*SC, lo = Math.max(o2,c2) + rg(20,60)*SC; p2 = c2; if(p2 < H*.12) p2 = H*.12 + 40;
+        var col2 = c2 < o2 ? UP : DN, dep = Math.abs(j-mid)/(mid+1.5), x2 = 40 + j*step, bw2 = Math.min(60*SC, step*.58);
         big += '<g class="agB" opacity="'+(1-dep*.35).toFixed(2)+'" style="--agd:'+rg(3,6.5).toFixed(1)+'s;animation-delay:-'+rg(0,6).toFixed(1)+'s;--ab:'+rg(5,12).toFixed(0)+'px;filter:blur('+(dep*2.2).toFixed(1)+'px) drop-shadow(0 0 22px '+col2+'cc)"><line x1="'+(x2+bw2/2)+'" x2="'+(x2+bw2/2)+'" y1="'+hi.toFixed(0)+'" y2="'+lo.toFixed(0)+'" stroke="'+col2+'" stroke-width="5"/><rect x="'+x2+'" y="'+Math.min(o2,c2).toFixed(0)+'" width="'+bw2+'" height="'+Math.max(Math.abs(c2-o2),8).toFixed(0)+'" rx="4" fill="'+col2+'"/></g>'; }
       body = bk+big+'<rect width="'+W+'" height="'+H+'" fill="url(#vg2)"/>'; bgc = "radial-gradient(900px 560px at 50% 55%,#13203a,#05080f 75%)";
     } else {   // 황금 격자 + 시세 전광판
       var hz = H*.46, ps = "";
-      for(var q=-20;q<=20;q++) ps += '<line x1="'+(W/2+q*30)+'" y1="'+hz+'" x2="'+(W/2+q*(land?170:240))+'" y2="'+H+'" stroke="'+GOLD+'" stroke-opacity=".22"/>';
+      for(var q=-20;q<=20;q++) ps += '<line x1="'+(W/2+q*30)+'" y1="'+hz+'" x2="'+(W/2+q*(land ? W*.133 : H*.19))+'" y2="'+H+'" stroke="'+GOLD+'" stroke-opacity=".22"/>';
       ps += '<g id="agHL"></g>';
       var NP = Math.round(W/20), yv = hz-30, raw = [], i3; for(i3=0;i3<=NP;i3++){ yv += gauss(16); raw.push(yv); }
       var lin = raw[NP] - raw[0], pts = [], pts2 = []; for(i3=0;i3<=NP;i3++){ var yy2 = Math.min(hz+50, Math.max(70, raw[i3] - lin*i3/NP)); pts.push((i3*20)+","+yy2.toFixed(0)); pts2.push((W+i3*20)+","+yy2.toFixed(0)); }
@@ -1084,15 +1084,16 @@ html.authlock body > *:not(#authGate){visibility:hidden !important;}
       function tape(y, idx, dur, rev){ var t = "", x = 0, n = 0; while(n < tk.length){ var s2 = tk[idx++ % tk.length]; t += '<text x="'+x+'" y="'+y+'" fill="'+(s2.slice(-1) === "▲" ? UP : DN)+'" font-size="15" font-family="monospace" opacity=".85">'+s2+'</text>'; x += s2.length*10 + 46; n++; }
         var per = x, full = ""; for(var rpt=0; rpt<Math.ceil(W/per)+2; rpt++) full += '<g transform="translate('+(rpt*per)+',0)">'+t+'</g>';
         return '<g class="agS'+(rev ? " agR" : "")+'" style="--agp:-'+per+'px;--agd:'+dur+'s">'+full+'</g>'; }
-      body = '<circle cx="'+W/2+'" cy="'+hz+'" r="'+(land?320:300)+'" fill="url(#sun)"/>'+ps+'<g class="agS" style="--agp:-'+W+'px;--agd:26s"><polyline points="'+pts.concat(pts2.slice(1)).concat([(2*W)+","+yv0(pts)]).join(" ")+'" fill="none" stroke="url(#lg)" stroke-width="4" style="filter:drop-shadow(0 0 10px '+GOLD+')"/></g>'+tape(34,1,38,false)+tape(60,4,52,true)+tape(H-46,7,44,false)+tape(H-20,2,60,true);
+      body = '<circle cx="'+W/2+'" cy="'+hz+'" r="'+(Math.min(W,H)*.45).toFixed(0)+'" fill="url(#sun)"/>'+ps+'<g class="agS" style="--agp:-'+W+'px;--agd:26s"><polyline points="'+pts.concat(pts2.slice(1)).concat([(2*W)+","+yv0(pts)]).join(" ")+'" fill="none" stroke="url(#lg)" stroke-width="4" style="filter:drop-shadow(0 0 10px '+GOLD+')"/></g>'+tape(34,1,38,false)+tape(60,4,52,true)+tape(H-46,7,44,false)+tape(H-20,2,60,true);
       function yv0(a){ return a[0].split(",")[1]; }
       bgc = "linear-gradient(#070b14 0%,#0b1322 45%,#0d1526 100%)";
     }
     var defs = '<defs><radialGradient id="vg" cx=".5" cy=".5" r=".6"><stop offset="0" stop-color="#060a12" stop-opacity=".92"/><stop offset=".7" stop-color="#060a12" stop-opacity=".55"/><stop offset="1" stop-color="#060a12" stop-opacity=".35"/></radialGradient><radialGradient id="vg2" cx=".5" cy=".5" r=".55"><stop offset="0" stop-color="#05080f" stop-opacity=".82"/><stop offset="1" stop-color="#05080f" stop-opacity="0"/></radialGradient><linearGradient id="lg" gradientUnits="userSpaceOnUse" x1="0" x2="'+W+'" y1="0" y2="0"><stop offset="0" stop-color="'+GOLD+'" stop-opacity=".1"/><stop offset=".6" stop-color="#ffd96a"/><stop offset="1" stop-color="#fff2b8"/></linearGradient>'+[GOLD,UP,"#4a8bff",DN].map(function(c,i){ return '<radialGradient id="bk'+i+'"><stop offset="0" stop-color="'+c+'" stop-opacity=".34"/><stop offset=".75" stop-color="'+c+'" stop-opacity=".22"/><stop offset="1" stop-color="'+c+'" stop-opacity="0"/></radialGradient>'; }).join("")+'<radialGradient id="sun" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="'+GOLD+'" stop-opacity=".55"/><stop offset="1" stop-color="'+GOLD+'" stop-opacity="0"/></radialGradient>'+CLIPDEFS+'</defs>';
     var d = document.createElement("div"); d.id = "agBg"; d.style.background = bgc;
     d.innerHTML = '<div class="agP"><svg xmlns="'+ns+'" viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid slice">'+defs+body+'</svg></div><div class="agAu"><i></i><i></i><i></i></div>';
+    var oldBg = g.querySelector("#agBg"); if(oldBg) oldBg.remove();
     g.insertBefore(d, g.firstChild);
-    agParallax(d);
+    if(!g._agRs){ g._agRs = 1; var rt = 0, lw = window.innerWidth, lh = window.innerHeight; window.addEventListener("resize", function(){ clearTimeout(rt); rt = setTimeout(function(){ if(!document.body.contains(g)) return; if(Math.abs(window.innerWidth-lw) < 40 && Math.abs(window.innerHeight-lh) < 120) return; lw = window.innerWidth; lh = window.innerHeight; try{ authBg(g); }catch(e){} }, 250); }); }   // 창 크기가 바뀌면 새 크기로 다시 그림 (모바일 주소창 높이 변화는 무시)
     if(kind === 2){   // 바닥 격자: 가로선이 앞으로 다가오는 효과
       var hl = d.querySelector("#agHL"), hzz = H*.46, NL = 12, t0 = performance.now(), lines = [], ii;
       for(ii=0; ii<NL; ii++){ var ln = document.createElementNS(ns, "line"); ln.setAttribute("x1", 0); ln.setAttribute("x2", W); ln.setAttribute("stroke", GOLD); hl.appendChild(ln); lines.push(ln); }
@@ -1104,20 +1105,6 @@ html.authlock body > *:not(#authGate){visibility:hidden !important;}
         if(!still) requestAnimationFrame(frame);
       })(performance.now());
     }
-  }
-  function agParallax(d){   // 마우스(PC) · 기기 기울기(안드로이드 등)를 따라 배경이 살짝 움직이는 깊이감
-    var P = d.querySelector(".agP"), A = d.querySelector(".agAu"); if(!P || !A) return;
-    if(window.matchMedia && matchMedia("(prefers-reduced-motion:reduce)").matches) return;
-    var tx = 0, ty = 0, cx = 0, cy = 0;
-    window.addEventListener("pointermove", function(e){ if(e.pointerType === "touch") return; tx = e.clientX / window.innerWidth - .5; ty = e.clientY / window.innerHeight - .5; }, {passive:true});
-    window.addEventListener("deviceorientation", function(e){ if(e.gamma == null || e.beta == null) return; tx = Math.max(-.5, Math.min(.5, e.gamma / 60)); ty = Math.max(-.5, Math.min(.5, (e.beta - 45) / 90)); }, {passive:true});
-    (function loop(){
-      if(!document.body.contains(d)) return;
-      cx += (tx - cx) * .06; cy += (ty - cy) * .06;
-      P.style.transform = "translate3d("+(-cx*34).toFixed(2)+"px,"+(-cy*24).toFixed(2)+"px,0)";
-      A.style.transform = "translate3d("+(cx*70).toFixed(2)+"px,"+(cy*50).toFixed(2)+"px,0)";
-      requestAnimationFrame(loop);
-    })();
   }
   function gate(msg){
     root.classList.add("authlock");
