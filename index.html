@@ -2025,14 +2025,14 @@ function fundAnim(idxs, amount, cfg, done){
   T(()=>{ each(v=>v.ov.remove()); fin(); syncSetOv(); notify(cfg.msg); done && done(); }, 3400);
 }
 function depositAnim(amount, done){
-  fundAnim([0], amount, {title:"입금", acct:"보험금 계좌", steps:["입금 요청 접수","자금 이체 확인","계좌에 반영"], fin:"입금이 완료되었어요", msg:"보험금 계좌에 "+fmtMoney(amount)+"가 입금되었어요."}, done);
+  fundAnim([0], amount, {title:"입금", acct:"보험금 계좌", steps:["입금 요청 접수","자금 이체 확인","계좌에 반영"], fin:"입금이 완료되었어요", msg:"보험금 계좌에 "+fmtMoney(amount)+" 입금이 완료되었어요."}, done);
 }
 /* 챌린지/펀딩 금액을 고르면 두 계좌(A·B)에 자금이 채워지는 연출 */
 function grantAnim(){
   const F = FUND(), amt = F ? fdKind() : chKind(); if(!amt) return;
   const nm = F ? "펀딩" : "챌린지";
   state.panes[1].balance = 0; state.panes[2].balance = 0; render();
-  fundAnim([1,2], amt, {title:nm+" 자금 지급", acct:"모의계좌", steps:["신청 접수","계좌 확인","자금 지급 반영"], fin:"계정 로그인이 완료되었어요", msg:nm+" A·B 계좌에 "+fmtMoney(amt)+"가 지급되었어요."}, null);
+  fundAnim([1,2], amt, {title:nm+" 자금 지급", acct:"모의계좌", steps:["신청 접수","계좌 확인","자금 지급 반영"], fin:"계정 로그인이 완료되었어요", msg:nm+" A·B 계좌에 "+fmtMoney(amt)+" 지급이 완료되었어요."}, null);
 }
 function depositIns(){
   const inp = document.getElementById("inpInsCap");
@@ -3755,9 +3755,9 @@ const TPL = [
  [/^거래 (\d+)회 · 평가금 (.+) \(초기 (.+)\)$/, ["$1 trades · Equity $2 (initial $3)","取引 $1回 · 評価額 $2(初期 $3)","交易 $1 次 · 净值 $2(初始 $3)"]],
  [/^손익 (.+?)\s+·\s+수수료 -(.+)$/, ["P/L $1  ·  Fees -$2","損益 $1  ·  手数料 -$2","盈亏 $1  ·  手续费 -$2"]],
  [/^저장 (.+?) · 시세 (.+?) \(KST\) · 손익은 수수료 제외, 실현 = 손익 − 수수료$/, ["Saved $1 · Quotes $2 (KST) · P/L excludes fees, Realized = P/L − fees","保存 $1 · 相場 $2(KST) · 損益は手数料を除く、実現=損益−手数料","保存 $1 · 行情 $2(KST) · 盈亏不含手续费，已实现 = 盈亏 − 手续费"]],
- [/^보험금 계좌에 (.+)가 입금되었어요\.$/, ["$1 was deposited into the Insurance account.","保険金口座に$1が入金されました。","$1 已存入保险金账户。"]],
- [/^챌린지 A·B 계좌에 (.+)가 지급되었어요\.$/, ["Challenge A·B accounts were credited with $1.","チャレンジA·B口座に$1が支給されました。","挑战 A·B 账户已发放 $1。"]],
- [/^펀딩 A·B 계좌에 (.+)가 지급되었어요\.$/, ["Funding A·B accounts were credited with $1.","ファンディングA·B口座に$1が支給されました。","资金 A·B 账户已发放 $1。"]],
+ [/^보험금 계좌에 (.+) 입금이 완료되었어요\.$/, ["$1 was deposited into the Insurance account.","保険金口座に$1が入金されました。","$1 已存入保险金账户。"]],
+ [/^챌린지 A·B 계좌에 (.+) 지급이 완료되었어요\.$/, ["Challenge A·B accounts were credited with $1.","チャレンジA·B口座に$1が支給されました。","挑战 A·B 账户已发放 $1。"]],
+ [/^펀딩 A·B 계좌에 (.+) 지급이 완료되었어요\.$/, ["Funding A·B accounts were credited with $1.","ファンディングA·B口座に$1が支給されました。","资金 A·B 账户已发放 $1。"]],
  [/^변동폭 ×(.+)$/, ["Volatility ×$1","変動幅 ×$1","波动幅度 ×$1"]],
  [/^(.+) 트레이더$/, ["$1 Trader","$1 トレーダー","$1 交易员"]],
  [/^(.+) · 모의계좌$/, ["$1 · Demo account","$1 · デモ口座","$1 · 模拟账户"]],
