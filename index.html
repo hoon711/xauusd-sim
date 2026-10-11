@@ -270,7 +270,12 @@ header{display:flex;flex-direction:column;gap:12px;}
 .title-row h1 span{color:var(--gold);}
 .themegrp{margin-left:0;display:flex;gap:2px;background:var(--panel-bg);border:1px solid var(--border);border-radius:8px;padding:2px;}
 .themebtn{font-family:var(--font-ui);font-size:.74rem;font-weight:600;padding:4px 12px;border-radius:6px;border:none;background:transparent;color:var(--muted);cursor:pointer;}
-#btnFs{white-space:nowrap;padding:4px 10px;font-size:.74rem;margin-left:0;}
+#btnFs{white-space:nowrap;margin-left:0;}
+/* 언어 선택 · 설명 · 전체화면은 같은 크기 */
+#selLang,#btnGuide,#btnFs{box-sizing:border-box;height:26px;padding-top:0;padding-bottom:0;font-size:.78rem;line-height:1;display:inline-flex;align-items:center;}
+#btnGuide,#btnFs{padding-left:12px;padding-right:12px;}
+@media (max-width:760px){ #selLang,#btnGuide,#btnFs{height:34px;font-size:.78rem;} #btnGuide,#btnFs{padding-left:14px;padding-right:14px;} }
+.settings > #btnFs{align-self:center;flex:none;}
 #btnFs.active{background:var(--buy);border-color:var(--buy);color:#fff;}
 .themegrp{gap:5px;padding:5px 7px;align-items:center;}
 .themebtn{width:18px;height:18px;padding:0;border-radius:50%;font-size:0;line-height:0;color:transparent;border:2px solid var(--border-strong);background-clip:padding-box;position:relative;}
@@ -298,6 +303,19 @@ header{display:flex;flex-direction:column;gap:12px;}
 .ctlrow .sep{width:1px;height:22px;background:var(--border-strong);margin:0 6px;flex:none;}
 .ampbox{gap:8px;} .ampbox > span{font-weight:700;color:var(--fg);}
 .stat.optbox .k{white-space:nowrap;font-size:.74rem;font-weight:600;}
+/* 모바일: 옵션 상자 접기/펴기 */
+.optHead{display:contents;}
+@media (max-width:760px){
+  .stat.optbox{flex-wrap:wrap;align-items:center;row-gap:8px;}
+  .stat.optbox .optHead{display:flex;align-items:center;justify-content:space-between;gap:10px;flex:1 1 100%;}
+  .stat.optbox .optHead .k{cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:6px 4px;font-size:.9rem;-webkit-tap-highlight-color:transparent;user-select:none;}
+  .stat.optbox .optHead .k::after{content:"\25BE";font-size:1.5rem;line-height:1;opacity:.9;transition:transform .15s;}
+  .stat.optbox:not(.collapsed) .optHead .k::after{transform:rotate(180deg);}
+  .stat.optbox.collapsed .ctlrow{display:none;}
+  .stat.optbox .ctlrow{flex:1 1 100%;}
+  .stat.speedbox .patgrp{gap:6px;} .stat.speedbox .patgrp .btn{padding:9px 9px;font-size:.78rem;white-space:nowrap;}
+}
+
 .stat .btn{padding:4px 11px;font-size:.8rem;}
 .stat .check{font-size:.78rem;}
 .stat{background:var(--panel-bg);border:1px solid var(--border);border-radius:8px;padding:8px 10px;min-width:0;}
@@ -753,6 +771,7 @@ tr.openrow td.tag{color:var(--warn);font-weight:600;}
   .themegrp{margin-left:0;}
   .title-row .sub{display:none;}
   .settings{margin-left:0;width:100%;flex-direction:column;gap:8px;}
+  .settings > #btnFs{align-self:flex-end;}
   .cfg{flex-wrap:wrap;row-gap:6px;padding:8px 10px;}
   .cfg.mk{margin-left:0;padding:8px 10px;}
   .cfg select{font-size:.85rem;padding:7px 6px;}
@@ -886,7 +905,7 @@ tr.openrow td.tag{color:var(--warn);font-weight:600;}
             <button class="btn speed" data-speed="20">20x</button>
           </div>
           <button class="btn ghost" id="btnNew">새로 시작</button>
-          <span class="patgrp"><button class="btn ghost" id="btnPat" title="실제 XAUUSD 차트 15개 중 하나와 시작 시간대를 랜덤으로 골라 새로 시작해요 (수백 가지 이상의 다른 패턴)">패턴 변경</button><button class="btn ghost" id="btnMode" title="보험금·챌린지 모드와 펀딩 A·B 모드를 바꿔요 (새로 시작돼요)">🔁 펀딩 모드</button></span>
+          <span class="patgrp"><button class="btn ghost" id="btnPat" title="실제 XAUUSD 차트 15개 중 하나와 시작 시간대를 랜덤으로 골라 새로 시작해요 (수백 가지 이상의 다른 패턴)">패턴 변경</button><button class="btn ghost" id="btnMode" title="보험금·챌린지 모드와 펀딩 A·B 모드를 바꿔요 (새로 시작돼요)">🔁 펀딩 모드</button><button class="btn ghost" id="btnPng" title="보험금 계좌의 거래내역을 이미지로 공유해요 (모바일: 카톡·문자·텔레그램 등 / PC: 이미지로 저장)">거래내역 공유</button></span>
         </div>
       </div>
       <div class="stat optbox">
@@ -900,15 +919,12 @@ tr.openrow td.tag{color:var(--warn);font-weight:600;}
           <label class="check" title="버튼 클릭, 진입, 익절·손절·강제청산 때 효과음이 나요"><input type="checkbox" id="chkSnd" checked> 효과음</label>
           <span class="sep"></span>
           <label class="check ampbox" title="실제 차트의 움직임을 이 배수만큼 키워요. 바꾸면 그 순간부터 앞으로 그려지는 캔들에 바로 적용돼요"><span>변동폭</span> <select id="selAmp" style="font-family:var(--font-ui);font-size:.78rem;background:var(--panel-bg-2);color:var(--fg);border:1px solid var(--border);border-radius:6px;padding:3px 4px;"><option value="1" selected>1배 (실제)</option><option value="1.5">1.5배</option><option value="2">2배</option><option value="3">3배</option><option value="4">4배</option></select></label>
-          <span class="sep"></span>
-          <button class="btn ghost" id="btnCloseAll">전체 청산</button>
-          <button class="btn ghost" id="btnPng" title="보험금 계좌의 거래내역을 이미지로 공유해요 (모바일: 카톡·문자·텔레그램 등 / PC: 이미지로 저장)">거래내역 공유</button>
           <input type="text" id="pngName" hidden maxlength="20" placeholder="트레이더 이름" title="트레이더 이름: 히스토리 PNG 상단과 파일 이름에 표시돼요 (선택)" style="font-family:var(--font-ui);font-size:.78rem;width:106px;box-sizing:border-box;background:var(--panel-bg-2);color:var(--fg);border:1px solid var(--border);border-radius:6px;padding:6px 7px;">
           <span class="sep"></span>
           <div class="themegrp" role="group" aria-label="테마"><button class="themebtn active" data-theme-set="mt5" title="MT5 클래식" aria-label="MT5 클래식"></button><button class="themebtn" data-theme-set="khaki" title="카키" aria-label="카키"></button><button class="themebtn" data-theme-set="pink" title="핑크" aria-label="핑크"></button><button class="themebtn" data-theme-set="win11" title="윈도우11" aria-label="윈도우11"></button></div>
           <select id="selLang" title="언어" aria-label="언어" style="font-family:var(--font-ui);font-size:.78rem;background:var(--panel-bg-2);color:var(--fg);border:1px solid var(--border);border-radius:6px;padding:5px 4px;"><option value="ko">한국어</option><option value="en">English</option><option value="ja">日本語</option><option value="zh">中文</option><option value="vi">Tiếng Việt</option></select>
-          <button class="btn ghost" id="btnFs" title="전체화면 켜기/끄기 (Esc로 해제)">전체화면</button>
           <button class="btn ghost" id="btnGuide" title="각 기능의 설명을 말풍선으로 보여줘요">❓ 설명</button>
+          <button class="btn ghost" id="btnFs" title="전체화면 켜기/끄기 (Esc로 해제)">전체화면</button>
         </div>
       </div>
     </div>
@@ -3300,9 +3316,6 @@ function wireEvents(){
     if(leg){ closeLeg(idx, leg, "수동청산"); render(); }
   });
   document.getElementById("chkFit").addEventListener("change", ()=>{ drawPaneCharts(); });
-  document.getElementById("btnCloseAll").addEventListener("click", ()=>{
-    state.panes.forEach((_,idx)=> closePosition(idx,"전체청산"));
-  });
   document.querySelectorAll(".btn.speed").forEach(btn=>{
     btn.addEventListener("click", ()=>{
       document.querySelectorAll(".btn.speed").forEach(b=>b.classList.remove("active"));
@@ -3887,7 +3900,6 @@ const GUIDE = [
  [()=>document.getElementById("chkFit").closest("label"),"TP/SL 보이게","켜면 포지션이 있을 때 진입·TP·SL 라인이 모두 보이도록 차트 가격 범위를 자동으로 넓혀요"],
  [()=>document.getElementById("chkSnd").closest("label"),"효과음","버튼 클릭, 진입, 익절·손절·강제청산 때 효과음이 나요"],
  [".ampbox","변동폭","실제 차트의 움직임을 이 배수만큼 키워요. 바꾸면 그 순간부터 앞으로 그려지는 캔들에 바로 적용돼요"],
- ["#btnCloseAll","전체 청산","열려 있는 모든 계좌의 포지션을 한꺼번에 청산해요."],
  ["#btnPng","거래내역 공유","보험금 계좌의 거래내역을 이미지로 만들어요. 누르면 트레이더 이름을 물어보고, 모바일에서는 카카오톡·문자·텔레그램 등으로 바로 공유할 수 있어요. PC에서는 이미지 파일로 저장돼요."],
  [".themegrp","테마","화면 색 테마를 바꿔요 (다크 · 카키 · 핑크 · 윈도우11 · MT5)."],
  ["#selLang","언어","화면 언어를 바꿔요 (한국어 · English · 日本語 · 中文 · Tiếng Việt)."],
@@ -3918,6 +3930,7 @@ function closeGuide(){ const gn = document.getElementById("guideNote"); if(gn) g
 function _gKey(e){ if(e.key === "Escape"){ e.stopPropagation(); closeGuide(); } }
 function openGuide(){
   if(_gOv){ closeGuide(); return; }
+  { const ob0 = document.querySelector(".stat.optbox"); if(ob0 && matchMedia("(max-width:760px)").matches) ob0.classList.remove("collapsed"); }   // 모바일: 옵션을 펼쳐야 설명 대상이 보임
   const body = document.body, ov = document.createElement("div");
   ov.id = "guideOv"; body.appendChild(ov); _gOv = ov;
   const ob = ov.getBoundingClientRect(), sc = (ob.width / ov.offsetWidth) || 1;
@@ -4032,6 +4045,34 @@ function initGuide(){
   setTimeout(()=>{ if(tip) tip.classList.add("fade"); }, 60000);
 }
 
+
+/* 모바일: 옵션은 접어 두고(기본), 설명 버튼은 옵션 머리줄에 둔다 (PC는 원래 배치 유지) */
+function initMobileOpts(){
+  const ob = document.querySelector(".stat.optbox"); if(!ob) return;
+  const k = ob.querySelector(".k"), row = ob.querySelector(".ctlrow");
+  if(!k || !row) return;
+    const gb = document.getElementById("btnGuide"); const phG = document.createElement("span"); phG.hidden = true; (gb.closest(".guideWrap") || gb).parentNode.insertBefore(phG, gb.closest(".guideWrap") || gb);
+  const fs = document.getElementById("btnFs"), phF = document.createElement("span"); phF.hidden = true; if(fs){ fs.parentNode.insertBefore(phF, fs); }
+  const setEl = document.querySelector(".title-row .settings");
+  const mq = matchMedia("(max-width:760px)"); let head = null, first = true;
+  const guideNode = ()=> gb.closest(".guideWrap") || gb;
+  function apply(){
+    if(mq.matches){
+      if(!head){ head = document.createElement("div"); head.className = "optHead"; ob.insertBefore(head, ob.firstChild); head.appendChild(k); }
+      head.appendChild(guideNode());
+      if(fs && setEl) setEl.insertBefore(fs, setEl.firstChild);   // 모바일: 옵션 밖(맨 위)에 항상 보이게
+      if(first){ first = false; ob.classList.add("collapsed"); }
+    } else {
+      if(head){ ob.insertBefore(k, head); head.remove(); head = null; }
+      phG.parentNode.insertBefore(guideNode(), phG);
+      if(fs) phF.parentNode.insertBefore(fs, phF);
+      ob.classList.remove("collapsed");
+    }
+  }
+  k.addEventListener("click", ()=>{ if(mq.matches) ob.classList.toggle("collapsed"); });
+  (mq.addEventListener ? mq.addEventListener("change", apply) : mq.addListener(apply));
+  apply();
+}
 /* ---------------- boot ---------------- */
 function start(initial){
   buildPanes();
@@ -4040,6 +4081,7 @@ function start(initial){
   newGame();   // 첫 시작도 랜덤 세션/시각으로
   initI18n();
   initGuide();
+  initMobileOpts();
 }
 if(window.claude?.hot?.ready){ window.claude.hot.ready(start); } else { start({}); }
 
