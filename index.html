@@ -582,13 +582,13 @@ canvas.pane-chart{touch-action:pan-y;cursor:crosshair;position:absolute;inset:0;
 .price-box.top .spread .pv{font-size:.9rem;}
 
 /* 펀딩 모드: 펀딩 A·B도 보험금처럼 SELL | Spread | BUY 시세 상자로 표시하고, 누르면 진입 */
-body.fund .pane.ch .price-box.top{grid-template-columns:1fr 48px 1fr;left:calc(50% - 24px);gap:0;background:var(--float-bg);border:1px solid var(--border);border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.45);overflow:hidden;}
+body.fund .pane.ch .price-box.top{grid-template-columns:1fr 48px 1fr;left:50%;gap:0;background:var(--float-bg);border:1px solid var(--border);border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.45);overflow:hidden;}
 body.fund .pane.ch .price-box.top .spread{display:flex;padding:0 4px;}
 body.fund .pane.ch .price-box.top button .pv{display:block;font-size:.9rem;}
 body.fund .pane.ch .price-box.top button{min-width:82px;padding:3px 10px;gap:0;border-radius:0;box-shadow:none;cursor:pointer;}
 body.fund .pane.ch .price-box.top button .pl{font-size:.8rem;font-weight:700;opacity:1;}
 /* 보험금 차트의 SELL/BUY는 시세 표시용: 작게, 누를 수 없게 */
-.pane.ins .price-box.top{grid-template-columns:1fr 58px 1fr;left:calc(50% - 29px);opacity:.92;}
+.pane.ins .price-box.top{grid-template-columns:1fr 58px 1fr;left:50%;opacity:.92;}
 .pane.ins .price-box.top button{min-width:104px;padding:6px 14px;gap:1px;cursor:default;pointer-events:none;filter:saturate(.75);}
 .pane.ins .price-box.top .spread{padding:0 4px;}
 .pane.ins .price-box.top button .pl{font-size:.95rem;font-weight:700;}
