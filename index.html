@@ -991,8 +991,9 @@ html.authlock body > *:not(#authGate){visibility:hidden !important;}
 #authGate #agBg .agAu i:nth-child(2){right:-16%;bottom:-26%;background:radial-gradient(closest-side,rgba(60,120,255,.5),transparent);--agd:28s;animation-delay:-9s;}
 #authGate #agBg .agAu i:nth-child(3){left:30%;top:35%;width:44vmax;height:44vmax;background:radial-gradient(closest-side,rgba(46,204,143,.28),transparent);--agd:34s;animation-delay:-17s;}
 @keyframes agFloat{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(6vmax,4vmax) scale(1.12);}66%{transform:translate(-4vmax,7vmax) scale(.92);}}
-@keyframes agIn{from{opacity:0;}to{opacity:1;}}
+@keyframes agIn{from{opacity:0;transform:translateY(22px) scale(.97);}to{opacity:1;transform:none;}}
 @keyframes agSweep{from{background-position:130% 0;}to{background-position:-30% 0;}}
+html.xlReady #authGate .agbox{animation:agIn .8s cubic-bezier(.2,.8,.2,1) both;}   /* 번역·높이가 확정된 뒤에 등장 */
 html:not(.xlReady) #authGate .agbox{visibility:hidden;}   /* 번역이 적용되기 전(한국어 원문 상태)에는 카드를 숨겨 높이 변화로 출렁이는 것을 막음 */
 #authGate .agbox::before{content:"";position:absolute;inset:0;border-radius:18px;padding:1.5px;pointer-events:none;background:linear-gradient(115deg,transparent 38%,rgba(255,217,106,.95) 50%,transparent 62%) 130% 0/260% 100% no-repeat;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:agSweep 1.8s .55s ease-out both;}
 @media (prefers-reduced-motion:reduce){#authGate #agBg *,#authGate .agbox,#authGate .agbox::before{animation:none !important;}}
