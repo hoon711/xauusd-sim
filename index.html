@@ -993,8 +993,8 @@ html.authlock body > *:not(#authGate){visibility:hidden !important;}
 @keyframes agFloat{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(6vmax,4vmax) scale(1.12);}66%{transform:translate(-4vmax,7vmax) scale(.92);}}
 @keyframes agIn{from{opacity:0;}to{opacity:1;}}
 @keyframes agSweep{from{background-position:130% 0;}to{background-position:-30% 0;}}
-#authGate .agbox{animation:agIn .5s ease-out both;}
-#authGate .agbox::before{content:"";position:absolute;inset:0;border-radius:18px;padding:1.5px;pointer-events:none;background:linear-gradient(115deg,transparent 38%,rgba(255,217,106,.95) 50%,transparent 62%) 130% 0/260% 100% no-repeat;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:none;opacity:0;}
+#authGate .agbox{}
+#authGate .agbox::before{content:"";position:absolute;inset:0;border-radius:18px;padding:1.5px;pointer-events:none;background:linear-gradient(115deg,transparent 38%,rgba(255,217,106,.95) 50%,transparent 62%) 130% 0/260% 100% no-repeat;-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:agSweep 1.8s .55s ease-out both;}
 @media (prefers-reduced-motion:reduce){#authGate #agBg *,#authGate .agbox,#authGate .agbox::before{animation:none !important;}}
 #authGate #agLang{display:block;margin:-12px 0 10px auto;font:inherit;font-size:.74rem;padding:4px 6px;border-radius:8px;background:var(--panel-bg-2,#111a28);color:var(--fg,#e7edf7);border:1px solid var(--border-strong,#2a3850);width:auto;text-align:left;}
 #authGate .agbrand{font-size:.78rem;letter-spacing:.14em;color:var(--muted,#7c8aa3);font-weight:700;}
