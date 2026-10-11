@@ -621,6 +621,7 @@ td.dbuy,tr.openrow td.dbuy{color:var(--profit);font-weight:600;} td.dsell,tr.ope
 tr.openrow td.up{color:var(--profit);} tr.openrow td.bad{color:var(--bad);}
 tr.openrow td.tag{color:var(--warn);font-weight:600;}
 .closing{color:var(--warn);font-size:.7rem;}
+.ampnote{color:var(--gold);font-size:.68rem;white-space:nowrap;font-weight:700;margin-left:2px;}
 .lagnote{color:var(--faint);font-size:.68rem;white-space:nowrap;} .lagnote .up{color:var(--profit);} .lagnote .bad{color:var(--bad);}
 .legclose{font-family:var(--font-ui);font-weight:700;font-size:.68rem;border-radius:4px;border:1px solid var(--sell);background:var(--sell);color:#fff;padding:2px 9px;cursor:pointer;}
 .log-scroll{position:relative;}
@@ -649,9 +650,9 @@ tr.openrow td.tag{color:var(--warn);font-weight:600;}
 @media (max-width:760px){#pngSheet .pnghead span{flex:1 1 100%;order:3;}}
 #pngSheet .pngact{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
 #pngSheet img{display:block;max-width:100%;height:auto;border-radius:6px;-webkit-touch-callout:default;-webkit-user-select:auto;user-select:auto;}
-#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);max-width:min(720px,92vw);background:var(--panel-bg);color:var(--warn);border:1px solid var(--border-strong);border-radius:10px;padding:10px 16px;font-size:calc(.84rem + 1px);line-height:1.45;box-shadow:0 8px 28px rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:50;}
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);max-width:min(720px,92vw);background:var(--panel-bg);color:var(--warn);border:1px solid var(--border-strong);border-radius:10px;padding:10px 16px;font-size:calc(.84rem + 1px);line-height:1.45;box-shadow:0 8px 28px rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:10010;}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
-@media (max-width:760px){#toast{bottom:84px;z-index:95;}}
+@media (max-width:760px){#toast{bottom:84px;}}
 #btnCloseAll{background:rgba(229,72,77,.16);border-color:rgba(229,72,77,.7);color:#ff8a8d;}
 #btnCloseAll:hover:not(:disabled){background:rgba(229,72,77,.3);}
 #btnRail{background:rgba(47,111,237,.16);border-color:rgba(47,111,237,.7);color:#8db4ff;}
@@ -1684,7 +1685,7 @@ function historyPng(){   // 4:3 (1200×900) 공유용 카드: 모바일에서 �
     // TP/SL 표시 (보험금의 연동 청산은 '연동 TP/SL') — 알약
     const linked = t.reason === "연동청산", rr = linked ? (t.cause || "") : (t.reason || "");
     const tag = rr === "익절" ? [linked ? "연동 TP" : "TP", linked ? C.fg : C.up] : rr === "손절" ? [linked ? "연동 SL" : "SL", linked ? C.fg : C.bad] : null;
-    if(tag){ x.font = "800 20px "+FONT; const tw = x.measureText(tag[0]).width + 22, tx = PX+176+dw+12; pill(tx, cy-15, tw, 30, tag[1], .16); x.textAlign = "center"; x.fillStyle = tag[1]; x.fillText(tag[0], tx+tw/2, cy+1); }
+    if(false && tag){ x.font = "800 20px "+FONT; const tw = x.measureText(tag[0]).width + 22, tx = PX+176+dw+12; pill(tx, cy-15, tw, 30, tag[1], .16); x.textAlign = "center"; x.fillStyle = tag[1]; x.fillText(tag[0], tx+tw/2, cy+1); }
     x.textAlign = "left"; x.fillStyle = C.mute; x.font = "24px "+MONO; x.fillText("-"+fmtMoney(t.fee||0), PX+790, cy);
     // 손익: 색 알약 배경
     const pc = net(t)>=0 ? C.up : C.bad, ptxt = sgn(net(t));
@@ -2195,7 +2196,7 @@ function calcPnl(pos, exitPrice){
 function logTrade(paneIdx, pos, exit, pnl, reason, extra){
   state.trades.unshift({
     tick: state.tick, sec: state.sec, openSec: pos.openSec, src: pos.src, pane: paneIdx, dir: pos.dir, lot: pos.lot,
-    openTick: pos.openTick, cause: pos.cause, entry: pos.entry, exit: exit, pnl: pnl, reason: reason, lag: extra ? extra.lag : null, slip: extra ? extra.slip : 0, fee: extra ? (extra.fee||0) : 0
+    openTick: pos.openTick, cause: pos.cause, entry: pos.entry, exit: exit, pnl: pnl, reason: reason, lag: extra ? extra.lag : null, slip: extra ? extra.slip : 0, fee: extra ? (extra.fee||0) : 0, amp: ampK()
   });
   renderLog();
 }
@@ -2615,9 +2616,11 @@ function renderPanes(){
 
 function fmtClock(sec){ sec = Math.floor(sec/TPS); return Math.floor(sec/60) + ":" + String(sec%60).padStart(2,"0"); }
 function p_open(idx){ return state.panes[idx].legs.length; }
+function ampTxt(t){ return t.amp > 1.0001 ? "변동폭 ×"+(+t.amp.toFixed(2)) : ""; }   // 변동폭 1배 초과일 때만 표기
 function slipHtml(t){
-  if(t.lag == null || t.lag <= 0) return "";
-  return ' <span class="lagnote">'+t.lag.toFixed(2)+'초</span>';   // 슬립 금액은 표시하지 않음
+  const at = ampTxt(t), ah = at ? ' <span class="ampnote">'+at+'</span>' : "";
+  if(t.lag == null || t.lag <= 0) return ah;
+  return ' <span class="lagnote">'+t.lag.toFixed(2)+'초</span>'+ah;   // 슬립 금액은 표시하지 않음
 }
 function legWho(l){ return ""; }
 let openSig = {};
@@ -2896,7 +2899,7 @@ function drawCandles(canvas, candles, opts){
         ctx.save(); ctx.setLineDash([2,3]); ctx.strokeStyle = col; ctx.globalAlpha = .75; ctx.lineWidth = 1.2;
         ctx.beginPath(); ctx.moveTo(xe, ye); ctx.lineTo(xx, yx); ctx.stroke(); ctx.restore();
         arrow(xx, yx, !buy, colOf(buy ? "SELL" : "BUY"));   // MT5: 청산은 반대 방향 거래 화살표
-        hits.push({x: xx, y: yx + (buy ? -9 : 9), kind: "청산", dir: buy ? "SELL" : "BUY", lot: t.lot, price: t.exit, sec: t.sec, pnl: t.pnl - (t.fee||0), reason: t.reason, col: colOf(buy ? "SELL" : "BUY")});
+        hits.push({x: xx, y: yx + (buy ? -9 : 9), kind: "청산", dir: buy ? "SELL" : "BUY", lot: t.lot, price: t.exit, sec: t.sec, pnl: t.pnl - (t.fee||0), reason: t.reason, amp: ampTxt(t), col: colOf(buy ? "SELL" : "BUY")});
       }
       arrow(xe, ye, buy, col);
       hits.push({x: xe, y: ye + (buy ? 9 : -9), kind: "진입", dir: dir, lot: t.lot, price: entry, sec: t.openSec, col: col});
@@ -3172,7 +3175,7 @@ function wireEvents(){
       row("수량", best.lot.toFixed(2)+" lot");
       row("가격", fmtPrice(best.price));
       row("시간", kstFull(best.sec));
-      if(best.kind === "청산"){ row("손익", (best.pnl>=0?"+":"")+fmtMoney(best.pnl), best.pnl>=0?"up":"bad"); if(best.reason) row("사유", best.reason); }
+      if(best.kind === "청산"){ row("손익", (best.pnl>=0?"+":"")+fmtMoney(best.pnl), best.pnl>=0?"up":"bad"); if(best.reason) row("사유", best.reason + (best.amp ? " · "+tr(best.amp) : "")); }
       tipEl.style.display = "block";
       const tw = tipEl.offsetWidth, th = tipEl.offsetHeight;
       tipEl.style.left = Math.min(window.innerWidth-tw-8, e.clientX+14)+"px"; tipEl.style.top = Math.max(4, e.clientY-th-10)+"px";
@@ -3676,6 +3679,7 @@ const TPL = [
  [/^보험금 계좌에 (.+)가 입금되었어요\.$/, ["$1 was deposited into the Insurance account.","保険金口座に$1が入金されました。","$1 已存入保险金账户。"]],
  [/^챌린지 A·B 계좌에 (.+)가 지급되었어요\.$/, ["Challenge A·B accounts were credited with $1.","チャレンジA·B口座に$1が支給されました。","挑战 A·B 账户已发放 $1。"]],
  [/^펀딩 A·B 계좌에 (.+)가 지급되었어요\.$/, ["Funding A·B accounts were credited with $1.","ファンディングA·B口座に$1が支給されました。","资金 A·B 账户已发放 $1。"]],
+ [/^변동폭 ×(.+)$/, ["Volatility ×$1","変動幅 ×$1","波动幅度 ×$1"]],
  [/^(.+) 트레이더$/, ["$1 Trader","$1 トレーダー","$1 交易员"]],
  [/^(.+) · 모의계좌$/, ["$1 · Demo account","$1 · デモ口座","$1 · 模拟账户"]],
  [/^증거금 부족 — 보험금 필요 (.+) \/ 가용 (.+) \(양쪽 모두 진입하지 않았어요\)$/, ["Not enough margin — Insurance needs $1 / available $2 (neither side was entered)","証拠金不足 — 保険金に必要 $1 / 利用可能 $2(両方ともエントリーしませんでした)","保证金不足 — 保险金需要 $1 / 可用 $2(两边均未开仓)"]],
