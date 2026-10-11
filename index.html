@@ -2908,7 +2908,7 @@ function drawCandles(canvas, candles, opts){
     lo = Math.min(...ticks); hi = Math.max(...ticks);
   } else {
     candles = aggregate(candles, parseInt(tf, 10) || 1);
-    const rightGap = opts.sz === "m" ? Math.round(plotW*0.15) : 0;   // 보통 크기: 최근 캔들 오른쪽에 여백
+    const rightGap = opts.sz === "m" ? Math.round(plotW*0.08) : 0;   // 보통 크기: 최근 캔들 오른쪽에 여백
     const maxVisible = Math.max(1, Math.floor((plotW - rightGap) / CANDLE_W));
     const nAll = candles.length;
     const maxOff = Math.max(0, nAll-maxVisible);
