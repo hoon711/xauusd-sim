@@ -490,12 +490,12 @@ body.fund #btnMode{background:rgba(160,107,255,.18);}
 @media (max-width:760px){ .cfg.ins .capwrap{width:100%;margin:0;} .cfg.ins .capwrap input{flex:1;min-width:0;width:auto;font-size:.8rem;padding:7px 8px;} .cfg.ins .capwrap .btn{padding:0 22px;font-size:.92rem;font-weight:700;} .cfg.ins .capwrap input{padding:0 8px;} .cfg.ins .capwrap .btn,.cfg.ins .capwrap input,.cfg.ins select,.cfg.ch select{height:40px;box-sizing:border-box;} }
 .setov{position:absolute;inset:0;z-index:6;display:none;align-items:center;justify-content:center;pointer-events:none;}
 .setov.show{display:flex;}
-.setov .sbox{pointer-events:auto;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;padding:16px 24px;border-radius:12px;background:color-mix(in srgb,var(--panel-bg) 90%,transparent);border:1px solid var(--border-strong);box-shadow:0 8px 28px rgba(0,0,0,.4);max-width:88%;}
+.setov .sbox{pointer-events:auto;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;padding:16px 34px;border-radius:12px;background:color-mix(in srgb,var(--panel-bg) 90%,transparent);border:1px solid var(--border-strong);box-shadow:0 8px 28px rgba(0,0,0,.4);max-width:88%;}
 .setov .st{font-size:1.02rem;color:var(--gold);font-family:var(--font-ui);}
 .setov[data-set="ch"] .st{color:var(--role-ch,var(--buy));}
 .setov[data-set="fd"] .st{color:#b992ff;}
-.setov .ss{font-size:.78rem;color:var(--muted);line-height:1.45;font-family:var(--font-ui);}
-.pane.ch .setov .sbox{padding:10px 16px;gap:5px;max-width:92%;}
+.setov .ss{font-size:.86rem;color:var(--muted);line-height:1.45;font-family:var(--font-ui);}
+.pane.ch .setov .sbox{padding:10px 26px;gap:5px;max-width:92%;}
 .setov .btn.primary{animation:setPulse 1.6s ease-in-out infinite;}
 .setov .sbox.nudge{animation:setNudge .45s;}
 @keyframes setPulse{0%,100%{box-shadow:0 0 0 0 rgba(232,182,74,.55);}60%{box-shadow:0 0 0 9px rgba(232,182,74,0);}}
@@ -551,6 +551,17 @@ canvas.pane-chart{touch-action:pan-y;cursor:crosshair;position:absolute;inset:0;
 .ea-body.collapsed{display:none;}
 .ea-row{display:grid;grid-template-columns:38px 1fr;align-items:center;border-top:1px solid var(--border);}
 .ea-row .lab{font-size:.92rem;font-weight:700;color:var(--muted);padding:4px 0 4px 6px;}
+@media (min-width:901px){
+  .ea-panel{width:126px;}
+  .ea-row{grid-template-columns:48px 1fr;}
+  .ea-row .lab{font-size:1.06rem;padding:4px 0 4px 8px;}
+  .ea-row input{font-size:1.16rem;}
+}
+.ea-body .ea-row:nth-child(1) .lab{color:#ffffff;}
+.ea-body .ea-row:nth-child(2) .lab{color:var(--buy);color:color-mix(in srgb,var(--buy) 86%,#fff);}
+.ea-body .ea-row:nth-child(3) .lab{color:var(--sell);color:color-mix(in srgb,var(--sell) 86%,#fff);}
+:root[data-sim="pink"] .ea-body .ea-row:nth-child(1) .lab,:root[data-sim="win11"] .ea-body .ea-row:nth-child(1) .lab{color:#1b1f2a;}
+
 .ea-row input{width:100%;background:transparent;border:none;color:var(--fg);font-family:var(--font-mono);font-size:1.1rem;font-weight:700;text-align:right;padding:4px 8px 4px 2px;}
 .ea-row input{-moz-appearance:textfield;appearance:textfield;}
 .ea-row input::-webkit-outer-spin-button,.ea-row input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0;}
@@ -559,10 +570,12 @@ canvas.pane-chart{touch-action:pan-y;cursor:crosshair;position:absolute;inset:0;
 .price-box button{min-width:0;width:100%;font-family:var(--font-mono);font-weight:700;border:none;color:#fff;cursor:pointer;padding:6px 1px;display:flex;flex-direction:column;align-items:center;gap:1px;line-height:1.05;}
 .price-box button .pl{font-size:.56rem;font-weight:600;opacity:.85;letter-spacing:.3px;}
 .price-box button .pv{font-size:.76rem;font-variant-numeric:tabular-nums;white-space:nowrap;}
-.price-box .sellbtn{background:var(--sell);}
+.price-box .sellbtn{background:var(--sell);background:color-mix(in srgb,var(--sell) 86%,#fff);}
 .price-box .sellbtn:hover{filter:brightness(1.12);}
-.price-box .buybtn{background:var(--buy);}
+.price-box .buybtn{background:var(--buy);background:color-mix(in srgb,var(--buy) 86%,#fff);}
 .price-box .buybtn:hover{filter:brightness(1.12);}
+.price-box .sellbtn,.price-box .buybtn{background-image:linear-gradient(180deg,rgba(255,255,255,.6) 0,rgba(255,255,255,.6) 1px,rgba(255,255,255,0) 1px),linear-gradient(0deg,rgba(0,0,0,.3) 0,rgba(0,0,0,.3) 3px,rgba(0,0,0,0) 3px),linear-gradient(180deg,rgba(255,255,255,.24) 0,rgba(255,255,255,.05) 48%,rgba(0,0,0,.1) 100%);text-shadow:0 1px 1px rgba(0,0,0,.28);transition:filter .12s,transform .08s;}
+.price-box .sellbtn:not(:disabled):active,.price-box .buybtn:not(:disabled):active{transform:translateY(1px);filter:brightness(.94);background-image:linear-gradient(180deg,rgba(0,0,0,.22) 0,rgba(0,0,0,.22) 2px,rgba(0,0,0,0) 2px),linear-gradient(180deg,rgba(255,255,255,.08),rgba(0,0,0,.08));}
 .price-box .spread{min-width:0;background:var(--panel-bg-2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;}
 .price-box .spread .pl{font-size:.56rem;color:var(--muted);}
 .price-box .spread .pv{font-family:var(--font-mono);font-size:.78rem;font-variant-numeric:tabular-nums;}
@@ -582,11 +595,13 @@ canvas.pane-chart{touch-action:pan-y;cursor:crosshair;position:absolute;inset:0;
 .price-box.top .spread .pv{font-size:.9rem;}
 
 /* 펀딩 모드: 펀딩 A·B도 보험금처럼 SELL | Spread | BUY 시세 상자로 표시하고, 누르면 진입 */
-body.fund .pane.ch .price-box.top{grid-template-columns:1fr 48px 1fr;left:50%;gap:0;background:var(--float-bg);border:1px solid var(--border);border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.45);overflow:hidden;}
-body.fund .pane.ch .price-box.top .spread{display:flex;padding:0 4px;}
-body.fund .pane.ch .price-box.top button .pv{display:block;font-size:.9rem;}
-body.fund .pane.ch .price-box.top button{min-width:82px;padding:3px 10px;gap:0;border-radius:0;box-shadow:none;cursor:pointer;}
-body.fund .pane.ch .price-box.top button .pl{font-size:.8rem;font-weight:700;opacity:1;}
+body.fund .pane.ch .price-box.top{grid-template-columns:1fr 64px 1fr;left:50%;gap:0;background:var(--float-bg);border:1px solid var(--border);border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.45);overflow:hidden;}
+body.fund .pane.ch .price-box.top .spread{display:flex;padding:0 6px;}
+body.fund .pane.ch .price-box.top .spread .pl{font-size:.76rem;}
+body.fund .pane.ch .price-box.top .spread .pv{font-size:1.02rem;}
+body.fund .pane.ch .price-box.top button .pv{display:block;font-size:1.02rem;}
+body.fund .pane.ch .price-box.top button{min-width:96px;padding:6px 14px;gap:0;border-radius:0;box-shadow:none;cursor:pointer;}
+body.fund .pane.ch .price-box.top button .pl{font-size:.9rem;font-weight:700;opacity:1;}
 /* 보험금 차트의 SELL/BUY는 시세 표시용: 작게, 누를 수 없게 */
 .pane.ins .price-box.top{grid-template-columns:1fr 58px 1fr;left:50%;opacity:.92;}
 .pane.ins .price-box.top button{min-width:104px;padding:6px 14px;gap:1px;cursor:default;pointer-events:none;filter:saturate(.75);}
@@ -1836,7 +1851,7 @@ function historyPng(){   // 4:3 (1200×900) 공유용 카드: 모바일에서 �
   // 표 머리글
   const ty = TY, RH = RH0, maxRows = Math.max(Math.floor((H - ty - 44 - FOOT) / RH), nShow);
   x.fillStyle = C.mute; x.font = "700 20px "+FONT; x.textBaseline = "middle";
-  x.textAlign = "left"; spaced("시각", PX+4, ty+22, 2); spaced("방향", PX+190, ty+22, 2);
+  x.textAlign = "left"; spaced("시각", PX+4, ty+22, 2); spaced("방향", PX+190, ty+22, 2); spaced("랏", PX+330, ty+22, 2);
   x.textAlign = "right"; x.fillText("진입 → 청산", PX+740, ty+22); x.fillText("손익", W-PX-4, ty+22);
   x.textAlign = "left"; spaced("수수료", PX+790, ty+22, 2);
   x.strokeStyle = C.gold; x.globalAlpha = .55; x.lineWidth = 2; x.beginPath(); x.moveTo(PX-12, ty+44); x.lineTo(W-PX+12, ty+44); x.stroke(); x.globalAlpha = 1;
@@ -1850,6 +1865,7 @@ function historyPng(){   // 4:3 (1200×900) 공유용 카드: 모바일에서 �
     const dtxt = (FUND() ? (t.pane===1?"A ":"B ") : "")+t.dir, dcol = t.dir==="BUY" ? C.buy : C.bad;
     x.font = "800 22px "+MONO; const dw = x.measureText(dtxt).width + 28; pill(PX+176, cy-17, dw, 34, dcol, .18);
     x.textAlign = "center"; x.fillStyle = dcol; x.fillText(dtxt, PX+176+dw/2, cy+1);
+    x.textAlign = "left"; x.fillStyle = C.fg; x.font = "24px "+MONO; x.fillText((+t.lot).toFixed(2), PX+330, cy);   // 사용한 랏수
     x.textAlign = "right"; x.fillStyle = C.fg; x.font = "24px "+MONO; x.fillText(fmtPrice(t.entry)+" → "+fmtPrice(t.exit), PX+740, cy);
     // TP/SL 표시 (보험금의 연동 청산은 '연동 TP/SL') — 알약
     const linked = t.reason === "연동청산", rr = linked ? (t.cause || "") : (t.reason || "");
