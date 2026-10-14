@@ -4390,6 +4390,7 @@ function openGuide(){
     const hl = document.createElement("div"); hl.className = "ghl" + (it.inb ? " inb" : "");
     hl.style.cssText = "left:"+(it.R.x-3)+"px;top:"+(it.R.y-3)+"px;width:"+(it.R.w+6)+"px;height:"+(it.R.h+6)+"px";
     hl.innerHTML = "<b>"+(i+1)+"</b>";
+    hl.style.zIndex = String(2000000 - Math.min(1999000, Math.round(it.R.w * it.R.h / 20)));   // 작은 영역일수록 위로(큰 영역에 가려지지 않게)
     hl.addEventListener("mouseenter", ()=>{ ov.querySelectorAll(".ghl.on").forEach(e=>e.classList.remove("on")); hl.classList.add("on"); showB(it, i); });
     hl.addEventListener("mouseleave", ()=>{ hl.classList.remove("on"); bub.style.display = "none"; const gn = document.getElementById("guideNote"); if(gn) gn.style.opacity = ""; const qa = document.getElementById("guideQr"); if(qa) qa.style.opacity = ""; });
     hl.addEventListener("click", e=>e.stopPropagation());
